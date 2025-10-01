@@ -1,0 +1,27 @@
+# Jekyll configuration for Reqvire documentation
+title: Reqvire Documentation
+description: The AI-Native Requirements As A Code framework for Modern Engineering Teams
+url: "https://www.reqvire.org"
+baseurl: ""
+
+# Theme
+theme: minima
+
+# Markdown settings
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+
+# Plugins
+plugins:
+  - jekyll-relative-links
+
+# Build settings
+relative_links:
+  enabled: true
+  collections: false
+
+# Exclude files from processing
+exclude:
+  - README.md
