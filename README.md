@@ -42,9 +42,20 @@ The site is automatically deployed from the `docs/` folder on the `main` branch.
 
 ### Local Development (Optional)
 
+#### Prerequisites
+
+Install Ruby and development dependencies:
+
+```bash
+sudo apt install ruby-full ruby-dev build-essential
+```
+
+#### Running Locally
+
 To preview the site locally:
 
 ```bash
+bundle config set --local path 'vendor/bundle'
 bundle install
 bundle exec jekyll serve --source docs
 ```
@@ -53,4 +64,4 @@ Then visit `http://localhost:4000`
 
 ### CNAME Configuration
 
-The `CNAME` file in the root directory maps the custom domain `www.reqvire.org` to GitHub Pages.
+The `CNAME` file in the `docs/` directory maps the custom domain `www.reqvire.org` to GitHub Pages.
