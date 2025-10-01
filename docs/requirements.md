@@ -5,10 +5,10 @@ title: Requirements
 
 ## Conceptual Overview
 
-In Reqvire, a **requirement** represents a stakeholder's need, system capability, or constraint that the system must fulfill. Requirements define:
+Reqvire is a tool, framework, and methodology for requirements management. In Reqvire, a **requirement** represents a stakeholder's need, system capability, or constraint that the system must fulfill. Requirements define:
 
-- **What** the system must do (*functional requirements*)
-- **How well** the system must perform (*non-functional requirements*)
+- **What** the system must do
+- **How** the system does it (including functional implementation details and non-functional aspects such as performance, security, and quality attributes)
 
 These requirements serve as the foundation for system design, development, and verification.
 
@@ -40,7 +40,7 @@ This structure supports a **progressive refinement** approach, ensuring traceabi
 User requirements include:
 
 - **Stakeholder needs**: High-level expressions of expectations from users, customers, operators, and regulatory bodies.
-- **Mission requirements**: Enterprise-level objectives the system must support. Each mission requirement should be linked to at least one **Measure of Effectiveness (MOE)** to ensure its success is measurable.
+- **Mission requirements**: Enterprise-level objectives the system must support.
 - **User stories**: Informal narratives that describe system interactions or functionalities from a user's perspective.
 - **WHAT-focused requirements**: Formalized requirements that define system capabilities, behaviors, or constraints without dictating the solution approach.
 
@@ -126,22 +126,22 @@ graph TD
     end 
 
     MOE_CPD -.->|trace| REQ_LIMITS
-    SDD_LIMITS -.->|satisy| REQ_LIMITS
+    SDD_LIMITS -.->|satisfiedBy| REQ_LIMITS
 
     MOE_CR -.->|trace| USER_STORY_PASSWORD
-    REQ_AUTH -.->|refine| USER_STORY_PASSWORD
-    REQ_SECURITY -.->|refine| USER_STORY_PASSWORD
-    
+    REQ_AUTH -.->|refinedBy| USER_STORY_PASSWORD
+    REQ_SECURITY -.->|refinedBy| USER_STORY_PASSWORD
+
     %% Relationships
-    REQ_ENCRYPT -.->|derive| REQ_SECURITY 
-    REQ_SESSION -.->|derive| REQ_SECURITY
+    REQ_ENCRYPT -.->|derivedFrom| REQ_SECURITY
+    REQ_SESSION -.->|derivedFrom| REQ_SECURITY
 
 
-    REQ_AUTH -.->|contains| REQ_PASSWORD
-    REQ_AUTH -.->|contains| REQ_OAUTH
+    REQ_AUTH -.->|contain| REQ_PASSWORD
+    REQ_AUTH -.->|contain| REQ_OAUTH
 
 
-    VerifyPasswordStrength -.->|verify| REQ_PASSWORD
+    VerifyPasswordStrength -.->|verifiedBy| REQ_PASSWORD
 
 
     %% Click Actions
