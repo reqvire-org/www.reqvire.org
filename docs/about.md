@@ -1,6 +1,6 @@
 ---
 layout: page
-title: About Reqvire
+title: About
 ---
 
 **Reqvire** is the lightweight Git-native **Requirements As a Code** framework that transforms how modern engineering teams build software. Seamlessly blending system modeling, requirements management, and AI-assisted development. Reqvire empowers teams to deliver better products faster with complete traceability and intelligent automation.

@@ -1,11 +1,19 @@
 # Jekyll configuration for Reqvire documentation
-title: Reqvire Documentation
+title: Reqvire
 description: The AI-Native Requirements As A Code framework for Modern Engineering Teams
 url: "https://www.reqvire.org"
 baseurl: ""
 
 # Theme
 theme: minima
+
+# Navigation
+header_pages:
+  - index.md
+  - about.md
+  - requirements.md
+  - verifications.md
+  - user_guide.md
 
 # Markdown settings
 markdown: kramdown

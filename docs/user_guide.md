@@ -116,7 +116,7 @@ project/
 
 ### Requirements and general Markdown files format
 
-Read specifications in [../specifications/SpecificationsRequirements.md](../specifications/SpecificationsRequirements.md)
+Read specifications in [SpecificationsRequirements.md](https://github.com/reqvire-org/reqvire/blob/main/specifications/SpecificationsRequirements.md)
 
 
 ## Validation
@@ -284,7 +284,7 @@ Reqvire includes several GitHub Actions workflows that can be used in your repos
 
 ```yaml
 - name: Install Reqvire
-  run: curl -fsSL https://raw.githubusercontent.com/Reqvire/reqvire/main/scripts/install.sh | bash
+  run: curl -fsSL https://raw.githubusercontent.com/reqvire-org/reqvire/main/scripts/install.sh | bash
 ```
 
 #### PR Validation
@@ -311,7 +311,7 @@ jobs:
         uses: actions/checkout@v4
         
       - name: Install Reqvire
-        run: curl -fsSL https://raw.githubusercontent.com/Reqvire/reqvire/main/scripts/install.sh | bash
+        run: curl -fsSL https://raw.githubusercontent.com/reqvire-org/reqvire/main/scripts/install.sh | bash
         
       - name: Validate requirements and generate report
         id: validate
@@ -359,7 +359,7 @@ jobs:
       
       
       - name: Install Reqvire
-        run: curl -fsSL https://raw.githubusercontent.com/Reqvire/reqvire/main/scripts/install.sh | bash
+        run: curl -fsSL https://raw.githubusercontent.com/reqvire-org/reqvire/main/scripts/install.sh | bash
             
       - name: Configure Git
         run: |
@@ -482,7 +482,7 @@ jobs:
          
                           
       - name: Install Reqvire
-        run: curl -fsSL https://raw.githubusercontent.com/Reqvire/reqvire/main/scripts/install.sh | bash
+        run: curl -fsSL https://raw.githubusercontent.com/reqvire-org/reqvire/main/scripts/install.sh | bash
       
       - name: Run Reqvire Impact (if triggered)
         if: contains(github.event.comment.body, '/reqvire impact')

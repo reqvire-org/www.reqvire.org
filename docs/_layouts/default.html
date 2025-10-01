@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="{{ page.lang | default: site.lang | default: "en" }}">
+
+  {%- include head.html -%}
+
+  <body>
+
+    {%- include header.html -%}
+
+    <main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        {{ content }}
+      </div>
+    </main>
+
+    {%- include footer.html -%}
+
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.1/dist/svg-pan-zoom.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js"></script>
+    <script>
+      // Convert Kramdown code blocks to mermaid divs wrapped in containers
+      document.querySelectorAll('pre > code.language-mermaid').forEach(function(codeBlock) {
+        var pre = codeBlock.parentElement;
+        var container = document.createElement('div');
+        container.className = 'mermaid-container';
+        var div = document.createElement('div');
+        div.className = 'mermaid';
+        div.textContent = codeBlock.textContent;
+        container.appendChild(div);
+        pre.replaceWith(container);
+      });
+
+      // Initialize and render
+      mermaid.initialize({
+        startOnLoad: true,
+        theme: 'default',
+        flowchart: {
+          useMaxWidth: true,
+          htmlLabels: true
+        },
+        securityLevel: 'loose'
+      });
+
+      // Add pan/zoom controls after rendering
+      mermaid.run().then(function() {
+        console.log('Mermaid rendered, adding controls...');
+
+        // Add modal functionality
+        var modal = document.createElement('div');
+        modal.className = 'diagram-modal';
+        modal.style.cssText = 'display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9);';
+
+        var closeBtn = document.createElement('span');
+        closeBtn.className = 'diagram-modal-close';
+        closeBtn.innerHTML = '&times;';
+        closeBtn.style.cssText = 'position: fixed; top: 20px; right: 40px; color: #fff; font-size: 40px; font-weight: bold; cursor: pointer; z-index: 10001; display: none; background: rgba(0,0,0,0.5); border-radius: 50%; width: 50px; height: 50px; line-height: 50px; text-align: center;';
+
+        var modalContent = document.createElement('div');
+        modalContent.className = 'diagram-modal-content';
+        modalContent.style.cssText = 'position: relative; background-color: #fefefe; padding: 20px; border-radius: 8px; width: 90vw; height: 90vh; overflow: hidden; display: flex; align-items: center; justify-content: center; touch-action: none;';
+
+        modal.appendChild(closeBtn);
+        modal.appendChild(modalContent);
+        document.body.appendChild(modal);
+
+        console.log('Modal created and added to body');
+
+        var currentModalPanZoom = null;
+
+        // Close modal function
+        function closeModal() {
+          modal.style.display = 'none';
+          closeBtn.style.display = 'none';
+          if (currentModalPanZoom) {
+            currentModalPanZoom.destroy();
+            currentModalPanZoom = null;
+          }
+          console.log('Modal closed');
+        }
+
+        // Close modal on X click
+        closeBtn.onclick = closeModal;
+
+        // Close on outside click - but prevent accidental closes from touch gestures
+        var touchStartPos = null;
+        modal.addEventListener('touchstart', function(e) {
+          if (e.target === modal) {
+            touchStartPos = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+          }
+        });
+
+        modal.addEventListener('touchend', function(e) {
+          if (e.target === modal && touchStartPos) {
+            var touchEndPos = { x: e.changedTouches[0].clientX, y: e.changedTouches[0].clientY };
+            var distance = Math.sqrt(
+              Math.pow(touchEndPos.x - touchStartPos.x, 2) +
+              Math.pow(touchEndPos.y - touchStartPos.y, 2)
+            );
+            // Only close if movement was less than 10px (not a swipe/pan)
+            if (distance < 10) {
+              closeModal();
+            }
+          }
+          touchStartPos = null;
+        });
+
+        modal.onclick = function(e) {
+          if (e.target === modal) {
+            closeModal();
+          }
+        };
+
+        // Close on ESC key
+        document.addEventListener('keydown', function(e) {
+          if (e.key === 'Escape' && modal.style.display === 'flex') {
+            closeModal();
+          }
+        });
+
+        // Add click handlers - wait a bit to ensure DOM is ready
+        setTimeout(function() {
+          var containers = document.querySelectorAll('.mermaid-container');
+          console.log('Found ' + containers.length + ' mermaid containers');
+
+          containers.forEach(function(container) {
+            var diagram = container.querySelector('.mermaid');
+            var svg = diagram.querySelector('svg');
+
+            if (!svg) {
+              console.log('No SVG found in container');
+              return;
+            }
+
+            // Make diagram clickable
+            diagram.style.cursor = 'pointer';
+
+            // Add hint
+            var hint = document.createElement('div');
+            hint.className = 'diagram-hint';
+            hint.textContent = '🔍 Click diagram to open fullscreen with pan/zoom controls';
+            container.appendChild(hint);
+
+            console.log('Click handler attaching');
+
+            diagram.onclick = function(e) {
+              console.log('Diagram clicked!');
+              e.preventDefault();
+              e.stopPropagation();
+
+              var svg = diagram.querySelector('svg');
+              if (svg) {
+                var clonedSvg = svg.cloneNode(true);
+
+                // Remove intrinsic dimensions and make it fill container
+                clonedSvg.removeAttribute('height');
+                clonedSvg.removeAttribute('width');
+                clonedSvg.style.cssText = 'width: 100%; height: 100%; touch-action: none;';
+
+                modalContent.innerHTML = '';
+                modalContent.appendChild(clonedSvg);
+
+
+                // Show modal with inline styles to ensure it works
+                modal.style.display = 'flex';
+                modal.style.alignItems = 'center';
+                modal.style.justifyContent = 'center';
+
+                // Make sure close button is visible
+                closeBtn.style.display = 'block';
+
+                console.log('Modal display set to flex');
+
+                // Initialize pan-zoom for modal - with larger viewport and touch support
+                setTimeout(function() {
+                  currentModalPanZoom = svgPanZoom(clonedSvg, {
+                    zoomEnabled: true,
+                    controlIconsEnabled: true,
+                    fit: true,
+                    center: true,
+                    minZoom: 0.1,
+                    maxZoom: 10,
+                    contain: false,
+                    panEnabled: true,
+                    dblClickZoomEnabled: false,
+                    mouseWheelZoomEnabled: true,
+                    preventMouseEventsDefault: true,
+                    customEventsHandler: {
+                      init: function(options) {
+                        var instance = options.instance;
+                        var initialScale = 1;
+                        var pannedX = 0;
+                        var pannedY = 0;
+
+                        // Setup Hammer.js for touch gestures on the parent element
+                        this.hammer = new Hammer(options.svgElement.parentElement, {
+                          inputClass: Hammer.SUPPORT_POINTER_EVENTS ? Hammer.PointerEventInput : Hammer.TouchInput
+                        });
+
+                        this.hammer.get('pinch').set({enable: true});
+                        this.hammer.get('pan').set({direction: Hammer.DIRECTION_ALL, threshold: 10});
+
+                        // Prevent double-tap zoom
+                        this.hammer.get('tap').set({enable: false});
+
+                        // Handle pan with single finger
+                        this.hammer.on('panstart panmove', function(ev) {
+                          // Only pan with single touch (check current pointers, not max)
+                          if (ev.pointers.length > 1) return;
+
+                          if (ev.type === 'panstart') {
+                            pannedX = 0;
+                            pannedY = 0;
+                          }
+
+                          instance.panBy({x: ev.deltaX - pannedX, y: ev.deltaY - pannedY});
+                          pannedX = ev.deltaX;
+                          pannedY = ev.deltaY;
+                        });
+
+                        // Handle pinch zoom
+                        this.hammer.on('pinchstart', function(ev) {
+                          initialScale = instance.getZoom();
+                          console.log('Pinch start, current zoom:', initialScale);
+                        });
+
+                        this.hammer.on('pinchmove', function(ev) {
+                          // ev.scale starts at 1 and goes up/down from there
+                          var newZoom = initialScale * ev.scale;
+                          newZoom = Math.max(0.1, Math.min(10, newZoom));
+
+                          // Get SVG point at center of pinch
+                          var svg = options.svgElement;
+                          var rect = svg.getBoundingClientRect();
+                          var point = {
+                            x: ev.center.x - rect.left,
+                            y: ev.center.y - rect.top
+                          };
+
+                          instance.zoomAtPoint(newZoom, point);
+                          console.log('Pinch move, scale:', ev.scale, 'new zoom:', newZoom);
+                        });
+
+                        this.hammer.on('pinchend', function(ev) {
+                          console.log('Pinch end, final zoom:', instance.getZoom());
+                        });
+
+                        // Prevent moving the page on touch devices
+                        options.svgElement.parentElement.addEventListener('touchmove', function(e) {
+                          e.preventDefault();
+                        }, { passive: false });
+                      },
+                      destroy: function() {
+                        this.hammer.destroy();
+                      }
+                    }
+                  });
+                  console.log('Pan-zoom initialized with Hammer.js touch support');
+                }, 150);
+              }
+            };
+          });
+        }, 100);
+      });
+    </script>
+
+  </body>
+
+</html>

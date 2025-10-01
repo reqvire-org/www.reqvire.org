@@ -12,3 +12,6 @@ Gemfile.lock
 # Ruby
 *.gem
 *.rbc
+
+# Playwrightmcp
+.playwright-mcp/

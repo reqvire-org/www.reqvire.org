@@ -1,7 +1,6 @@
 ---
 layout: home
-title: Reqvire Docs
-description: The AI-Native Requirements As A Code framework for Modern Engineering Teams
+title: Home
 ---
 
 ## Get Started
