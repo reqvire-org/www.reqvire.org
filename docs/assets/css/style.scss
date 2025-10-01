@@ -5,6 +5,13 @@
 
 /* Custom styles for Reqvire documentation */
 
+/* Remove vertical lines from home page lists */
+.home .wrapper ul,
+.home .wrapper li {
+  border-left: none !important;
+  border-right: none !important;
+}
+
 /* Mermaid diagram styling */
 .mermaid-container {
   position: relative;
