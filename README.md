@@ -45,9 +45,8 @@ The site is automatically deployed from the `docs/` folder on the `main` branch.
 To preview the site locally:
 
 ```bash
-cd docs
 bundle install
-bundle exec jekyll serve
+bundle exec jekyll serve --source docs
 ```
 
 Then visit `http://localhost:4000`
