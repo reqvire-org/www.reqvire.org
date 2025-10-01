@@ -72,12 +72,11 @@ Here's an example of a Reqvire configuration file:
   # Glob patterns to exclude from requirements processing
   excluded_filename_patterns:
     - "Usecases.md"
-    - "**/Logical*.md"
-    - "**/Physical*.md"
-    - "**/TODO.md"
-    - "**/tests/**"    
-    - "**/core/**"    
-    - "**/cli/**"            
+    - "Logical*.md"
+    - "Physical*.md"
+    - "TODO.md"
+    - "tests/**"
+    - "src/**"            
 
 style:
   # Theme for HTML output (default, dark, light)

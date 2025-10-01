@@ -84,10 +84,10 @@ Use Reqvire's coverage report command to:
 
 ```bash
 # Generate coverage report
-./target/debug/reqvire coverage-report
+reqvire coverage-report
 
 # Generate JSON coverage report for programmatic analysis
-./target/debug/reqvire coverage-report --json
+reqvire coverage-report --json
 ```
 
 The coverage system will flag:
