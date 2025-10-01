@@ -10,10 +10,10 @@ title: Home
 Experience the future of development where your requirements live alongside your code, evolve with your project, and unlock the full potential of AI-powered engineering—from intelligent requirement synthesis to automated code generation—all within your familiar Git workflow.
 
 Reqvire unlocks:
-  - 🚀 Requirements as Code: Transform requirements from static documents into living, version-controlled assets that evolve with your codebase
-  - ⚡ Effortless Integration: Plug seamlessly into your existing workflow with Git branches, pull requests, and CI/CD pipelines—no disruption, just enhancement
-  - 🤖 Smart Automation: Reqvire handles diagram generation, traceability matrices, and impact analysis automatically—your requirements become high-quality context for AI tools
-  - 🧠 AI-Ready Architecture: Optimal context that enables AI assisted requirements management and assisted coding—AI understands what needs to be built, where to make changes, and how everything connects
+  - 🚀 **Requirements as Code**: Transform requirements from static documents into living, version-controlled assets that evolve with your codebase
+  - ⚡ **Effortless Integration**: Plug seamlessly into your existing workflow with Git branches, pull requests, and CI/CD pipelines—no disruption, just enhancement
+  - 🤖 **Smart Automation**: Reqvire handles diagram generation, traceability matrices, and impact analysis automatically—your requirements become high-quality context for AI tools
+  - 🧠 **AI-Ready Architecture**: Optimal context that enables AI assisted requirements management and assisted coding—AI understands what needs to be built, where to make changes, and how everything connects
 
 
 ## Table of Contents
