@@ -11,7 +11,7 @@ This user guide provides detailed instructions on how to use Reqvire effectively
 - [Configuration](#configuration)
 - [Working with Requirements](#working-with-requirements)
 - [Validation](#validation)
-- [Linting](#linting)
+- [Formatting](#formatting)
 - [Generating Documentation](#generating-documentation)
 - [Traceability](#traceability)
 - [Sections Summary](#sections-summary)
@@ -124,26 +124,24 @@ Read specifications in [SpecificationsRequirements.md](https://github.com/reqvir
 Any functional require command that needs to parse model will as a first step perform model validation and report any errors found.
 Errors must be fixed before command can execute.
 
-## Linting
+## Formatting
 
-Linting helps maintain consistent formatting and style.
+Formatting helps maintain consistent formatting and style.
 
-### Run Linting
-
-Sometimes it is requred to run linting several times to converged to clean document format.
+### Run Formatting
 
 Apply automatic fixes to formatting issues:
 
 ```bash
-reqvire lint
+reqvire format
 ```
 
 ### Dry Run
 
-Preview linting changes without applying them:
+Preview formatting changes without applying them:
 
 ```bash
-reqvire lint --dry-run
+reqvire format --dry-run
 ```
 
 ## Traceability

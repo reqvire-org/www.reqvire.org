@@ -24,7 +24,7 @@ Reqvire unlocks:
   - [User Guide](./user_guide.md)
     - [Commands and Configuration](./user_guide.md#basic-commands)
     - [Working with Requirements](./user_guide.md#working-with-requirements)
-    - [Validation and Linting](./user_guide.md#validation)
+    - [Validation and Formatting](./user_guide.md#validation)
     - [Traceability](./user_guide.md#traceability)
     - [GitHub Integration](./user_guide.md#github-integration)
 
@@ -36,7 +36,7 @@ Reqvire unlocks:
 - **Traceability**: Automatically track relationships between requirements and code
 - **Visualization**: Generate diagrams and matrices from your model
 - **Collaboration**: Review changes to requirements just like code changes
-- **CI/CD Integration**: Automate validation, linting, and documentation generation
+- **CI/CD Integration**: Automate validation, formatting, and documentation generation
 - **Change Impact Analysis**: Understand how changes affect related requirements
 
 ## GitHub Integration
