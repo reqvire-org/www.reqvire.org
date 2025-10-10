@@ -59,6 +59,46 @@ User requirements serve as the **foundation for system design**, ensuring that a
 
 System requirements are derived from user requirements and are structured to map directly to **subsystems** or **components** of the overall system, ensuring **modularity** and **traceability**.
 
+## Requirement Containment
+
+Reqvire manages **requirement containment** through its **file and section structure** rather than explicit containment relationships. This approach provides a natural and intuitive way to organize and group related requirements.
+
+### Files and Sections as Containers
+
+In Reqvire, requirements are organized hierarchically using:
+
+- **Files**: Markdown files serve as top-level containers for requirements, typically representing major system areas, subsystems, or requirement categories.
+- **Sections**: Within each file, markdown sections (defined by headings) provide logical grouping of related requirements.
+
+This file-and-section based containment approach offers several advantages:
+
+- **Natural hierarchy**: The document structure directly reflects the containment relationships.
+- **Simplified management**: No need to maintain explicit containment links between requirements.
+- **Clear organization**: The physical location of a requirement in the documentation hierarchy shows its containment.
+- **Flexible grouping**: Requirements can be easily reorganized by moving them between sections or files.
+
+### Example Structure
+
+```
+specifications/
+├── UserRequirements.md
+│   └── ## Authentication
+│       ├── REQ_AUTH
+│       └── REQ_SECURITY
+└── SystemRequirements/
+    └── IdentityProvider.md
+        ├── ## Password Authentication
+        │   └── REQ_PASSWORD
+        └── ## OAuth Authentication
+            └── REQ_OAUTH
+```
+
+In this example:
+- `UserRequirements.md` file contains high-level authentication requirements
+- `IdentityProvider.md` file contains detailed system requirements
+- Sections within each file further organize related requirements
+- The `derivedFrom` relationship traces technical requirements back to user requirements
+
 ## Diagram summary
 
 
@@ -129,16 +169,16 @@ graph TD
     SDD_LIMITS -.->|satisfiedBy| REQ_LIMITS
 
     MOE_CR -.->|trace| USER_STORY_PASSWORD
-    REQ_AUTH -.->|refinedBy| USER_STORY_PASSWORD
-    REQ_SECURITY -.->|refinedBy| USER_STORY_PASSWORD
+    REQ_AUTH -.->|derivedFrom| USER_STORY_PASSWORD
+    REQ_SECURITY -.->|derivedFrom| USER_STORY_PASSWORD
 
     %% Relationships
     REQ_ENCRYPT -.->|derivedFrom| REQ_SECURITY
     REQ_SESSION -.->|derivedFrom| REQ_SECURITY
 
 
-    REQ_AUTH -.->|contain| REQ_PASSWORD
-    REQ_AUTH -.->|contain| REQ_OAUTH
+    REQ_PASSWORD -.->|derivedFrom| REQ_AUTH
+    REQ_OAUTH -.->|derivedFrom| REQ_AUTH
 
 
     VerifyPasswordStrength -.->|verifiedBy| REQ_PASSWORD
