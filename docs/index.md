@@ -12,8 +12,8 @@ Experience the future of development where your requirements live alongside your
 Reqvire unlocks:
   - 🚀 **Requirements as Code**: Transform requirements from static documents into living, version-controlled assets that evolve with your codebase
   - ⚡ **Effortless Integration**: Plug seamlessly into your existing workflow with Git branches, pull requests, and CI/CD pipelines—no disruption, just enhancement
-  - 🤖 **Smart Automation**: Reqvire handles diagram generation, traceability matrices, and impact analysis automatically—your requirements become high-quality context for AI tools
-  - 🧠 **AI-Ready Architecture**: Optimal context that enables AI assisted requirements management and assisted coding—AI understands what needs to be built, where to make changes, and how everything connects
+  - 🤖 **Smart Automation**: Automatically generates diagrams, traceability matrices, and impact analysis—keeping documentation synchronized with your requirements
+  - 🧠 **AI-Ready Context**: Your requirements become high-quality context for AI tools—enabling assisted requirements management and coding where AI understands what needs to be built, where to make changes, and how everything connects
 
 
 ## Table of Contents
@@ -27,8 +27,6 @@ Reqvire unlocks:
     - [Validation and Formatting](./user_guide.md#validation)
     - [Traceability](./user_guide.md#traceability)
     - [GitHub Integration](./user_guide.md#github-integration)
-
----
 
 ## Key Benefits
 
@@ -47,6 +45,3 @@ The [GitHub Integration](./user_guide.md#github-integration) section in the User
 - Using PR comment commands for change impact analysis
 - Integrating with CI/CD pipelines
 - Release automation
-
----
-
