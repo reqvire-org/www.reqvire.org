@@ -296,29 +296,13 @@ Generate an index of all requirements and verifications in the model.
 reqvire model index
 ```
 
-This generates an index listing all requirements and verifications, outputting directly to the console. This is useful for getting a quick overview of all elements in your model or for piping into other tools.
+This generates an index listing all requirements and verifications, outputting directly to the console. This is useful for HTML export - if saved as index.md, it will become index.html.
 
-#### Output Format Options
-
-```bash
-# Generate model index in text format (default)
-reqvire model index
-
-# Generate model index in JSON format for programmatic processing
-reqvire model index --json
-```
-
-The output is written to stdout, making it easy to redirect to a file or pipe to other commands:
+The output is written to stdout, making it easy to redirect to a file:
 
 ```bash
 # Save index to a file
-reqvire model index > index.txt
-
-# Save JSON index to a file
-reqvire model index --json > index.json
-
-# Process with other tools
-reqvire model index --json | jq '.requirements | length'
+reqvire model index > index.md
 ```
 
 ## Change Impact Report
