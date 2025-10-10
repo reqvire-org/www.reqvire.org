@@ -145,32 +145,65 @@ reqvire format --dry-run
 
 ## Traceability
 
-Track relationships between requirements using traceability features.
+Track relationships between requirements and verifications using traceability features.
 
-### Generate Traceability Matrix
+### Generate Verification Traces
 
 ```bash
-reqvire traces
+reqvire verifications traces
 ```
 
-This generates a traceability matrix showing relationships between requirements in Markdown format by default.
+This generates upward trace trees from verifications to root requirements, showing how verifications link to requirements and their parent chains. Output is in Markdown format with Mermaid diagrams by default.
 
 #### Output Format Options
 
-You can specify different output formats for the traceability matrix:
-
 ```bash
-# Generate traceability matrix in Markdown format (default)
-reqvire traces
+# Generate verification traces in Markdown format with Mermaid diagrams (default)
+reqvire verifications traces
 
-# Generate traceability matrix in JSON format
-reqvire traces --json
-
-# Generate traceability matrix in SVG format
-reqvire traces --svg > matrix.svg
+# Generate verification traces in JSON format
+reqvire verifications traces --json
 ```
 
-The SVG format produces a visual representation that can be included in documentation or viewed directly in a browser.
+#### Filtering Options
+
+You can filter the verification traces using various criteria:
+
+```bash
+# Filter by specific verification ID
+reqvire verifications traces --filter-id="test-auth-001"
+
+# Filter by verification name pattern (regex)
+reqvire verifications traces --filter-name="Authentication.*"
+
+# Filter by verification type
+reqvire verifications traces --filter-type="test-verification"
+
+# Combine multiple filters (AND logic)
+reqvire verifications traces --filter-type="test-verification" --filter-name="Login.*" --json
+```
+
+Supported verification types: `test-verification`, `analysis-verification`, `inspection-verification`, `demonstration-verification`
+
+### Generate Verification Matrix
+
+```bash
+reqvire verifications matrix
+```
+
+This generates a traceability matrix showing verification coverage across all requirements.
+
+#### Output Format Options
+
+```bash
+# Generate verification matrix in SVG format
+reqvire verifications matrix --svg > matrix.svg
+
+# Generate verification matrix in JSON format
+reqvire verifications matrix --json
+```
+
+The matrix implements the **verification roll-up strategy** - a requirement at any level is marked as verified if ALL its child requirements are verified, with verification status rolling up from leaf requirements through the entire parent chain to the root.
 
 ## Sections Summary
 
@@ -367,9 +400,9 @@ jobs:
         run: |
           reqvire generate-diagrams
       
-      - name: Generate traces svg
+      - name: Generate verification matrix svg
         run: |
-          reqvire traces --svg > specifications/matrix.svg
+          reqvire verifications matrix --svg > specifications/matrix.svg
                 
       - name: Check for Changes
         id: check_changes
@@ -415,7 +448,7 @@ jobs:
       github.event.issue.pull_request != null &&
       (
         contains(github.event.comment.body, '/reqvire impact') ||
-        contains(github.event.comment.body, '/reqvire traces')
+        contains(github.event.comment.body, '/reqvire verifications traces')
       )
     runs-on: ubuntu-latest
        
@@ -490,11 +523,11 @@ jobs:
           echo "$OUTPUT" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
 
-      - name: Run Reqvire Traces (if triggered)
-        if: contains(github.event.comment.body, '/reqvire traces')
+      - name: Run Reqvire Verification Traces (if triggered)
+        if: contains(github.event.comment.body, '/reqvire verifications traces')
         id: run_traces
         run: |
-          OUTPUT=$(reqvire traces || echo "⚠️ reqvire traces failed.")
+          OUTPUT=$(reqvire verifications traces || echo "⚠️ reqvire verifications traces failed.")
           echo "REQVIRE_OUTPUT<<EOF" >> $GITHUB_ENV
           echo "$OUTPUT" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

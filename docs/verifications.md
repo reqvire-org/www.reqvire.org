@@ -86,21 +86,37 @@ Reqvire automatically maintains bidirectional relations:
 - When a requirement has `verifiedBy: [Test A]`, the Test A element shows `verify: [Requirement]`
 - This ensures complete traceability in both directions
 
-## Coverage Reporting
+## Verification Coverage
 
-Use Reqvire's coverage report command to:
-- Identify unverified leaf requirements
-- Track test-verification satisfaction status
-- Generate coverage metrics and reports
-- Support quality assurance and compliance activities
+Generate verification coverage reports to track verification status of your requirements.
+
+### Coverage Command
 
 ```bash
 # Generate coverage report
-reqvire coverage-report
+reqvire verifications coverage
 
 # Generate JSON coverage report for programmatic analysis
-reqvire coverage-report --json
+reqvire verifications coverage --json
 ```
+
+The coverage report focuses on **leaf requirements** and provides:
+- Percentage of verified/unverified leaf requirements
+- Breakdown by file and section
+- Breakdown by verification type
+- Test-verification satisfaction status
+
+### Coverage Strategy
+
+The coverage system implements the **verification roll-up approach**:
+
+- **Leaf requirements** MUST be verified - these represent the actual testable functionality
+- **Parent requirements** are automatically covered when their leaf requirements are verified
+- One verification can verify multiple leaf requirements, providing coverage for entire requirement chains
+- **Test-verifications** require `satisfiedBy` relations to actual test implementations
+- **Analysis/inspection/demonstration verifications** are considered satisfied by default (no `satisfiedBy` required)
+
+### Coverage Flags
 
 The coverage system will flag:
 - ✅ **Satisfied test-verifications**: Those with valid `satisfiedBy` relations to test implementations
