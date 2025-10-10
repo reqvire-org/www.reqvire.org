@@ -205,6 +205,12 @@ reqvire verifications matrix --json
 
 The matrix implements the **verification roll-up strategy** - a requirement at any level is marked as verified if ALL its child requirements are verified, with verification status rolling up from leaf requirements through the entire parent chain to the root.
 
+#### Example Verification Matrix
+
+![Verification Traceability Matrix](assets/images/verifications_matrix.png)
+
+*Example traceability matrix showing verification coverage and roll-up strategy. Requirements are color-coded by verification status, with verification rolling up from leaf requirements to parent requirements.*
+
 ## Sections Summary
 
 Generate a summary of file sections and their content without individual elements.
