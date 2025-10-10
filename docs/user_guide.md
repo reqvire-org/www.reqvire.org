@@ -15,6 +15,7 @@ This user guide provides detailed instructions on how to use Reqvire effectively
 - [Generating Documentation](#generating-documentation)
 - [Traceability](#traceability)
 - [Sections Summary](#sections-summary)
+- [Model Commands](#model-commands)
 - [Change Impact Report](#change-impact-report)
 - [Diagrams](#diagrams)
 - [GitHub Integration](#github-integration)
@@ -185,6 +186,18 @@ reqvire verifications traces --filter-type="test-verification" --filter-name="Lo
 
 Supported verification types: `test-verification`, `analysis-verification`, `inspection-verification`, `demonstration-verification`
 
+#### Relative Link Generation
+
+By default, verification traces generate links relative to the directory where reqvire was executed. You can specify a different base folder for relative links:
+
+```bash
+# Generate traces with links relative to a specific folder
+reqvire verifications traces --from-folder="docs/specs"
+
+# This makes generated links relative to docs/specs instead of the current directory,
+# useful when the output will be placed in a different location
+```
+
 ### Generate Verification Matrix
 
 ```bash
@@ -218,7 +231,7 @@ Generate a summary of file sections and their content without individual element
 ### Generate Sections Summary
 
 ```bash
-reqvire sections-summary
+reqvire model section-summary
 ```
 
 This generates a summary showing files, sections, and section content without listing individual requirements or verifications.
@@ -227,10 +240,10 @@ This generates a summary showing files, sections, and section content without li
 
 ```bash
 # Generate sections summary in text format (default)
-reqvire sections-summary
+reqvire model section-summary
 
 # Generate sections summary in JSON format
-reqvire sections-summary --json
+reqvire model section-summary --json
 ```
 
 #### Filtering Options
@@ -239,16 +252,73 @@ You can filter the output using various criteria:
 
 ```bash
 # Filter by file pattern
-reqvire sections-summary --filter-file="specifications/*.md"
+reqvire model section-summary --filter-file="specifications/*.md"
 
 # Filter by section name pattern
-reqvire sections-summary --filter-section="System*"
+reqvire model section-summary --filter-section="System*"
 
 # Filter by content containing specific text
-reqvire sections-summary --filter-content="MUST"
+reqvire model section-summary --filter-content="MUST"
 
 # Combine multiple filters
-reqvire sections-summary --filter-file="specifications/*.md" --filter-section="System*" --json
+reqvire model section-summary --filter-file="specifications/*.md" --filter-section="System*" --json
+```
+
+## Model Commands
+
+Commands for generating model overviews and summaries.
+
+### Model Summary
+
+Generate a comprehensive summary of the entire requirements model.
+
+```bash
+reqvire model summary
+```
+
+This generates a summary showing the complete structure of your requirements model, including all files, sections, requirements, and verifications.
+
+#### Output Format Options
+
+```bash
+# Generate model summary in text format (default)
+reqvire model summary
+
+# Generate model summary in JSON format
+reqvire model summary --json
+```
+
+### Model Index
+
+Generate an index of all requirements and verifications in the model.
+
+```bash
+reqvire model index
+```
+
+This generates an index listing all requirements and verifications, outputting directly to the console. This is useful for getting a quick overview of all elements in your model or for piping into other tools.
+
+#### Output Format Options
+
+```bash
+# Generate model index in text format (default)
+reqvire model index
+
+# Generate model index in JSON format for programmatic processing
+reqvire model index --json
+```
+
+The output is written to stdout, making it easy to redirect to a file or pipe to other commands:
+
+```bash
+# Save index to a file
+reqvire model index > index.txt
+
+# Save JSON index to a file
+reqvire model index --json > index.json
+
+# Process with other tools
+reqvire model index --json | jq '.requirements | length'
 ```
 
 ## Change Impact Report
