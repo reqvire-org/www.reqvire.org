@@ -27,13 +27,25 @@ Reqvire supports several verification element types that align with standard sys
 
 ## Coverage Philosophy
 
+Reqvire uses a **Verification Roll-up approach**, where verification of detailed requirements provides coverage for their parent requirements through the requirements hierarchy.
+
 ### Leaf Requirements Focus
+
 Reqvire's verification coverage focuses on **leaf requirements** - requirements that do not have forward relations to other requirements. These represent the actual testable functionality.
+
+**Preferable Verification Approach:**
+
+The recommended strategy is to **verify leaf requirements** rather than intermediate or parent requirements. This approach provides several key advantages:
+
+- **Verification Roll-up**: When leaf requirements are verified, their verification status automatically rolls up through the traceability chain to cover all parent requirements up to the root
+- **Efficiency**: A single verification can verify multiple leaf requirements, providing coverage for entire requirement chains
+- **Coverage Completeness**: Verifying the most detailed, specific requirements ensures that all higher-level requirements they derive from are implicitly verified
+- **Clear Test Scope**: Leaf requirements represent concrete, testable functionality with well-defined acceptance criteria
 
 **Coverage Rules:**
 - **Leaf requirements** MUST be verified - these represent the actual testable functionality
-- **Parent/intermediate requirements** MAY be verified but it's not a hard requirement as they might be covered in verification of leaf requirements
-- One verification may verify multiple leaf requirements (N:1 relationship)
+- **Parent/intermediate requirements** MAY be verified but it's not necessary as they are covered through verification of their leaf requirements
+- One verification may verify multiple leaf requirements (N:1 relationship), covering entire chains of parent requirements
 
 ### Coverage Metrics
 The verification coverage system tracks:
