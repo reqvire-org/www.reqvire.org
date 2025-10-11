@@ -12,6 +12,7 @@ This user guide provides detailed instructions on how to use Reqvire effectively
 - [Working with Requirements](#working-with-requirements)
 - [Validation](#validation)
 - [Formatting](#formatting)
+- [Linting](#linting)
 - [Generating Documentation](#generating-documentation)
 - [Traceability](#traceability)
 - [Sections Summary](#sections-summary)
@@ -144,6 +145,48 @@ Apply automatic fixes to formatting issues:
 
 ```bash
 reqvire format --fix
+```
+
+## Linting
+
+The lint command analyzes model quality and detects issues in requirements relations, such as redundant verify relations and potentially redundant hierarchical relations.
+
+### Analyze All Issues
+
+Run lint to detect all model quality issues:
+
+```bash
+reqvire lint
+```
+
+This analyzes the model and reports all detected issues.
+
+### Filter by Issue Type
+
+```bash
+# Show only auto-fixable issues
+reqvire lint --fixable
+
+# Show only issues requiring manual review
+reqvire lint --auditable
+```
+
+### Apply Automatic Fixes
+
+Apply automatic fixes for auto-fixable issues:
+
+```bash
+reqvire lint --fix
+```
+
+**Note:** Only auto-fixable issues (like redundant verify relations) will be fixed. Issues marked as requiring manual review (auditable) must be addressed manually.
+
+### JSON Output
+
+Output results in JSON format for integration with other tools:
+
+```bash
+reqvire lint --json
 ```
 
 ## Traceability
