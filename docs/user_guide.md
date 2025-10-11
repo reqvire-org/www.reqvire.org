@@ -128,20 +128,22 @@ Errors must be fixed before command can execute.
 
 Formatting helps maintain consistent formatting and style.
 
-### Run Formatting
+### Check Formatting (Dry-Run)
 
-Apply automatic fixes to formatting issues:
+Preview formatting issues without applying changes (safe default):
 
 ```bash
 reqvire format
 ```
 
-### Dry Run
+This shows what would be changed but doesn't apply any fixes.
 
-Preview formatting changes without applying them:
+### Apply Fixes
+
+Apply automatic fixes to formatting issues:
 
 ```bash
-reqvire format --dry-run
+reqvire format --fix
 ```
 
 ## Traceability
