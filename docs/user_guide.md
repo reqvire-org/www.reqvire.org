@@ -325,6 +325,35 @@ reqvire export --output output_folder
 
 This creates HTML files with navigation, properly formatted requirements, and interactive diagrams.
 
+### Serve Documentation Locally
+
+For local development and preview, use the serve command to start a local HTTP server:
+
+```bash
+reqvire serve
+```
+
+This command starts a local server serving your documentation.
+
+#### Command Options
+
+```bash
+# Start server on default host and port (localhost:8080)
+reqvire serve
+
+# Specify custom host and port
+reqvire serve --host 0.0.0.0 --port 3000
+```
+
+**Options:**
+- `--host <HOST>` - Bind address (default: `localhost`)
+- `--port <PORT>` - Server port (default: `8080`)
+
+The server will display the URL and instructions:
+- Press `Ctrl-C` to stop the server
+- Press `Ctrl-R` in the shell to regenerate and restart the browser
+
+The server continues running until you terminate it with `Ctrl-C`.
 
 ## Diagrams
 
