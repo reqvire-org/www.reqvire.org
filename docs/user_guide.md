@@ -349,11 +349,7 @@ reqvire serve --host 0.0.0.0 --port 3000
 - `--host <HOST>` - Bind address (default: `localhost`)
 - `--port <PORT>` - Server port (default: `8080`)
 
-The server will display the URL and instructions:
-- Press `Ctrl-C` to stop the server
-- Press `Ctrl-R` in the shell to regenerate and restart the browser
-
-The server continues running until you terminate it with `Ctrl-C`.
+The server will display the URL. Press `Ctrl-C` to stop the server.
 
 ## Diagrams
 
