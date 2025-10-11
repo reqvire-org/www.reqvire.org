@@ -11,7 +11,7 @@ This user guide provides detailed instructions on how to use Reqvire effectively
 - [Configuration](#configuration)
 - [Working with Requirements](#working-with-requirements)
 - [Validation](#validation)
-- [Formatting](#formatting)
+- [Linting](#linting)
 - [Generating Documentation](#generating-documentation)
 - [Traceability](#traceability)
 - [Sections Summary](#sections-summary)
@@ -124,24 +124,58 @@ Read specifications in [SpecificationsRequirements.md](https://github.com/reqvir
 Any functional require command that needs to parse model will as a first step perform model validation and report any errors found.
 Errors must be fixed before command can execute.
 
-## Formatting
+## Linting
 
-Formatting helps maintain consistent formatting and style.
+The lint command performs quality checks on your requirements model, including syntactic issues, redundant verify relations, and potentially redundant hierarchical relations.
 
-### Run Formatting
+### Check All Issues (Dry-Run)
 
-Apply automatic fixes to formatting issues:
+Run all lint checks without making changes (safe default):
 
 ```bash
-reqvire format
+reqvire lint
 ```
 
-### Dry Run
+This runs all quality checks and shows what would be changed, but doesn't apply any fixes.
 
-Preview formatting changes without applying them:
+### Check Specific Categories
 
 ```bash
-reqvire format --dry-run
+# Check only syntax/structural issues
+reqvire lint --syntax
+
+# Check for redundant verify relations
+reqvire lint --redundant-verify
+
+# Check for potentially redundant hierarchical relations
+reqvire lint --redundant-hierarchy
+
+# Combine multiple checks
+reqvire lint --syntax --redundant-verify
+```
+
+### Apply Fixes
+
+Apply auto-fixable changes (syntax issues and redundant verify relations):
+
+```bash
+# Fix all auto-fixable issues
+reqvire lint --fix
+
+# Fix only specific categories
+reqvire lint --syntax --fix
+reqvire lint --redundant-verify --fix
+```
+
+**Note:** The `--redundant-hierarchy` check identifies potentially redundant relations that require manual review and cannot be auto-fixed.
+
+### JSON Output
+
+Output results in JSON format for integration with other tools:
+
+```bash
+reqvire lint --json
+reqvire lint --syntax --json
 ```
 
 ## Traceability
