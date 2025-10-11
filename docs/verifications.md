@@ -100,10 +100,10 @@ Generate verification coverage reports to track verification status of your requ
 
 ```bash
 # Generate coverage report
-reqvire verifications coverage
+reqvire coverage
 
 # Generate JSON coverage report for programmatic analysis
-reqvire verifications coverage --json
+reqvire coverage --json
 ```
 
 The coverage report focuses on **leaf requirements** and provides:

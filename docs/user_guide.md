@@ -151,7 +151,7 @@ Track relationships between requirements and verifications using traceability fe
 ### Generate Verification Traces
 
 ```bash
-reqvire verifications traces
+reqvire traces
 ```
 
 This generates upward trace trees from verifications to root requirements, showing how verifications link to requirements and their parent chains. Output is in Markdown format with Mermaid diagrams by default.
@@ -160,10 +160,10 @@ This generates upward trace trees from verifications to root requirements, showi
 
 ```bash
 # Generate verification traces in Markdown format with Mermaid diagrams (default)
-reqvire verifications traces
+reqvire traces
 
 # Generate verification traces in JSON format
-reqvire verifications traces --json
+reqvire traces --json
 ```
 
 #### Filtering Options
@@ -172,16 +172,16 @@ You can filter the verification traces using various criteria:
 
 ```bash
 # Filter by specific verification ID
-reqvire verifications traces --filter-id="test-auth-001"
+reqvire traces --filter-id="test-auth-001"
 
 # Filter by verification name pattern (regex)
-reqvire verifications traces --filter-name="Authentication.*"
+reqvire traces --filter-name="Authentication.*"
 
 # Filter by verification type
-reqvire verifications traces --filter-type="test-verification"
+reqvire traces --filter-type="test-verification"
 
 # Combine multiple filters (AND logic)
-reqvire verifications traces --filter-type="test-verification" --filter-name="Login.*" --json
+reqvire traces --filter-type="test-verification" --filter-name="Login.*" --json
 ```
 
 Supported verification types: `test-verification`, `analysis-verification`, `inspection-verification`, `demonstration-verification`
@@ -192,7 +192,7 @@ By default, verification traces generate links relative to the directory where r
 
 ```bash
 # Generate traces with links relative to a specific folder
-reqvire verifications traces --from-folder="docs/specs"
+reqvire traces --from-folder="docs/specs"
 
 # This makes generated links relative to docs/specs instead of the current directory,
 # useful when the output will be placed in a different location
@@ -201,7 +201,7 @@ reqvire verifications traces --from-folder="docs/specs"
 ### Generate Verification Matrix
 
 ```bash
-reqvire verifications matrix
+reqvire matrix
 ```
 
 This generates a traceability matrix showing verification coverage across all requirements.
@@ -210,10 +210,10 @@ This generates a traceability matrix showing verification coverage across all re
 
 ```bash
 # Generate verification matrix in SVG format
-reqvire verifications matrix --svg > matrix.svg
+reqvire matrix --svg > matrix.svg
 
 # Generate verification matrix in JSON format
-reqvire verifications matrix --json
+reqvire matrix --json
 ```
 
 The matrix implements the **verification roll-up strategy** - a requirement at any level is marked as verified if ALL its child requirements are verified, with verification status rolling up from leaf requirements through the entire parent chain to the root.
@@ -231,7 +231,7 @@ Generate a summary of file sections and their content without individual element
 ### Generate Sections Summary
 
 ```bash
-reqvire model section-summary
+reqvire section-summary
 ```
 
 This generates a summary showing files, sections, and section content without listing individual requirements or verifications.
@@ -240,10 +240,10 @@ This generates a summary showing files, sections, and section content without li
 
 ```bash
 # Generate sections summary in text format (default)
-reqvire model section-summary
+reqvire section-summary
 
 # Generate sections summary in JSON format
-reqvire model section-summary --json
+reqvire section-summary --json
 ```
 
 #### Filtering Options
@@ -252,28 +252,28 @@ You can filter the output using various criteria:
 
 ```bash
 # Filter by file pattern
-reqvire model section-summary --filter-file="specifications/*.md"
+reqvire section-summary --filter-file="specifications/*.md"
 
 # Filter by section name pattern
-reqvire model section-summary --filter-section="System*"
+reqvire section-summary --filter-section="System*"
 
 # Filter by content containing specific text
-reqvire model section-summary --filter-content="MUST"
+reqvire section-summary --filter-content="MUST"
 
 # Combine multiple filters
-reqvire model section-summary --filter-file="specifications/*.md" --filter-section="System*" --json
+reqvire section-summary --filter-file="specifications/*.md" --filter-section="System*" --json
 ```
 
 ## Model Commands
 
 Commands for generating model overviews and summaries.
 
-### Model Summary
+### Summary
 
 Generate a comprehensive summary of the entire requirements model.
 
 ```bash
-reqvire model summary
+reqvire summary
 ```
 
 This generates a summary showing the complete structure of your requirements model, including all files, sections, requirements, and verifications.
@@ -281,28 +281,11 @@ This generates a summary showing the complete structure of your requirements mod
 #### Output Format Options
 
 ```bash
-# Generate model summary in text format (default)
-reqvire model summary
+# Generate summary in text format (default)
+reqvire summary
 
-# Generate model summary in JSON format
-reqvire model summary --json
-```
-
-### Model Index
-
-Generate an index of all requirements and verifications in the model.
-
-```bash
-reqvire model index
-```
-
-This generates an index listing all requirements and verifications, outputting directly to the console. This is useful for HTML export - if saved as index.md, it will become index.html.
-
-The output is written to stdout, making it easy to redirect to a file:
-
-```bash
-# Save index to a file
-reqvire model index > index.md
+# Generate summary in JSON format
+reqvire summary --json
 ```
 
 ## Change Impact Report
@@ -462,7 +445,7 @@ jobs:
       
       - name: Generate verification matrix svg
         run: |
-          reqvire verifications matrix --svg > specifications/matrix.svg
+          reqvire matrix --svg > specifications/matrix.svg
                 
       - name: Check for Changes
         id: check_changes
@@ -508,7 +491,7 @@ jobs:
       github.event.issue.pull_request != null &&
       (
         contains(github.event.comment.body, '/reqvire impact') ||
-        contains(github.event.comment.body, '/reqvire verifications traces')
+        contains(github.event.comment.body, '/reqvire traces')
       )
     runs-on: ubuntu-latest
        
@@ -584,10 +567,10 @@ jobs:
           echo "EOF" >> $GITHUB_ENV
 
       - name: Run Reqvire Verification Traces (if triggered)
-        if: contains(github.event.comment.body, '/reqvire verifications traces')
+        if: contains(github.event.comment.body, '/reqvire traces')
         id: run_traces
         run: |
-          OUTPUT=$(reqvire verifications traces || echo "⚠️ reqvire verifications traces failed.")
+          OUTPUT=$(reqvire traces || echo "⚠️ reqvire traces failed.")
           echo "REQVIRE_OUTPUT<<EOF" >> $GITHUB_ENV
           echo "$OUTPUT" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
