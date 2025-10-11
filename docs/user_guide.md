@@ -315,12 +315,12 @@ reqvire change-impact --json
 
 ## Generating Documentation
 
-Reqvire can generate HTML documentation from your Markdown files.
+Reqvire can export your model to browsable HTML documentation with complete traceability.
 
-### Convert to HTML
+### Export to HTML
 
 ```bash
-reqvire html --output output_folder
+reqvire export --output output_folder
 ```
 
 This creates HTML files with navigation, properly formatted requirements, and interactive diagrams.
