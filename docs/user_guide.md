@@ -333,7 +333,7 @@ For local development and preview, use the serve command to start a local HTTP s
 reqvire serve
 ```
 
-This command starts a local server serving your documentation.
+This command starts a local server serving your documentation. It's particularly useful for local development and for integrating with AI assistants via Playwright or Puppeteer MCP servers, giving them visual access to your documentation.
 
 #### Command Options
 
