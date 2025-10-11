@@ -154,7 +154,7 @@ Track relationships between requirements and verifications using traceability fe
 reqvire traces
 ```
 
-This generates upward trace trees from verifications to root requirements, showing how verifications link to requirements and their parent chains. Output is in Markdown format with Mermaid diagrams by default.
+This generates upward trace trees from verifications to root requirements, showing how verifications link to requirements and their parent chains. It also identifies redundant verify relations - cases where the same verification verifies both a leaf requirement and its parent, which indicates the model is not clean. Output is in Markdown format with Mermaid diagrams by default.
 
 #### Output Format Options
 
