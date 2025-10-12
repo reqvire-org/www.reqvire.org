@@ -179,7 +179,7 @@ Apply automatic fixes for auto-fixable issues:
 reqvire lint --fix
 ```
 
-**Note:** Only auto-fixable issues (like redundant verify relations) will be fixed. Issues marked as requiring manual review (auditable) must be addressed manually.
+**Note:** Only auto-fixable issues (like redundant verify or redundant direct chain hierarchical relations) will be fixed. Issues marked as requiring manual review (auditable) must be addressed manually.
 
 ### JSON Output
 
