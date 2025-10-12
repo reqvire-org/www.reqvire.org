@@ -313,6 +313,42 @@ reqvire section-summary --filter-file="specifications/*.md" --filter-section="Sy
 
 Commands for generating model overviews and summaries.
 
+### Model Diagram
+
+Generate a complete model diagram showing all elements and their relationships.
+
+```bash
+reqvire model
+```
+
+This generates markdown with a Mermaid diagram showing the complete model structure including all elements and their relations.
+
+#### Filter by Root Element
+
+Generate a filtered diagram showing only elements forward-related from a specific root:
+
+```bash
+# Show only elements reachable via forward relations from specified root
+reqvire model --root-id=<element-id>
+```
+
+This includes only elements that are reachable by following forward relations from the specified root element.
+
+#### Output Format Options
+
+```bash
+# Generate model diagram in Markdown with Mermaid (default)
+reqvire model
+
+# Generate complete model structure in JSON format
+reqvire model --json
+
+# Generate filtered JSON with only forward-related elements from root
+reqvire model --root-id=<element-id> --json
+```
+
+The JSON output contains the complete model structure including folders, elements, and relations, making it suitable for programmatic analysis and integration with other tools.
+
 ### Summary
 
 Generate a comprehensive summary of the entire requirements model.
