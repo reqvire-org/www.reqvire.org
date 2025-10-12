@@ -368,7 +368,7 @@ Reqvire can export your model to browsable HTML documentation with complete trac
 reqvire export --output output_folder
 ```
 
-This creates HTML files with navigation, properly formatted requirements, and interactive diagrams.
+This creates HTML files with navigation, properly formatted requirements, interactive diagrams, verification traces, and coverage reports.
 
 ### Serve Documentation Locally
 
