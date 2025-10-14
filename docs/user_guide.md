@@ -9,6 +9,7 @@ This user guide provides detailed instructions on how to use Reqvire effectively
 
 - [Basic Commands](#basic-commands)
 - [Configuration](#configuration)
+- [File Exclusion Patterns](#file-exclusion-patterns)
 - [Working with Requirements](#working-with-requirements)
 - [Validation](#validation)
 - [Formatting](#formatting)
@@ -63,6 +64,35 @@ To use a custom configuration file:
 reqvire -c path/to/custom-config.yaml
 ```
 
+## File Exclusion Patterns
+
+Reqvire automatically excludes files and directories from structured markdown processing based on ignore patterns defined in:
+
+1. **`.gitignore`** - If your project is a git repository, reqvire reads the `.gitignore` file at the repository root
+2. **`.reqvireignore`** - A reqvire-specific ignore file using the same pattern syntax as `.gitignore`
+
+Both files use standard gitignore pattern syntax to exclude files from being parsed as structured markdown (requirements/verifications). However, they differ in an important way:
+
+- **`.gitignore`**: Files matching these patterns are **completely excluded** - they cannot be parsed as structured markdown AND cannot be referenced in file relations to elements
+- **`.reqvireignore`**: Files matching these patterns are excluded from structured markdown parsing BUT **can still be referenced** in file relations to elements (useful for design documents, diagrams, or other supporting files that you want to link to but not parse)
+
+**Example `.reqvireignore`:**
+```
+# Exclude use case documents
+Usecases.md
+
+# Exclude logical and physical design documents
+Logical*.md
+Physical*.md
+
+# Exclude TODO lists
+TODO.md
+
+# Exclude entire directories
+tests/**
+src/**
+```
+
 ### Configuration Options
 
 Here's an example of a Reqvire configuration file:
@@ -70,15 +100,6 @@ Here's an example of a Reqvire configuration file:
 ```yaml
   # Path to the user requirements root folder
   user_requirements_root_folder: "specifications"
-  
-  # Glob patterns to exclude from requirements processing
-  excluded_filename_patterns:
-    - "Usecases.md"
-    - "Logical*.md"
-    - "Physical*.md"
-    - "TODO.md"
-    - "tests/**"
-    - "src/**"            
 
 style:
   # Theme for HTML output (default, dark, light)
@@ -92,9 +113,9 @@ style:
   
   # Diagram direction (TD for top-down, LR for left-to-right)
   diagram_direction: "LR"
-  
+
   # If diagrams click links should be blobs to work from GitHub console
-  diagrams_with_blobs: false  
+  diagrams_with_blobs: false
 ```
 
 ## Working with Requirements
