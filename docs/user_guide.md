@@ -269,6 +269,15 @@ reqvire traces --from-folder="docs/specs"
 # useful when the output will be placed in a different location
 ```
 
+#### GitHub Blob Links
+
+```bash
+# Generate traces with GitHub blob links (useful for viewing from GitHub)
+reqvire traces --links-with-blobs
+```
+
+By default, traces use relative links in Mermaid diagrams. Use `--links-with-blobs` to generate diagrams with GitHub blob URLs, which makes clickable links work properly when viewing trace diagrams directly in the GitHub web interface.
+
 ### Generate Verification Matrix
 
 ```bash
