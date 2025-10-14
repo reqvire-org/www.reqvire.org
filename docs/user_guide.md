@@ -120,9 +120,6 @@ src/**
 Here's an example of a Reqvire configuration file:
 
 ```yaml
-  # Path to the user requirements root folder
-  user_requirements_root_folder: "specifications"
-
 style:
   # Theme for HTML output (default, dark, light)
   theme: "default"
@@ -142,21 +139,51 @@ style:
 
 ## Working with Requirements
 
-Reqvire is designed to work with a structured requirements hierarchy in Markdown files.
+Reqvire is designed to work with a structured requirements hierarchy in Markdown files. Requirements are organized using **folders, files, and sections for logical containment** - representing subsystems, features, or functional areas.
 
 ### Folder Structure
 
-A typical Reqvire project structure looks like this:
+A typical Reqvire project structure reflecting logical containment:
 
 ```
 project/
 ├── specifications/
-│   ├── UserRequirements.md
-│   ├── MissionRequirements.md
-│   ├── SystemRequirements/
-│       └── Requirements.md
+│   ├── Requirements.md
+│   ├── Authentication/
+│   │   ├── Overview.md
+│   │   ├── PasswordAuth.md
+│   │   └── OAuth.md
+│   ├── DataManagement/
+│   │   ├── Storage.md
+│   │   └── Backup.md
+│   └── API/
+│       └── Endpoints.md
 └── reqvire.yaml
 ```
+
+This structure uses folders, files, and sections to represent **containment relationships** - how requirements are organized into subsystems and functional areas.
+
+### Model Structure
+
+Markdown files contain **requirements** and **verification elements** that together form the complete model structure. These elements are connected through:
+
+- **Containment**: The folder, file, and section hierarchy provides the containment structure
+- **Relations**: Elements are wired together using relations such as:
+  - `derivedFrom` - hierarchical relation showing how detailed requirements derive from higher-level ones
+  - `verifies` - linking verifications to requirements they verify
+  - `trace` - soft relations for traceability between elements
+
+The combination of containment structure and explicit relations creates the full requirements model.
+
+### Requirement Hierarchy Levels
+
+Requirements are organized in hierarchical levels within the markdown structure:
+
+- **Level 1 requirements** are root-level requirements that don't have parent relations. These are typically found at the top level of your main requirements file.
+- **Level 2 requirements** (children of level 1) are usually **user requirements** - high-level stakeholder needs and system objectives.
+- **Deeper levels** typically contain **system requirements** - detailed technical specifications that derive from and implement the user requirements above them.
+
+This hierarchy naturally reflects the progressive refinement from high-level user needs down to detailed technical implementation.
 
 ### Requirements and general Markdown files format
 
