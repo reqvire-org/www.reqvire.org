@@ -96,7 +96,9 @@ Reqvire automatically parses structured Markdown to generate:
 - **Change propagation analysis** identifying all downstream effects of modifications
 - **Compliance matrices** mapping requirements to standards, regulations, or policies
 - **Model summary reports** providing overview statistics and health metrics
-- **Interactive documentation** with clickable diagrams and searchable content
+- **Interactive HTML documentation** with clickable diagrams and searchable content
+- **Mermaid diagram exports** for integration with documentation platforms
+- **JSON/CSV exports** for integration with external tools and dashboards
 
 ---
 
@@ -109,4 +111,6 @@ Reqvire is designed for automation. In typical Git-based workflows, you can:
 - **Generate traceability and change impact reports** for stakeholder review
 - **Block PRs** if requirements are incomplete or broken
 - **Package models** into versioned documentation releases
+- **Integrate with GitHub Actions/GitLab CI** for automated validation
+- **Generate reports** that become part of your release artifacts
 

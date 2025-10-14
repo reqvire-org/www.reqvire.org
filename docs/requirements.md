@@ -80,13 +80,13 @@ This file-and-section based containment approach offers several advantages:
 ### Example Structure
 
 ```
-specifications/
-├── UserRequirements.md
+project/
+├── Requirements.md              # Top-level user requirements
 │   └── ## Authentication
 │       ├── REQ_AUTH
 │       └── REQ_SECURITY
-└── SystemRequirements/
-    └── IdentityProvider.md
+└── Authentication/
+    └── Requirements.md          # Authentication subsystem requirements
         ├── ## Password Authentication
         │   └── REQ_PASSWORD
         └── ## OAuth Authentication
@@ -94,10 +94,11 @@ specifications/
 ```
 
 In this example:
-- `UserRequirements.md` file contains high-level authentication requirements
-- `IdentityProvider.md` file contains detailed system requirements
+- Top-level `Requirements.md` file contains high-level user requirements
+- `Authentication/Requirements.md` file contains detailed system requirements for the authentication subsystem
 - Sections within each file further organize related requirements
 - The `derivedFrom` relationship traces technical requirements back to user requirements
+- Organization follows **architectural decomposition** by subsystem/component rather than by artifact type
 
 ## Diagram summary
 
