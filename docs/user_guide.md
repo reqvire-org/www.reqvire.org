@@ -70,11 +70,33 @@ Reqvire automatically excludes files and directories from structured markdown pr
 
 1. **`.gitignore`** - If your project is a git repository, reqvire reads the `.gitignore` file at the repository root
 2. **`.reqvireignore`** - A reqvire-specific ignore file using the same pattern syntax as `.gitignore`
+3. **Reserved filenames** - Certain common repository documentation files are always excluded from structured markdown processing
 
-Both files use standard gitignore pattern syntax to exclude files from being parsed as structured markdown (requirements/verifications). However, they differ in an important way:
+Both ignore files use standard gitignore pattern syntax to exclude files from being parsed as structured markdown (requirements/verifications). However, they differ in an important way:
 
 - **`.gitignore`**: Files matching these patterns are **completely excluded** - they cannot be parsed as structured markdown AND cannot be referenced in file relations to elements
 - **`.reqvireignore`**: Files matching these patterns are excluded from structured markdown parsing BUT **can still be referenced** in file relations to elements (useful for design documents, diagrams, or other supporting files that you want to link to but not parse)
+
+### Reserved Filenames
+
+The following filenames are considered reserved and are always excluded from structured markdown processing, as they are typically used for general repository documentation or AI assistant context:
+
+- `README.md`
+- `CHANGELOG.md`, `CHANGES.md`
+- `CONTRIBUTING.md`
+- `LICENSE.md`
+- `CODE_OF_CONDUCT.md`
+- `SECURITY.md`
+- `AUTHORS.md`
+- `ROADMAP.md`
+- `CLAUDE.md`
+- `AGENT.md`
+- `AI.md`
+- `PROMPT.md`
+- `INSTRUCTIONS.md`
+- `CONTEXT.md`
+- `CURSOR.md`
+- `COPILOT.md`
 
 **Example `.reqvireignore`:**
 ```
