@@ -100,24 +100,43 @@ Reqvire is designed to work with a structured requirements hierarchy in Markdown
 
 ### Folder Structure
 
-A typical Reqvire project structure reflecting logical containment:
+Reqvire supports flexible organization based on **architectural decomposition** - structuring by subsystem/component rather than by artifact type. Requirements can be organized separately from implementation or co-located with code.
+
+**Example 1: Requirements separate from implementation**
 
 ```
 project/
-└── specifications/
-    ├── Requirements.md
-    ├── Authentication/
-    │   ├── Overview.md
-    │   ├── PasswordAuth.md
-    │   └── OAuth.md
-    ├── DataManagement/
-    │   ├── Storage.md
-    │   └── Backup.md
-    └── API/
-        └── Endpoints.md
+├── Requirements.md
+├── Authentication/
+│   └── Requirements.md           # Authentication subsystem requirements
+├── Storage/
+│   └── Requirements.md           # Storage subsystem requirements
+├── API/
+│   └── Requirements.md           # API subsystem requirements
+└── src/
+    ├── auth.rs
+    ├── storage.rs
+    └── api.rs
 ```
 
-This structure uses folders, files, and sections to represent **containment relationships** - how requirements are organized into subsystems and functional areas.
+**Example 2: Requirements co-located with implementation**
+
+```
+project/
+├── Requirements.md
+└── src/
+    ├── authentication/
+    │   ├── Requirements.md       # Authentication subsystem requirements
+    │   └── auth.rs
+    ├── storage/
+    │   ├── Requirements.md       # Storage subsystem requirements
+    │   └── storage.rs
+    └── api/
+        ├── Requirements.md       # API subsystem requirements
+        └── api.rs
+```
+
+Both approaches organize by architectural decomposition. The co-location approach provides additional benefits for developers and AI coding assistants by placing requirements directly alongside the code they describe.
 
 ### Model Structure
 
