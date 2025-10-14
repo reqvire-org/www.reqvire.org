@@ -8,7 +8,6 @@ This user guide provides detailed instructions on how to use Reqvire effectively
 ## Table of Contents
 
 - [Basic Commands](#basic-commands)
-- [Configuration](#configuration)
 - [File Exclusion Patterns](#file-exclusion-patterns)
 - [Working with Requirements](#working-with-requirements)
 - [Validation](#validation)
@@ -42,26 +41,6 @@ Display the current version:
 
 ```bash
 reqvire --version
-```
-
-## Configuration
-
-Reqvire uses a YAML configuration file to customize its behavior.
-
-### Default Configuration File
-
-By default, Reqvire looks for configuration in the following files (in order):
-- `reqvire.yaml`
-- `reqvire.yml`
-- `.reqvire.yaml`
-- `.reqvire.yml`
-
-### Custom Configuration
-
-To use a custom configuration file:
-
-```bash
-reqvire -c path/to/custom-config.yaml
 ```
 
 ## File Exclusion Patterns
@@ -115,28 +94,6 @@ tests/**
 src/**
 ```
 
-### Configuration Options
-
-Here's an example of a Reqvire configuration file:
-
-```yaml
-style:
-  # Theme for HTML output (default, dark, light)
-  theme: "default"
-  
-  # Maximum width for HTML output
-  max_width: 1200
-  
-  # Optional path to custom CSS file
-  # custom_css: "path/to/custom.css"
-  
-  # Diagram direction (TD for top-down, LR for left-to-right)
-  diagram_direction: "LR"
-
-  # If diagrams click links should be blobs to work from GitHub console
-  diagrams_with_blobs: false
-```
-
 ## Working with Requirements
 
 Reqvire is designed to work with a structured requirements hierarchy in Markdown files. Requirements are organized using **folders, files, and sections for logical containment** - representing subsystems, features, or functional areas.
@@ -147,18 +104,17 @@ A typical Reqvire project structure reflecting logical containment:
 
 ```
 project/
-├── specifications/
-│   ├── Requirements.md
-│   ├── Authentication/
-│   │   ├── Overview.md
-│   │   ├── PasswordAuth.md
-│   │   └── OAuth.md
-│   ├── DataManagement/
-│   │   ├── Storage.md
-│   │   └── Backup.md
-│   └── API/
-│       └── Endpoints.md
-└── reqvire.yaml
+└── specifications/
+    ├── Requirements.md
+    ├── Authentication/
+    │   ├── Overview.md
+    │   ├── PasswordAuth.md
+    │   └── OAuth.md
+    ├── DataManagement/
+    │   ├── Storage.md
+    │   └── Backup.md
+    └── API/
+        └── Endpoints.md
 ```
 
 This structure uses folders, files, and sections to represent **containment relationships** - how requirements are organized into subsystems and functional areas.
@@ -513,6 +469,15 @@ reqvire generate-diagrams
 ```
 
 This creates Mermaid diagrams within your requirements files.
+
+#### Options
+
+```bash
+# Generate diagrams with GitHub blob links (useful for viewing from GitHub)
+reqvire generate-diagrams --links-with-blobs
+```
+
+By default, diagrams use relative links. Use `--links-with-blobs` to generate diagrams with GitHub blob URLs, which makes clickable links work properly when viewing diagrams directly in the GitHub web interface.
 
 ### Remove Diagrams
 
