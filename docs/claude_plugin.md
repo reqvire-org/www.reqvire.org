@@ -3,15 +3,40 @@ layout: page
 title: Claude Code Plugin
 ---
 
-## Table of Contents
-{:.no_toc}
+## Installation
 
-* TOC
-{:toc}
+### Prerequisites
 
----
+Before installing the plugin, ensure you have:
 
-## Reqvire Plugin for Claude Code
+1. **Claude Code** installed (available at [claude.com/claude-code](https://claude.com/claude-code))
+2. **Reqvire CLI** installed on your system
+
+To install the Reqvire CLI:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/reqvire-org/reqvire/main/scripts/install.sh | bash
+```
+
+For detailed CLI installation options, see the [Installation Guide](https://www.reqvire.org/installation).
+
+### Installing the Plugin
+
+The Reqvire plugin is available through the reqvire-org marketplace for Claude Code:
+
+1. **Add the marketplace** - In Claude Code, run:
+   ```
+   /plugin marketplace add https://github.com/reqvire-org/reqvire
+   ```
+
+2. **Install the plugin** - Then run:
+   ```
+   /plugin install reqvire@reqvire-org
+   ```
+
+3. Restart Claude Code to activate the plugin
+
+## About the Plugin
 
 Reqvire offers a plugin for Claude Code, bringing AI-native requirements engineering capabilities directly into your Claude Code workflow through the reqvire-org marketplace.
 
@@ -44,37 +69,6 @@ The plugin provides the following slash commands (all prefixed with `reqvire:`):
 - `/reqvire:lint-model` - Check model quality and detect issues
 - `/reqvire:generate-tasks` - Generate implementation tasks from requirements
 - `/reqvire:find-redundant-verifications` - Identify redundant verification relations
-
-## Installation
-
-### Prerequisites
-
-Before installing the plugin, ensure you have:
-
-1. **Claude Code** installed (available at [claude.com/claude-code](https://claude.com/claude-code))
-2. **Reqvire CLI** installed on your system
-
-To install the Reqvire CLI:
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/reqvire-org/reqvire/main/scripts/install.sh | bash
-```
-
-For detailed CLI installation options, see the [Installation Guide](https://www.reqvire.org/installation).
-
-### Installing the Plugin from GitHub
-
-The Reqvire plugin is available through the reqvire-org marketplace for Claude Code:
-
-1. Open Claude Code
-2. Navigate to Settings > Marketplace
-3. Add the reqvire-org GitHub repository as a marketplace source:
-   ```
-   https://github.com/reqvire-org/reqvire
-   ```
-4. Browse the marketplace and find "reqvire"
-5. Click "Install" on the Reqvire plugin
-6. Restart Claude Code to activate the plugin
 
 ## Getting Started
 
@@ -186,14 +180,5 @@ Automatically generate a comprehensive task breakdown from requirement changes, 
 ## Learn More
 
 - [User Guide](./user_guide.md) - Complete guide to using Reqvire
-- [Requirements Documentation](./requirements.md) - Understanding requirements structure
-- [Verifications](./verifications.md) - Understanding verification elements
+- [Modeling Language](./modeling_language.md) - Understanding Reqvire's modeling concepts
 - [GitHub Repository](https://github.com/reqvire-org/reqvire) - Source code and plugin files
-
-## Support
-
-If you encounter issues or have questions:
-
-- [Open an issue](https://github.com/reqvire-org/reqvire/issues) on GitHub
-- [Join discussions](https://github.com/reqvire-org/reqvire/discussions) with the community
-- Visit our [documentation](https://www.reqvire.org) for detailed guides

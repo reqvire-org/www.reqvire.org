@@ -6,10 +6,23 @@ title: User Guide
 This user guide provides detailed instructions on how to install and use Reqvire effectively.
 
 ## Table of Contents
-{:.no_toc}
 
-* toc
-{:toc max_level=1}
+- [Installation](#installation)
+- [Basic Commands](#basic-commands)
+- [File Exclusion Patterns](#file-exclusion-patterns)
+- [Working with Requirements](#working-with-requirements)
+- [Validation](#validation)
+- [Formatting](#formatting)
+- [Linting](#linting)
+- [Generating Documentation](#generating-documentation)
+- [Traceability](#traceability)
+- [Sections Summary](#sections-summary)
+- [Model Commands](#model-commands)
+- [Change Impact Report](#change-impact-report)
+- [Diagrams](#diagrams)
+- [GitHub Integration](#github-integration)
+  - [GitHub Actions](#github-actions)
+  - [GitHub Issue Comment Commands](#github-issue-comment-commands)
 
 ---
 
@@ -46,25 +59,6 @@ reqvire --version
 ```
 
 ---
-
-## Table of Contents
-
-- [Installation](#installation)
-- [Basic Commands](#basic-commands)
-- [File Exclusion Patterns](#file-exclusion-patterns)
-- [Working with Requirements](#working-with-requirements)
-- [Validation](#validation)
-- [Formatting](#formatting)
-- [Linting](#linting)
-- [Generating Documentation](#generating-documentation)
-- [Traceability](#traceability)
-- [Sections Summary](#sections-summary)
-- [Model Commands](#model-commands)
-- [Change Impact Report](#change-impact-report)
-- [Diagrams](#diagrams)
-- [GitHub Integration](#github-integration)
-  - [GitHub Actions](#github-actions)
-  - [GitHub Issue Comment Commands](#github-issue-comment-commands)
 
 ## Basic Commands
 
