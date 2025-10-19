@@ -10,10 +10,9 @@ theme: minima
 # Navigation
 header_pages:
   - index.md
-  - about.md
-  - requirements.md
-  - verifications.md
+  - claude_plugin.md
   - user_guide.md
+  - modeling_language.md
 
 # Markdown settings
 markdown: kramdown

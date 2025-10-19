@@ -3,10 +3,53 @@ layout: page
 title: User Guide
 ---
 
-This user guide provides detailed instructions on how to use Reqvire effectively.
+This user guide provides detailed instructions on how to install and use Reqvire effectively.
+
+## Table of Contents
+{:.no_toc}
+
+* toc
+{:toc max_level=1}
+
+---
+
+## Installation
+
+### Quick Install
+
+Install Reqvire using the installation script:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/reqvire-org/reqvire/main/scripts/install.sh | bash
+```
+
+This will download and install the latest version of Reqvire for your platform.
+
+### Installing from Source
+
+If you prefer to build from source, you'll need Rust installed:
+
+```bash
+git clone https://github.com/reqvire-org/reqvire.git
+cd reqvire
+cargo build --release
+```
+
+The binary will be available at `target/release/reqvire`.
+
+### Verify Installation
+
+Check that Reqvire is installed correctly:
+
+```bash
+reqvire --version
+```
+
+---
 
 ## Table of Contents
 
+- [Installation](#installation)
 - [Basic Commands](#basic-commands)
 - [File Exclusion Patterns](#file-exclusion-patterns)
 - [Working with Requirements](#working-with-requirements)
@@ -513,7 +556,7 @@ By default, diagrams use relative links. Use `--links-with-blobs` to generate di
 reqvire remove-diagrams
 ```
 
-This removes Mermaid diagrams within your requirements files. It is suggested to remove diagrams before using AI/LLM-s to reason about model to reduce context lenght.
+This removes Mermaid diagrams within your requirements files. It is suggested to remove diagrams before using AI tools to reason about model to reduce context length.
 
 
 ## GitHub Integration
