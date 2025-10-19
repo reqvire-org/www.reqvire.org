@@ -82,10 +82,30 @@ Once installed, you can immediately start using Reqvire's capabilities:
 
 ### Using Skills
 
-Skills are invoked automatically by Claude when relevant to your task. For example:
+Skills are specialized AI capabilities that work behind the scenes. You don't need to explicitly invoke them—just interact with Claude naturally, and the appropriate skill will activate based on your request.
 
-- When working on requirements analysis, the **syseng** skill provides guidance on MBSE best practices and analyzes your model structure
-- When planning implementation work, the **task-master** skill helps break down requirement changes into actionable tasks with full traceability
+**syseng skill** activates when you:
+- Ask questions about your requirements model structure
+- Request help adding or modifying requirements
+- Need to understand verification coverage gaps
+- Want guidance on MBSE best practices
+- Ask to analyze traceability or relationships
+
+**Example interactions:**
+- "Show me which requirements aren't verified"
+- "Help me add a new authentication requirement"
+- "What's wrong with my model structure?"
+
+**task-master skill** activates when you:
+- Ask about what requirements have changed
+- Need an implementation plan for new features
+- Want a breakdown of tasks from requirement changes
+- Request work items with traceability links
+
+**Example interactions:**
+- "What requirements changed in this branch?"
+- "Generate implementation tasks for these changes"
+- "Create a plan for implementing the new feature"
 
 ### Using Commands
 
