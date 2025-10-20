@@ -18,7 +18,7 @@ To install the Reqvire CLI:
 curl -fsSL https://raw.githubusercontent.com/reqvire-org/reqvire/main/scripts/install.sh | bash
 ```
 
-For detailed CLI installation options, see the [Installation Guide](https://www.reqvire.org/installation).
+For detailed CLI installation options, see the [Installation Guide](https://www.reqvire.org/user_guide#installation).
 
 ### Installing the Plugin
 
