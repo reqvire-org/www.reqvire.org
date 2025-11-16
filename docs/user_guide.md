@@ -11,12 +11,13 @@ This user guide provides detailed instructions on how to install and use Reqvire
 - [Basic Commands](#basic-commands)
 - [File Exclusion Patterns](#file-exclusion-patterns)
 - [Working with Requirements](#working-with-requirements)
+- [Element Manipulation](#element-manipulation)
 - [Validation](#validation)
 - [Formatting](#formatting)
 - [Linting](#linting)
 - [Generating Documentation](#generating-documentation)
 - [Traceability](#traceability)
-- [Sections Summary](#sections-summary)
+- [Search and Filtering](#search-and-filtering)
 - [Model Commands](#model-commands)
 - [Change Impact Report](#change-impact-report)
 - [Diagrams](#diagrams)
@@ -201,10 +202,126 @@ This hierarchy naturally reflects the progressive refinement from high-level use
 
 Read specifications in [SpecificationsRequirements.md](https://github.com/reqvire-org/reqvire/blob/main/specifications/SpecificationsRequirements.md)
 
+## Element Manipulation
+
+Reqvire provides commands to add, move, and remove elements directly from the command line. These operations maintain model consistency by validating relations and updating parent files automatically.
+
+### Add Element
+
+Add a new element to your model from Markdown content:
+
+```bash
+# Add element using heredoc
+reqvire add --to-file "specifications/Requirements.md" --to-section "System Requirements" <<'EOF'
+### New Security Requirement
+
+The system SHALL enforce authentication for all API endpoints.
+
+#### Metadata
+  * type: system-requirement
+
+#### Relations
+  * derivedFrom: Requirements.md#user-authentication
+EOF
+
+# Add from file using pipe
+cat element.md | reqvire add specifications/Requirements.md "System Requirements"
+
+# Add from file using input redirection
+reqvire add specifications/Requirements.md "System Requirements" < element.md
+
+# Add inline using echo and pipe
+echo "### My Requirement..." | reqvire add specifications/Requirements.md "Features"
+```
+
+The element will be inserted at the end of the specified section. You can also specify an index (0-based):
+
+```bash
+# Insert at position 0 (beginning) using pipe
+cat element.md | reqvire add specifications/Requirements.md "System Requirements" 0
+
+# Insert at position 2 using heredoc
+reqvire add specifications/Requirements.md "Features" 2 <<'EOF'
+### My New Requirement
+Content here...
+EOF
+
+# Insert at position using input redirection
+reqvire add specifications/Requirements.md "Security" 1 < element.md
+```
+
+#### Preview Changes
+
+Use `--dry-run` to preview the operation without applying changes:
+
+```bash
+reqvire add --to-file "specs/Reqs.md" --to-section "Features" --dry-run < element.md
+```
+
+#### JSON Output
+
+Get structured output for programmatic processing:
+
+```bash
+reqvire add --to-file "specs/Reqs.md" --to-section "Features" --json < element.md
+```
+
+### Remove Element
+
+Remove an element by its identifier:
+
+```bash
+reqvire rm "specifications/Requirements.md#security-requirement"
+```
+
+This command:
+- Removes the element from its parent file
+- Validates that no other elements have relations pointing to it
+- Fails if the element is referenced by other elements (maintaining model integrity)
+
+#### Preview Removal
+
+Use `--dry-run` to see what would be removed:
+
+```bash
+reqvire rm "specifications/Requirements.md#old-requirement" --dry-run
+```
+
+### Move Element
+
+Move an element to a different location:
+
+```bash
+# Move to different section in same file
+reqvire mv "specs/Reqs.md#auth-requirement" --to-section "Security"
+
+# Move to different file
+reqvire mv "specs/Reqs.md#auth-requirement" \
+           --to-file "specs/Security.md" \
+           --to-section "Authentication"
+
+# Move to specific position
+reqvire mv "specs/Reqs.md#auth-requirement" \
+           --to-section "Security" \
+           --index 0
+```
+
+The move operation:
+- Updates the element's identifier to reflect new location
+- Updates all relations pointing to the moved element
+- Maintains model consistency automatically
+
+#### Preview Move
+
+Use `--dry-run` to preview the operation:
+
+```bash
+reqvire mv "specs/Reqs.md#auth-req" --to-section "Security" --dry-run
+```
 
 ## Validation
 
-Any functional require command that needs to parse model will as a first step perform model validation and report any errors found.
+Any functional reqvire command that needs to parse model will as a first step perform model validation and report any errors found.
 Errors must be fixed before command can execute.
 
 ## Formatting
@@ -360,105 +477,167 @@ The matrix implements the **verification roll-up strategy** - a requirement at a
 
 *Example traceability matrix showing verification coverage and roll-up strategy. Requirements are color-coded by verification status, with verification rolling up from leaf requirements to parent requirements.*
 
-## Sections Summary
+## Search and Filtering
 
-Generate a summary of file sections and their content without individual elements.
+The `search` command provides powerful filtering and querying capabilities to explore your requirements model. It supports comprehensive filtering with over 10 filter types that can be combined using AND logic.
 
-### Generate Sections Summary
+### Basic Search
 
 ```bash
-reqvire section-summary
+# Search all elements (default text output)
+reqvire search
+
+# Search with JSON output
+reqvire search --json
+
+# Abbreviated output (one-line per element)
+reqvire search --short
 ```
 
-This generates a summary showing files, sections, and section content without listing individual requirements or verifications.
+### Filtering by Metadata
 
-#### Output Format Options
+Filter elements by their metadata properties:
 
 ```bash
-# Generate sections summary in text format (default)
-reqvire section-summary
+# Filter by element type
+reqvire search --filter-type="user-requirement"
+reqvire search --filter-type="system-requirement"
+reqvire search --filter-type="test-verification"
 
-# Generate sections summary in JSON format
-reqvire section-summary --json
+# Filter by file path (glob pattern)
+reqvire search --filter-file="specifications/**/*.md"
+
+# Filter by section name (glob pattern)
+reqvire search --filter-section="System*"
+reqvire search --filter-section="*Security*"
+
+# Filter by element name (regex)
+reqvire search --filter-name=".*authentication.*"
 ```
 
-#### Filtering Options
+### Filtering by Content
 
-You can filter the output using various criteria:
+Filter elements based on their text content:
 
 ```bash
-# Filter by file pattern
-reqvire section-summary --filter-file="specifications/*.md"
+# Filter by element content
+reqvire search --filter-content="SHALL.*authenticate"
 
-# Filter by section name pattern
-reqvire section-summary --filter-section="System*"
+# Filter by parent section content
+reqvire search --filter-section-content="security requirements"
 
-# Filter by content containing specific text
-reqvire section-summary --filter-content="MUST"
+# Filter by parent file frontmatter content
+reqvire search --filter-page-content="architecture"
+```
 
-# Combine multiple filters
-reqvire section-summary --filter-file="specifications/*.md" --filter-section="System*" --json
+### Filtering by Relations
+
+Filter elements based on their relations to other elements:
+
+```bash
+# Find elements that have ALL specified relations
+reqvire search --have-relations="verifiedBy,satisfiedBy"
+
+# Find elements that do NOT have ALL specified relations
+reqvire search --not-have-relations="verifiedBy"
+
+# Find unverified requirements
+reqvire search --filter-type="requirement" --not-have-relations="verifiedBy"
+
+# Find unsatisfied verifications
+reqvire search --filter-type="test-verification" --not-have-relations="satisfiedBy"
+```
+
+### Combining Filters
+
+All filters use AND logic - elements must match ALL specified criteria:
+
+```bash
+# Find unverified user requirements in System section
+reqvire search --filter-type="user-requirement" \
+               --filter-section="System*" \
+               --not-have-relations="verifiedBy"
+
+# Find security requirements mentioning encryption
+reqvire search --filter-section="*Security*" \
+               --filter-content="encryption" \
+               --filter-type="system-requirement"
+
+# Complex query with JSON output
+reqvire search --filter-file="specifications/*.md" \
+               --filter-type="user-requirement" \
+               --have-relations="verifiedBy" \
+               --filter-content="SHALL" \
+               --json
+```
+
+### Output Modes
+
+```bash
+# Full text output with all details
+reqvire search --filter-section="Security"
+
+# Abbreviated text output (one line per element)
+reqvire search --short --filter-section="Security"
+
+# JSON output for programmatic processing
+reqvire search --json --filter-type="requirement"
+
+# Abbreviated JSON (omits content and verbose fields)
+reqvire search --json --short
 ```
 
 ## Model Commands
 
-Commands for generating model overviews and summaries.
+The `model` command generates a model-centric view showing requirements and verifications with their nested relations as a hierarchical tree structure.
 
-### Model Diagram
+### Generate Model-Centric Structure
 
-Generate a complete model diagram showing all elements and their relationships.
+Generate a complete model-centric structure starting from root requirements:
 
 ```bash
 reqvire model
 ```
 
-This generates markdown with a Mermaid diagram showing the complete model structure including all elements and their relations.
+This generates a hierarchical structure showing:
+- Root requirements (level 1)
+- Their nested child requirements and relations
+- Complete forward relation chains (derive, satisfiedBy, verifiedBy, trace)
+- Mermaid diagrams for each element showing its relations
 
-#### Filter by Root Element
+Each element in the output includes a Mermaid diagram visualizing its forward relations to other elements.
 
-Generate a filtered diagram showing only elements forward-related from a specific root:
+### Filter by Element Name
+
+Generate a filtered model starting from a specific element by name:
 
 ```bash
-# Show only elements reachable via forward relations from specified root
-reqvire model --root-id=<element-id>
+# Show model structure starting from named element
+reqvire model --from "User Authentication"
+
+# Show nested structure for specific feature
+reqvire model --from "Data Storage System"
 ```
 
-This includes only elements that are reachable by following forward relations from the specified root element.
+This includes only the specified element and elements reachable by following forward relations (derive, satisfiedBy, verifiedBy, trace) from it.
 
-#### Output Format Options
+### Output Format Options
 
 ```bash
-# Generate model diagram in Markdown with Mermaid (default)
+# Generate model in text format with Mermaid diagrams (default)
 reqvire model
 
-# Generate complete model structure in JSON format
+# Generate filtered text output from specific element
+reqvire model --from "Security Requirements"
+
+# Generate complete model structure in JSON format (nested)
 reqvire model --json
 
-# Generate filtered JSON with only forward-related elements from root
-reqvire model --root-id=<element-id> --json
+# Generate filtered JSON starting from specific element
+reqvire model --from "API Layer" --json
 ```
 
-The JSON output contains the complete model structure including folders, elements, and relations, making it suitable for programmatic analysis and integration with other tools.
-
-### Summary
-
-Generate a comprehensive summary of the entire requirements model.
-
-```bash
-reqvire summary
-```
-
-This generates a summary showing the complete structure of your requirements model, including all files, sections, requirements, and verifications.
-
-#### Output Format Options
-
-```bash
-# Generate summary in text format (default)
-reqvire summary
-
-# Generate summary in JSON format
-reqvire summary --json
-```
+The JSON output contains the nested model structure with elements containing their forward-related child elements, making it suitable for programmatic analysis and integration with other tools.
 
 ## Change Impact Report
 
@@ -496,6 +675,14 @@ reqvire export --output output_folder
 ```
 
 This creates HTML files with navigation, properly formatted requirements, interactive diagrams, verification traces, and coverage reports.
+
+The HTML export includes:
+- **Interactive Diagrams**: All Mermaid diagrams include click handlers that navigate to element definitions
+- **Color-Coded Elements**: Requirements and verifications are color-coded by type for easy identification
+- **Pan and Zoom**: Diagrams support pan/zoom functionality with auto-centering
+- **Model-Centric View**: Nested hierarchical structure showing forward relations
+- **Complete Traceability**: Verification traces, coverage reports, and traceability matrices
+- **Navigation**: Index page with links to all documentation sections
 
 ### Serve Documentation Locally
 
