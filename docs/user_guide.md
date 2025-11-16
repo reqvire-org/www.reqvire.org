@@ -651,6 +651,14 @@ reqvire change-impact
 
 This generates a report showing how changes affect related requirements. By default, it compares with HEAD~1 (the previous commit).
 
+The report identifies:
+- **Changed elements** - Content or relation changes
+- **Relocated elements** - Elements moved between files (shown with old/new locations)
+- **New elements** - Newly added elements
+- **Removed elements** - Deleted elements
+
+Elements that are both relocated and changed will appear in both the "Relocated" and "Changed" sections.
+
 #### Options
 
 ```bash

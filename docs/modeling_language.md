@@ -44,6 +44,8 @@ A **Section** is used for grouping similar requirements for easier management an
 
 An **Element** is a uniquely identifiable system element within a Markdown document. It starts with a `###` header and includes all content under that header until the next header of the same or higher hierarchy.
 
+**Element names must be globally unique** across all files in your model. This ensures stable element identity when elements are moved between files.
+
 **Element structure:**
 1. Element Header (`###`) - Defines the start of an element
 2. Element Content - Description and details
