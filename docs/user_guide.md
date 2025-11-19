@@ -319,6 +319,39 @@ Use `--dry-run` to preview the operation:
 reqvire mv "specs/Reqs.md#auth-req" --to-section "Security" --dry-run
 ```
 
+### Rename Element
+
+Rename an element while automatically updating all relations that reference it:
+
+```bash
+# Rename an element by name
+reqvire rename "Old Name" "New Name"
+```
+
+The rename operation:
+- Updates the element's heading text in the markdown file
+- Updates the element's identifier in the registry
+- Updates all relations (both forward and backward) pointing to the renamed element
+- Maintains model consistency automatically
+
+**Note:** Element names are globally unique in Reqvire, so you only need to provide the element name (not the full file path identifier).
+
+#### Preview Rename
+
+Use `--dry-run` to preview the operation:
+
+```bash
+reqvire rename "Old Name" "New Name" --dry-run
+```
+
+#### JSON Output
+
+Get structured output for programmatic processing:
+
+```bash
+reqvire rename "Old Name" "New Name" --json
+```
+
 ## Validation
 
 Any functional reqvire command that needs to parse model will as a first step perform model validation and report any errors found.
