@@ -47,12 +47,6 @@ The recommended strategy is to **verify leaf requirements** rather than intermed
 - **Parent/intermediate requirements** MAY be verified but it's not necessary as they are covered through verification of their leaf requirements
 - One verification may verify multiple leaf requirements (N:1 relationship), covering entire chains of parent requirements
 
-**Visual Example:**
-
-![Verification Traceability Matrix](assets/images/verifications_matrix.png)
-
-*Example verification matrix demonstrating the roll-up strategy. Requirements are color-coded by verification status - when leaf requirements are verified, their verification status automatically rolls up to parent requirements, providing complete coverage through the requirement hierarchy.*
-
 ### Coverage Metrics
 The verification coverage system tracks:
 - **Verified leaf requirements**: Leaf requirements with `verifiedBy` relations pointing to verification elements

@@ -451,32 +451,6 @@ reqvire traces --links-with-blobs
 
 By default, traces use relative links in Mermaid diagrams. Use `--links-with-blobs` to generate diagrams with GitHub blob URLs, which makes clickable links work properly when viewing trace diagrams directly in the GitHub web interface.
 
-### Generate Verification Matrix
-
-```bash
-reqvire matrix
-```
-
-This generates a traceability matrix showing verification coverage across all requirements.
-
-#### Output Format Options
-
-```bash
-# Generate verification matrix in SVG format
-reqvire matrix --svg > matrix.svg
-
-# Generate verification matrix in JSON format
-reqvire matrix --json
-```
-
-The matrix implements the **verification roll-up strategy** - a requirement at any level is marked as verified if ALL its child requirements are verified, with verification status rolling up from leaf requirements through the entire parent chain to the root.
-
-#### Example Verification Matrix
-
-![Verification Traceability Matrix](assets/images/verifications_matrix.png)
-
-*Example traceability matrix showing verification coverage and roll-up strategy. Requirements are color-coded by verification status, with verification rolling up from leaf requirements to parent requirements.*
-
 ## Search and Filtering
 
 The `search` command provides powerful filtering and querying capabilities to explore your requirements model. It supports comprehensive filtering with over 10 filter types that can be combined using AND logic.
@@ -843,11 +817,7 @@ jobs:
       - name: Generate Diagrams
         run: |
           reqvire generate-diagrams
-      
-      - name: Generate verification matrix svg
-        run: |
-          reqvire matrix --svg > specifications/matrix.svg
-                
+
       - name: Check for Changes
         id: check_changes
         run: |
