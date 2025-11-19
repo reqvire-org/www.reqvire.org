@@ -268,23 +268,24 @@ reqvire add --to-file "specs/Reqs.md" --to-section "Features" --json < element.m
 
 ### Remove Element
 
-Remove an element by its identifier:
+Remove an element by its name:
 
 ```bash
-reqvire rm "specifications/Requirements.md#security-requirement"
+reqvire rm "Security Requirement"
 ```
 
 This command:
+- Accepts element name (globally unique in model)
 - Removes the element from its parent file
-- Validates that no other elements have relations pointing to it
-- Fails if the element is referenced by other elements (maintaining model integrity)
+- Removes all relations pointing to the deleted element
+- Maintains model consistency automatically
 
 #### Preview Removal
 
 Use `--dry-run` to see what would be removed:
 
 ```bash
-reqvire rm "specifications/Requirements.md#old-requirement" --dry-run
+reqvire rm "Old Requirement" --dry-run
 ```
 
 ### Move Element
@@ -293,20 +294,22 @@ Move an element to a different location:
 
 ```bash
 # Move to different section in same file
-reqvire mv "specs/Reqs.md#auth-requirement" --to-section "Security"
+reqvire mv "Auth Requirement" --to-file "specs/Reqs.md" --to-section "Security"
 
 # Move to different file
-reqvire mv "specs/Reqs.md#auth-requirement" \
+reqvire mv "Auth Requirement" \
            --to-file "specs/Security.md" \
            --to-section "Authentication"
 
 # Move to specific position
-reqvire mv "specs/Reqs.md#auth-requirement" \
+reqvire mv "Auth Requirement" \
+           --to-file "specs/Reqs.md" \
            --to-section "Security" \
            --index 0
 ```
 
 The move operation:
+- Accepts element name (globally unique in model)
 - Updates the element's identifier to reflect new location
 - Updates all relations pointing to the moved element
 - Maintains model consistency automatically
@@ -316,7 +319,7 @@ The move operation:
 Use `--dry-run` to preview the operation:
 
 ```bash
-reqvire mv "specs/Reqs.md#auth-req" --to-section "Security" --dry-run
+reqvire mv "Auth Requirement" --to-file "specs/Reqs.md" --to-section "Security" --dry-run
 ```
 
 ### Rename Element
