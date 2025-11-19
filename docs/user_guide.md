@@ -355,6 +355,48 @@ Get structured output for programmatic processing:
 reqvire rename "Old Name" "New Name" --json
 ```
 
+### Move File
+
+Move an entire specification file with all its elements to a new location:
+
+```bash
+# Move file within specifications directory
+reqvire mv-file "specifications/OldFile.md" "specifications/NewFile.md"
+
+# Move file to different directory
+reqvire mv-file "specifications/Auth.md" "security/Authentication.md"
+
+# Works from subdirectories (paths relative to current directory)
+cd submodule/
+reqvire mv-file "specs/File.md" "requirements/File.md"
+```
+
+The mv-file operation:
+- Moves all elements from source file to target file
+- Updates all element identifiers to reflect new file path
+- Updates all relations pointing to moved elements (from other files)
+- Preserves all element content, metadata, and relations
+- Deletes the source file after successful move
+- Resolves paths relative to current working directory
+
+**Note:** Unlike `mv` which moves a single element, `mv-file` moves the entire file with all its elements.
+
+#### Preview File Move
+
+Use `--dry-run` to preview the operation:
+
+```bash
+reqvire mv-file "specs/Old.md" "specs/New.md" --dry-run
+```
+
+#### JSON Output
+
+Get structured output with element mappings:
+
+```bash
+reqvire mv-file "specs/Old.md" "specs/New.md" --json
+```
+
 ## Validation
 
 Any functional reqvire command that needs to parse model will as a first step perform model validation and report any errors found.
