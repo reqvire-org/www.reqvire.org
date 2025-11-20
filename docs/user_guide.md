@@ -381,12 +381,41 @@ The mv-file operation:
 
 **Note:** Unlike `mv` which moves a single element, `mv-file` moves the entire file with all its elements.
 
+#### Squash Mode: Merge Files
+
+When the target file already exists, use `--squash` to merge all elements from source into the target:
+
+```bash
+# Consolidate temporary specs into main file
+reqvire mv-file "temp/Experiments.md" "specifications/Requirements.md" --squash
+
+# Merge over-fragmented files
+reqvire mv-file "specs/Small.md" "specs/Main.md" --squash
+```
+
+Squash behavior:
+- Moves all source elements to target file's **first section**
+- Target file's existing elements remain unchanged
+- Source file is deleted
+- All relations are updated throughout the model
+
+**When to use --squash:**
+- Consolidating experimental or temporary specifications
+- Merging over-fragmented files (files with only 1-2 elements)
+- Simplifying model structure by reducing file count
+- Combining related requirements into a single file
+
+**Without --squash**, attempting to move to an existing file will fail with an error.
+
 #### Preview File Move
 
 Use `--dry-run` to preview the operation:
 
 ```bash
 reqvire mv-file "specs/Old.md" "specs/New.md" --dry-run
+
+# Preview squash operation
+reqvire mv-file "temp/A.md" "specs/Main.md" --squash --dry-run
 ```
 
 #### JSON Output
