@@ -828,6 +828,43 @@ reqvire remove-diagrams
 
 This removes Mermaid diagrams within your requirements files. It is suggested to remove diagrams before using AI tools to reason about model to reduce context length.
 
+### Containment View
+
+Analyze the physical structure of your model - how elements are organized across folders and files:
+
+```bash
+# View containment hierarchy as Mermaid diagram
+reqvire containment
+
+# Get JSON structure for programmatic analysis
+reqvire containment --json
+```
+
+**What containment shows:**
+- Folder hierarchy
+- Files within each folder
+- Elements within each file (filtered to show only top-level parents)
+
+**Note:** Containment view filters elements to show only those without hierarchical parent relations in the same file. For actual element counts per file, use `reqvire search --json`.
+
+**When to use containment:**
+- Understanding overall model organization
+- Planning file reorganization
+- Identifying folder structure issues
+- Before large-scale refactoring with mv-file
+
+**Example: Find files that need consolidation**
+
+```bash
+# Get element counts per file
+reqvire search --json | jq -r '.files | to_entries[] | "\(.key): \(.value.total_elements) elements"'
+
+# Find small files (candidates for consolidation with --squash)
+reqvire search --json | jq -r '.files | to_entries[] | select(.value.total_elements < 3) | .path'
+
+# Find large files (candidates for splitting)
+reqvire search --json | jq -r '.files | to_entries[] | select(.value.total_elements > 20) | .path'
+```
 
 ## GitHub Integration
 
