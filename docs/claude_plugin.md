@@ -67,8 +67,13 @@ The plugin provides the following slash commands (all prefixed with `reqvire:`):
 - `/reqvire:analyze-coverage` - Generate verification coverage reports
 - `/reqvire:analyze-impact` - Analyze change impact across the model
 - `/reqvire:lint-model` - Check model quality and detect issues
+- `/reqvire:consolidate` - Consolidate refinement-only requirements into parent Details sections
 - `/reqvire:generate-tasks` - Generate implementation tasks from requirements
 - `/reqvire:find-redundant-verifications` - Identify redundant verification relations
+- `/reqvire:rename-element` - Rename an element and update all references
+- `/reqvire:mv` - Move an element to a different file or section
+- `/reqvire:mv-file` - Move an entire file and update all relations
+- `/reqvire:rm` - Remove an element and update all relations
 
 ## Getting Started
 
@@ -176,6 +181,56 @@ Get a detailed report showing verification coverage across all requirements, hel
 ```
 
 Automatically generate a comprehensive task breakdown from requirement changes, with full traceability links and test verification steps.
+
+### Consolidating Requirements
+
+```
+/reqvire:consolidate
+```
+
+Consolidate child requirements that only refine their parents into the parent's Details section. This improves model organization by merging implementation-level details into their conceptual parents while maintaining full traceability.
+
+**Use this when:**
+- Your model has grown with many small refinement requirements
+- Child requirements only elaborate on implementation details without adding new capabilities
+- You want to reduce model clutter while preserving all technical information
+- Requirements are connected via derivedFrom relations but represent implementation details
+
+**The consolidation process:**
+1. Identifies candidate parent-child pairs using heuristics (similar names, short content, implementation-level details)
+2. Merges child content into parent's Details section with clear subsection headings
+3. Moves all child relations (satisfiedBy, verifiedBy) to the parent
+4. Removes child requirements and updates all references to point to parent
+5. Validates the model to ensure no broken relations
+
+**Example transformation:**
+
+Before consolidation:
+```markdown
+### Format Consistency Enforcement
+The system shall provide formatting capability...
+
+---
+
+### Excess Whitespace Format Implementation
+Detect and fix excess whitespace...
+  * derivedFrom: [Format Consistency Enforcement]
+  * satisfiedBy: [format.rs]
+```
+
+After consolidation:
+```markdown
+### Format Consistency Enforcement
+The system shall provide formatting capability...
+
+#### Details
+**Excess Whitespace:**
+- Detect and fix excess whitespace after element headers
+- Maintain consistent formatting across documents
+
+#### Relations
+  * satisfiedBy: [format.rs]
+```
 
 ## Learn More
 
