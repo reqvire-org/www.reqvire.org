@@ -30,15 +30,11 @@ Each Reqvire model consists of:
 - **Requirements** – User requirements and system requirements organized in a hierarchical structure through derivation relations
 - **Verifications** – Test verifications, analysis verifications, inspection verifications, and demonstration verifications linked to requirements
 - **Relations** – Explicit connections between elements including derivedFrom (requirement hierarchy), verifiedBy/verify (requirement-verification links), satisfiedBy (requirement-implementation links), and trace (soft traceability)
-- **Sections and Files** – Organizational structure using Markdown files, sections, and folders to group related elements
+- **Files and Folders** – Organizational structure using Markdown files and folders to group related elements
 
 Elements are defined using simple Markdown headers (`###`) with metadata and relations specified in subsections.
 
 ### Document Structure
-
-#### Sections
-
-A **Section** is used for grouping similar requirements for easier management and visualizations. It starts with a `##` header and includes all system elements under that header until the next header of the same or higher hierarchy.
 
 #### Elements
 
@@ -107,9 +103,8 @@ If no explicit type is specified, Reqvire uses intelligent defaults:
 ```markdown
 # System Requirements
 
-## Authentication System
-
 ### User Login
+
 The system shall provide secure user authentication using username and password.
 
 #### Metadata
@@ -119,11 +114,15 @@ The system shall provide secure user authentication using username and password.
   * verifiedBy: [Login Test](../tests/auth.md#login-test)
 
 #### Details
+
 - Passwords must be hashed using bcrypt
 - Failed login attempts shall be logged
 - Account lockout after 5 failed attempts
 
+---
+
 ### Password Validation
+
 The system shall validate password complexity before accepting registration.
 
 #### Metadata
@@ -133,6 +132,8 @@ The system shall validate password complexity before accepting registration.
   * derivedFrom: [User Login](#user-login)
   * verifiedBy: [Password Validation Test](../tests/auth.md#password-test)
   * satisfiedBy: src/auth/password.rs
+
+---
 ```
 
 ### Organizational Approaches
@@ -224,42 +225,40 @@ System requirements are derived from user requirements and are structured to map
 
 ### Requirement Containment
 
-Reqvire manages **requirement containment** through its **file and section structure** rather than explicit containment relationships. This approach provides a natural and intuitive way to organize and group related requirements.
+Reqvire manages **requirement containment** through its **file and folder structure** rather than explicit containment relationships. This approach provides a natural and intuitive way to organize and group related requirements.
 
-#### Files and Sections as Containers
+#### Files and Folders as Containers
 
 In Reqvire, requirements are organized hierarchically using:
 
-- **Files**: Markdown files serve as top-level containers for requirements, typically representing major system areas, subsystems, or requirement categories.
-- **Sections**: Within each file, markdown sections (defined by headings) provide logical grouping of related requirements.
+- **Folders**: Directory structure represents major system areas, subsystems, or requirement categories.
+- **Files**: Markdown files serve as containers for requirements, typically grouping related requirements within a folder.
 
-This file-and-section based containment approach offers several advantages:
+This file-and-folder based containment approach offers several advantages:
 
-- **Natural hierarchy**: The document structure directly reflects the containment relationships.
+- **Natural hierarchy**: The directory structure directly reflects the containment relationships.
 - **Simplified management**: No need to maintain explicit containment links between requirements.
 - **Clear organization**: The physical location of a requirement in the documentation hierarchy shows its containment.
-- **Flexible grouping**: Requirements can be easily reorganized by moving them between sections or files.
+- **Flexible grouping**: Requirements can be easily reorganized by moving them between files or folders.
 
 #### Example Structure
 
 ```
 project/
 ├── Requirements.md              # Top-level user requirements
-│   └── ## Authentication
-│       ├── REQ_AUTH
-│       └── REQ_SECURITY
+│   ├── REQ_AUTH
+│   └── REQ_SECURITY
 └── Authentication/
-    └── Requirements.md          # Authentication subsystem requirements
-        ├── ## Password Authentication
-        │   └── REQ_PASSWORD
-        └── ## OAuth Authentication
-            └── REQ_OAUTH
+    ├── PasswordAuth.md          # Password authentication requirements
+    │   └── REQ_PASSWORD
+    └── OAuthAuth.md             # OAuth authentication requirements
+        └── REQ_OAUTH
 ```
 
 In this example:
 - Top-level `Requirements.md` file contains high-level user requirements
-- `Authentication/Requirements.md` file contains detailed system requirements for the authentication subsystem
-- Sections within each file further organize related requirements
+- `Authentication/` folder contains detailed system requirements for the authentication subsystem
+- Each file groups related requirements
 - The `derivedFrom` relationship traces technical requirements back to user requirements
 - Organization follows **architectural decomposition** by subsystem/component rather than by artifact type
 
@@ -468,7 +467,7 @@ reqvire coverage --json
 
 The coverage report focuses on **leaf requirements** and provides:
 - Percentage of verified/unverified leaf requirements
-- Breakdown by file and section
+- Breakdown by file
 - Breakdown by verification type
 - Test-verification satisfaction status
 

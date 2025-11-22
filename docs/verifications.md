@@ -102,7 +102,7 @@ reqvire coverage --json
 
 The coverage report focuses on **leaf requirements** and provides:
 - Percentage of verified/unverified leaf requirements
-- Breakdown by file and section
+- Breakdown by file
 - Breakdown by verification type
 - Test-verification satisfaction status
 

@@ -134,7 +134,7 @@ src/**
 
 ## Working with Requirements
 
-Reqvire is designed to work with a structured requirements hierarchy in Markdown files. Requirements are organized using **folders, files, and sections for logical containment** - representing subsystems, features, or functional areas.
+Reqvire is designed to work with a structured requirements hierarchy in Markdown files. Requirements are organized using **folders and files for logical containment** - representing subsystems, features, or functional areas.
 
 ### Folder Structure
 
@@ -180,7 +180,7 @@ Both approaches organize by architectural decomposition. The co-location approac
 
 Markdown files contain **requirements** and **verification elements** that together form the complete model structure. These elements are connected through:
 
-- **Containment**: The folder, file, and section hierarchy provides the containment structure
+- **Containment**: The folder and file hierarchy provides the containment structure
 - **Relations**: Elements are wired together using relations such as:
   - `derivedFrom` - hierarchical relation showing how detailed requirements derive from higher-level ones
   - `verifies` - linking verifications to requirements they verify
@@ -212,7 +212,7 @@ Add a new element to your model from Markdown content:
 
 ```bash
 # Add element using heredoc
-reqvire add --to-file "specifications/Requirements.md" --to-section "System Requirements" <<'EOF'
+reqvire add "specifications/Requirements.md" <<'EOF'
 ### New Security Requirement
 
 The system SHALL enforce authentication for all API endpoints.
@@ -225,29 +225,29 @@ The system SHALL enforce authentication for all API endpoints.
 EOF
 
 # Add from file using pipe
-cat element.md | reqvire add specifications/Requirements.md "System Requirements"
+cat element.md | reqvire add specifications/Requirements.md
 
 # Add from file using input redirection
-reqvire add specifications/Requirements.md "System Requirements" < element.md
+reqvire add specifications/Requirements.md < element.md
 
 # Add inline using echo and pipe
-echo "### My Requirement..." | reqvire add specifications/Requirements.md "Features"
+echo "### My Requirement..." | reqvire add specifications/Requirements.md
 ```
 
-The element will be inserted at the end of the specified section. You can also specify an index (0-based):
+The element will be appended to the file. You can also specify an index (0-based):
 
 ```bash
 # Insert at position 0 (beginning) using pipe
-cat element.md | reqvire add specifications/Requirements.md "System Requirements" 0
+cat element.md | reqvire add specifications/Requirements.md 0
 
 # Insert at position 2 using heredoc
-reqvire add specifications/Requirements.md "Features" 2 <<'EOF'
+reqvire add specifications/Requirements.md 2 <<'EOF'
 ### My New Requirement
 Content here...
 EOF
 
 # Insert at position using input redirection
-reqvire add specifications/Requirements.md "Security" 1 < element.md
+reqvire add specifications/Requirements.md 1 < element.md
 ```
 
 #### Preview Changes
@@ -255,7 +255,7 @@ reqvire add specifications/Requirements.md "Security" 1 < element.md
 Use `--dry-run` to preview the operation without applying changes:
 
 ```bash
-reqvire add --to-file "specs/Reqs.md" --to-section "Features" --dry-run < element.md
+reqvire add "specs/Reqs.md" --dry-run < element.md
 ```
 
 #### JSON Output
@@ -263,7 +263,7 @@ reqvire add --to-file "specs/Reqs.md" --to-section "Features" --dry-run < elemen
 Get structured output for programmatic processing:
 
 ```bash
-reqvire add --to-file "specs/Reqs.md" --to-section "Features" --json < element.md
+reqvire add "specs/Reqs.md" --json < element.md
 ```
 
 ### Remove Element
@@ -293,19 +293,11 @@ reqvire rm "Old Requirement" --dry-run
 Move an element to a different location:
 
 ```bash
-# Move to different section in same file
-reqvire mv "Auth Requirement" --to-file "specs/Reqs.md" --to-section "Security"
-
 # Move to different file
-reqvire mv "Auth Requirement" \
-           --to-file "specs/Security.md" \
-           --to-section "Authentication"
+reqvire mv "Auth Requirement" --to-file "specs/Security.md"
 
-# Move to specific position
-reqvire mv "Auth Requirement" \
-           --to-file "specs/Reqs.md" \
-           --to-section "Security" \
-           --index 0
+# Move to specific position in file
+reqvire mv "Auth Requirement" --to-file "specs/Reqs.md" --index 0
 ```
 
 The move operation:
@@ -319,7 +311,7 @@ The move operation:
 Use `--dry-run` to preview the operation:
 
 ```bash
-reqvire mv "Auth Requirement" --to-file "specs/Reqs.md" --to-section "Security" --dry-run
+reqvire mv "Auth Requirement" --to-file "specs/Reqs.md" --dry-run
 ```
 
 ### Rename Element
@@ -394,7 +386,7 @@ reqvire mv-file "specs/Small.md" "specs/Main.md" --squash
 ```
 
 Squash behavior:
-- Moves all source elements to target file's **first section**
+- All source elements are appended to target file
 - Target file's existing elements remain unchanged
 - Source file is deleted
 - All relations are updated throughout the model
@@ -588,10 +580,6 @@ reqvire search --filter-type="test-verification"
 # Filter by file path (glob pattern)
 reqvire search --filter-file="specifications/**/*.md"
 
-# Filter by section name (glob pattern)
-reqvire search --filter-section="System*"
-reqvire search --filter-section="*Security*"
-
 # Filter by element name (regex)
 reqvire search --filter-name=".*authentication.*"
 ```
@@ -603,9 +591,6 @@ Filter elements based on their text content:
 ```bash
 # Filter by element content
 reqvire search --filter-content="SHALL.*authenticate"
-
-# Filter by parent section content
-reqvire search --filter-section-content="security requirements"
 
 # Filter by parent file frontmatter content
 reqvire search --filter-page-content="architecture"
@@ -634,13 +619,13 @@ reqvire search --filter-type="test-verification" --not-have-relations="satisfied
 All filters use AND logic - elements must match ALL specified criteria:
 
 ```bash
-# Find unverified user requirements in System section
+# Find unverified user requirements in specifications
 reqvire search --filter-type="user-requirement" \
-               --filter-section="System*" \
+               --filter-file="specifications/*.md" \
                --not-have-relations="verifiedBy"
 
 # Find security requirements mentioning encryption
-reqvire search --filter-section="*Security*" \
+reqvire search --filter-file="**/Security*.md" \
                --filter-content="encryption" \
                --filter-type="system-requirement"
 
@@ -656,10 +641,10 @@ reqvire search --filter-file="specifications/*.md" \
 
 ```bash
 # Full text output with all details
-reqvire search --filter-section="Security"
+reqvire search --filter-file="**/Security*.md"
 
 # Abbreviated text output (one line per element)
-reqvire search --short --filter-section="Security"
+reqvire search --short --filter-file="**/Security*.md"
 
 # JSON output for programmatic processing
 reqvire search --json --filter-type="requirement"

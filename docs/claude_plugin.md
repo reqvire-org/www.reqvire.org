@@ -67,11 +67,11 @@ The plugin provides the following slash commands (all prefixed with `reqvire:`):
 - `/reqvire:analyze-coverage` - Generate verification coverage reports
 - `/reqvire:analyze-impact` - Analyze change impact across the model
 - `/reqvire:lint-model` - Check model quality and detect issues
-- `/reqvire:consolidate` - Consolidate refinement-only requirements into parent Details sections
+- `/reqvire:consolidate` - Consolidate refinement-only requirements into parent Details subsections
 - `/reqvire:generate-tasks` - Generate implementation tasks from requirements
 - `/reqvire:find-redundant-verifications` - Identify redundant verification relations
 - `/reqvire:rename-element` - Rename an element and update all references
-- `/reqvire:mv` - Move an element to a different file or section
+- `/reqvire:mv` - Move an element to a different file or position
 - `/reqvire:mv-file` - Move an entire file and update all relations
 - `/reqvire:rm` - Remove an element and update all relations
 
@@ -188,7 +188,7 @@ Automatically generate a comprehensive task breakdown from requirement changes, 
 /reqvire:consolidate
 ```
 
-Consolidate child requirements that only refine their parents into the parent's Details section. This improves model organization by merging implementation-level details into their conceptual parents while maintaining full traceability.
+Consolidate child requirements that only refine their parents into the parent's Details subsection. This improves model organization by merging implementation-level details into their conceptual parents while maintaining full traceability.
 
 **Use this when:**
 - Your model has grown with many small refinement requirements
@@ -198,7 +198,7 @@ Consolidate child requirements that only refine their parents into the parent's 
 
 **The consolidation process:**
 1. Identifies candidate parent-child pairs using heuristics (similar names, short content, implementation-level details)
-2. Merges child content into parent's Details section with clear subsection headings
+2. Merges child content into parent's Details subsection with clear headings
 3. Moves all child relations (satisfiedBy, verifiedBy) to the parent
 4. Removes child requirements and updates all references to point to parent
 5. Validates the model to ensure no broken relations

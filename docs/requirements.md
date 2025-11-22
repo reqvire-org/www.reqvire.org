@@ -61,42 +61,40 @@ System requirements are derived from user requirements and are structured to map
 
 ## Requirement Containment
 
-Reqvire manages **requirement containment** through its **file and section structure** rather than explicit containment relationships. This approach provides a natural and intuitive way to organize and group related requirements.
+Reqvire manages **requirement containment** through its **file and folder structure** rather than explicit containment relationships. This approach provides a natural and intuitive way to organize and group related requirements.
 
-### Files and Sections as Containers
+### Files and Folders as Containers
 
 In Reqvire, requirements are organized hierarchically using:
 
-- **Files**: Markdown files serve as top-level containers for requirements, typically representing major system areas, subsystems, or requirement categories.
-- **Sections**: Within each file, markdown sections (defined by headings) provide logical grouping of related requirements.
+- **Folders**: Directory structure represents major system areas, subsystems, or requirement categories.
+- **Files**: Markdown files serve as containers for requirements, typically grouping related requirements within a folder.
 
-This file-and-section based containment approach offers several advantages:
+This file-and-folder based containment approach offers several advantages:
 
-- **Natural hierarchy**: The document structure directly reflects the containment relationships.
+- **Natural hierarchy**: The directory structure directly reflects the containment relationships.
 - **Simplified management**: No need to maintain explicit containment links between requirements.
 - **Clear organization**: The physical location of a requirement in the documentation hierarchy shows its containment.
-- **Flexible grouping**: Requirements can be easily reorganized by moving them between sections or files.
+- **Flexible grouping**: Requirements can be easily reorganized by moving them between files or folders.
 
 ### Example Structure
 
 ```
 project/
 ├── Requirements.md              # Top-level user requirements
-│   └── ## Authentication
-│       ├── REQ_AUTH
-│       └── REQ_SECURITY
+│   ├── REQ_AUTH
+│   └── REQ_SECURITY
 └── Authentication/
-    └── Requirements.md          # Authentication subsystem requirements
-        ├── ## Password Authentication
-        │   └── REQ_PASSWORD
-        └── ## OAuth Authentication
-            └── REQ_OAUTH
+    ├── PasswordAuth.md          # Password authentication requirements
+    │   └── REQ_PASSWORD
+    └── OAuthAuth.md             # OAuth authentication requirements
+        └── REQ_OAUTH
 ```
 
 In this example:
 - Top-level `Requirements.md` file contains high-level user requirements
-- `Authentication/Requirements.md` file contains detailed system requirements for the authentication subsystem
-- Sections within each file further organize related requirements
+- `Authentication/` folder contains detailed system requirements for the authentication subsystem
+- Each file groups related requirements
 - The `derivedFrom` relationship traces technical requirements back to user requirements
 - Organization follows **architectural decomposition** by subsystem/component rather than by artifact type
 
