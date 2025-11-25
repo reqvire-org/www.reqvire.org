@@ -234,7 +234,15 @@ reqvire add specifications/Requirements.md < element.md
 echo "### My Requirement..." | reqvire add specifications/Requirements.md
 ```
 
-The element will be appended to the end of the file.
+The element will be appended to the end of the file. You can specify an index (0-based) to insert at a specific position:
+
+```bash
+# Insert at position 0 (beginning)
+cat element.md | reqvire add specifications/Requirements.md 0
+
+# Insert at position 2
+reqvire add specifications/Requirements.md 2 < element.md
+```
 
 #### Preview Changes
 
