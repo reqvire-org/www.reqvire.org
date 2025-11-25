@@ -81,16 +81,42 @@ Relations are defined in a subsection with the header `#### Relations` and conta
 | `satisfiedBy` | Requirement → Implementation | Links to code/test files that satisfy the requirement |
 | `trace` | Element → Element | Soft traceability link between elements |
 
+#### Attachments
+
+Attachments are defined in a subsection with the header `#### Attachments` and contain references to supporting files or Refinement elements:
+
+```markdown
+#### Attachments
+  * [Design Document](docs/design.md)
+  * [Constraint Definition](constraints.md#memory-constraint)
+```
+
+**Supported attachment targets:**
+- **File paths** - References to files (design documents, images, PDFs, etc.)
+- **Refinement element identifiers** - References to Refinement elements (constraint, behavior, specification)
+
+Attachments to Refinement elements provide a way to associate detailed specifications, constraints, and behavioral definitions with requirements without creating formal relations.
+
 ### Element Types
 
 Element types are identified through the `type` metadata property:
 
+**Requirement Types:**
 - **requirement** - System requirement
 - **user-requirement** - User requirement
+
+**Verification Types:**
 - **verification** / **test-verification** - Verification through testing
 - **analysis-verification** - Verification through analysis
 - **inspection-verification** - Verification through inspection
 - **demonstration-verification** - Verification through demonstration
+
+**Refinement Types:**
+- **constraint** - Design or implementation constraint
+- **behavior** - Behavioral specification or state machine
+- **specification** - Detailed specification document
+
+Refinement elements are special elements that **cannot have Relations subsections**. They are used to provide additional detail and can be attached to requirements via the Attachments subsection.
 
 ### Type Determination
 
@@ -98,10 +124,21 @@ If no explicit type is specified, Reqvire uses intelligent defaults:
 - Files in `Verifications/` directories default to `verification`
 - Other files default to `requirement`
 
+### File Header Requirement
+
+All specification files must begin with the header `# Elements` as the first level-1 heading. This header identifies the file as a Reqvire specification file. Files without this header are ignored during model parsing.
+
+```markdown
+# Elements
+
+### My Requirement
+...
+```
+
 ### Example Document
 
 ```markdown
-# System Requirements
+# Elements
 
 ### User Login
 
