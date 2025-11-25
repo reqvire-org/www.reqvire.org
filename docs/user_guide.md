@@ -200,7 +200,16 @@ This hierarchy naturally reflects the progressive refinement from high-level use
 
 ### Requirements and general Markdown files format
 
-Read specifications in [SpecificationsRequirements.md](https://github.com/reqvire-org/reqvire/blob/main/specifications/SpecificationsRequirements.md)
+**Important:** All specification files must begin with `# Elements` as the first level-1 heading. This header identifies the file as a Reqvire specification file. Files without this header are silently ignored during model parsing.
+
+```markdown
+# Elements
+
+### My Requirement
+...
+```
+
+For detailed specifications, read [SpecificationsRequirements.md](https://github.com/reqvire-org/reqvire/blob/main/specifications/SpecificationsRequirements.md)
 
 ## Element Manipulation
 
