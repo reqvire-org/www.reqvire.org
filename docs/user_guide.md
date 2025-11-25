@@ -234,21 +234,7 @@ reqvire add specifications/Requirements.md < element.md
 echo "### My Requirement..." | reqvire add specifications/Requirements.md
 ```
 
-The element will be appended to the file. You can also specify an index (0-based):
-
-```bash
-# Insert at position 0 (beginning) using pipe
-cat element.md | reqvire add specifications/Requirements.md 0
-
-# Insert at position 2 using heredoc
-reqvire add specifications/Requirements.md 2 <<'EOF'
-### My New Requirement
-Content here...
-EOF
-
-# Insert at position using input redirection
-reqvire add specifications/Requirements.md 1 < element.md
-```
+The element will be appended to the end of the file.
 
 #### Preview Changes
 
@@ -294,14 +280,16 @@ Move an element to a different location:
 
 ```bash
 # Move to different file
-reqvire mv "Auth Requirement" --to-file "specs/Security.md"
+reqvire mv "Auth Requirement" "specs/Security.md"
 
-# Move to specific position in file
-reqvire mv "Auth Requirement" --to-file "specs/Reqs.md" --index 0
+# Move to specific position in file (0-based index)
+reqvire mv "Auth Requirement" "specs/Reqs.md" 0
 ```
 
 The move operation:
 - Accepts element name (globally unique in model)
+- Accepts target file path as second argument
+- Accepts optional index as third argument (0-based, defaults to end of file)
 - Updates the element's identifier to reflect new location
 - Updates all relations pointing to the moved element
 - Maintains model consistency automatically
@@ -311,7 +299,7 @@ The move operation:
 Use `--dry-run` to preview the operation:
 
 ```bash
-reqvire mv "Auth Requirement" --to-file "specs/Reqs.md" --dry-run
+reqvire mv "Auth Requirement" "specs/Reqs.md" --dry-run
 ```
 
 ### Rename Element
@@ -416,6 +404,87 @@ Get structured output with element mappings:
 
 ```bash
 reqvire mv-file "specs/Old.md" "specs/New.md" --json
+```
+
+## Attachment Commands
+
+Reqvire supports attaching external files and Refinement elements to any element. Attachments are stored in the element's `#### Attachments` subsection.
+
+### Attach
+
+Attach a file or Refinement element to an element:
+
+```bash
+# Attach a file
+reqvire attach "docs/sla-document.pdf" "Performance Requirement"
+
+# Attach a Refinement element (constraint, behavior, or specification)
+reqvire attach "Rate Limiting Constraint" "API Endpoint Requirement"
+```
+
+**Auto-detection behavior:**
+1. The system first checks if the attachment exists as a file (relative to cwd or git root)
+2. If file exists: attaches as file path
+3. If no file exists: looks up element by name (must be Refinement type: constraint, behavior, or specification)
+4. Error if neither file nor element found
+
+**Result:**
+```markdown
+#### Attachments
+  * [sla-document.pdf](docs/sla-document.pdf)
+  * [Rate Limiting Constraint](Behaviors.md#rate-limiting-constraint)
+```
+
+#### Preview Attachment
+
+Use `--dry-run` to preview the operation:
+
+```bash
+reqvire attach "docs/spec.pdf" "My Requirement" --dry-run
+```
+
+### Detach
+
+Remove an attachment from an element:
+
+```bash
+# Detach a file
+reqvire detach "Performance Requirement" "docs/sla-document.pdf"
+
+# Detach a Refinement element
+reqvire detach "API Endpoint Requirement" "Rate Limiting Constraint"
+```
+
+The same auto-detection logic applies: file paths are checked first, then element names.
+
+#### Preview Detachment
+
+Use `--dry-run` to preview the operation:
+
+```bash
+reqvire detach "My Requirement" "docs/spec.pdf" --dry-run
+```
+
+### Move Attachment
+
+Move an attachment from one element to another:
+
+```bash
+reqvire mv-attachment "Source Element" "Target Element" "attachment-path-or-name"
+```
+
+#### Preview Move
+
+```bash
+reqvire mv-attachment "Source" "Target" "doc.pdf" --dry-run
+```
+
+### Remove Attachment
+
+Remove an attachment from an element (alias for detach):
+
+```bash
+reqvire rm-attachment "Element Name" "attachment-path-or-name"
 ```
 
 ## Validation
