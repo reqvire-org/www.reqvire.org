@@ -78,7 +78,7 @@ Relations are defined in a subsection with the header `#### Relations` and conta
 | `derivedFrom` | Child → Parent | Requirement hierarchy (child derives from parent) |
 | `verifiedBy` | Requirement → Verification | Links requirement to its verifications |
 | `verify` | Verification → Requirement | Links verification to requirements it verifies |
-| `satisfiedBy` | Requirement → Implementation | Links to code/test files that satisfy the requirement |
+| `satisfiedBy` | Requirement → Implementation/Refinement | Links to code/test files or refinement elements (behavior, specification, constraint) that satisfy the requirement |
 | `trace` | Element → Element | Soft traceability link between elements |
 
 #### Attachments
