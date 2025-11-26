@@ -16,7 +16,7 @@ Reqvire enforces a **consistent structure** for organizing and presenting requir
 
 The use of structured syntaxes like **EARS (Easy Approach to Requirements Syntax)** is encouraged to enhance clarity and consistency but is **not mandatory**.
 
-For detailed specifications on document structure and formatting, refer to: [Specifications](https://github.com/reqvire-org/reqvire/blob/main/specifications/SpecificationsRequirements.md).
+For detailed specifications on document structure and formatting, refer to: [Specifications](https://github.com/reqvire-org/reqvire/blob/main/requirements/SpecificationsRequirements.md).
 
 
 ## Requirement Types and Classification
@@ -199,7 +199,7 @@ end
 
 ## Visual Representation
 
-Reqvire automatically generates visual representations of requirements and their relationships using Mermaid diagrams. For more information on diagrams, see the [User Guide](./user_guide.md#diagrams) and [Specifications](https://github.com/reqvire-org/reqvire/blob/main/specifications/SpecificationsRequirements.md).
+Reqvire automatically generates visual representations of requirements and their relationships using Mermaid diagrams. For more information on diagrams, see the [User Guide](./user_guide.md#diagrams) and [Specifications](https://github.com/reqvire-org/reqvire/blob/main/requirements/SpecificationsRequirements.md).
 
 
 

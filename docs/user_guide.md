@@ -209,7 +209,7 @@ This hierarchy naturally reflects the progressive refinement from high-level use
 ...
 ```
 
-For detailed specifications, read [SpecificationsRequirements.md](https://github.com/reqvire-org/reqvire/blob/main/specifications/SpecificationsRequirements.md)
+For detailed specifications, read [SpecificationsRequirements.md](https://github.com/reqvire-org/reqvire/blob/main/requirements/SpecificationsRequirements.md)
 
 ## Element Manipulation
 
@@ -221,7 +221,7 @@ Add a new element to your model from Markdown content:
 
 ```bash
 # Add element using heredoc
-reqvire add "specifications/Requirements.md" <<'EOF'
+reqvire add "requirements/Requirements.md" <<'EOF'
 ### New Security Requirement
 
 The system SHALL enforce authentication for all API endpoints.
@@ -234,23 +234,23 @@ The system SHALL enforce authentication for all API endpoints.
 EOF
 
 # Add from file using pipe
-cat element.md | reqvire add specifications/Requirements.md
+cat element.md | reqvire add requirements/Requirements.md
 
 # Add from file using input redirection
-reqvire add specifications/Requirements.md < element.md
+reqvire add requirements/Requirements.md < element.md
 
 # Add inline using echo and pipe
-echo "### My Requirement..." | reqvire add specifications/Requirements.md
+echo "### My Requirement..." | reqvire add requirements/Requirements.md
 ```
 
 The element will be appended to the end of the file. You can specify an index (0-based) to insert at a specific position:
 
 ```bash
 # Insert at position 0 (beginning)
-cat element.md | reqvire add specifications/Requirements.md 0
+cat element.md | reqvire add requirements/Requirements.md 0
 
 # Insert at position 2
-reqvire add specifications/Requirements.md 2 < element.md
+reqvire add requirements/Requirements.md 2 < element.md
 ```
 
 #### Preview Changes
@@ -358,10 +358,10 @@ Move an entire specification file with all its elements to a new location:
 
 ```bash
 # Move file within specifications directory
-reqvire mv-file "specifications/OldFile.md" "specifications/NewFile.md"
+reqvire mv-file "requirements/OldFile.md" "requirements/NewFile.md"
 
 # Move file to different directory
-reqvire mv-file "specifications/Auth.md" "security/Authentication.md"
+reqvire mv-file "requirements/Auth.md" "security/Authentication.md"
 
 # Works from subdirectories (paths relative to current directory)
 cd submodule/
@@ -384,7 +384,7 @@ When the target file already exists, use `--squash` to merge all elements from s
 
 ```bash
 # Consolidate temporary specs into main file
-reqvire mv-file "temp/Experiments.md" "specifications/Requirements.md" --squash
+reqvire mv-file "temp/Experiments.md" "requirements/Requirements.md" --squash
 
 # Merge over-fragmented files
 reqvire mv-file "specs/Small.md" "specs/Main.md" --squash
@@ -664,7 +664,7 @@ reqvire search --filter-type="system-requirement"
 reqvire search --filter-type="test-verification"
 
 # Filter by file path (glob pattern)
-reqvire search --filter-file="specifications/**/*.md"
+reqvire search --filter-file="requirements/**/*.md"
 
 # Filter by element name (regex)
 reqvire search --filter-name=".*authentication.*"
@@ -707,7 +707,7 @@ All filters use AND logic - elements must match ALL specified criteria:
 ```bash
 # Find unverified user requirements in specifications
 reqvire search --filter-type="user-requirement" \
-               --filter-file="specifications/*.md" \
+               --filter-file="requirements/*.md" \
                --not-have-relations="verifiedBy"
 
 # Find security requirements mentioning encryption
@@ -716,7 +716,7 @@ reqvire search --filter-file="**/Security*.md" \
                --filter-type="system-requirement"
 
 # Complex query with JSON output
-reqvire search --filter-file="specifications/*.md" \
+reqvire search --filter-file="requirements/*.md" \
                --filter-type="user-requirement" \
                --have-relations="verifiedBy" \
                --filter-content="SHALL" \

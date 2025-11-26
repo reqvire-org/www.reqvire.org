@@ -78,7 +78,7 @@ Your Reqvire requirements work seamlessly with:
 
 Include relevant requirements files in your AI context to get specification-aware responses:
 ```
-Analyze this code against requirements in specifications/Authentication.md
+Analyze this code against requirements in requirements/Authentication.md
 ```
 
 **2. Leverage Traceability**
