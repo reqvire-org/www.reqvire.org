@@ -820,10 +820,14 @@ Reqvire can export your model to browsable HTML documentation with complete trac
 ### Export to HTML
 
 ```bash
+# Export to a temporary directory (path will be printed)
+reqvire export
+
+# Export to a specific output folder
 reqvire export --output output_folder
 ```
 
-This creates HTML files with navigation, properly formatted requirements, interactive diagrams, verification traces, and coverage reports.
+This creates HTML files with navigation, properly formatted requirements, interactive diagrams, verification traces, and coverage reports. If no `--output` is specified, the export goes to a temporary directory and the path is printed for easy access.
 
 The HTML export includes:
 - **Interactive Diagrams**: All Mermaid diagrams include click handlers that navigate to element definitions
@@ -861,32 +865,7 @@ The server will display the URL. Press `Ctrl-C` to stop the server.
 
 ## Diagrams
 
-Reqvire can automatically generate diagrams from your requirements model.
-
-### Generate Diagrams
-
-```bash
-reqvire generate-diagrams
-```
-
-This creates Mermaid diagrams within your requirements files.
-
-#### Options
-
-```bash
-# Generate diagrams with GitHub blob links (useful for viewing from GitHub)
-reqvire generate-diagrams --links-with-blobs
-```
-
-By default, diagrams use relative links. Use `--links-with-blobs` to generate diagrams with GitHub blob URLs, which makes clickable links work properly when viewing diagrams directly in the GitHub web interface.
-
-### Remove Diagrams
-
-```bash
-reqvire remove-diagrams
-```
-
-This removes Mermaid diagrams within your requirements files. It is suggested to remove diagrams before using AI tools to reason about model to reduce context length.
+Reqvire automatically generates diagrams when exporting your model to HTML. Diagrams are embedded in the exported HTML documentation showing element relationships.
 
 ### Containment View
 
@@ -977,66 +956,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: reqvire-validation-report
-          path: reports/validation_report.txt          
-```
-
-#### Automated Diagram Generation
-
-This workflow automatically generates and commits updated diagrams when pull requests are merged to the main branch:
-
-```yaml
-name: Generate Diagrams and Traces SVG on PR Merge
-
-on:
-  pull_request:
-    types: [closed]
-    branches:
-      - main
-
-jobs:
-  generate-diagrams:
-    if: github.event.pull_request.merged == true
-    name: Generate and Commit Diagrams
-    runs-on: ubuntu-latest
-    
-    permissions:
-      contents: write  # Required to commit to the repository
-    
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-        with:
-          ref: main  # Checkout the default branch (change if needed)
-          fetch-depth: 0  # Get full history for proper Git operations
-      
-      
-      - name: Install Reqvire
-        run: curl -fsSL https://raw.githubusercontent.com/reqvire-org/reqvire/main/scripts/install.sh | bash
-            
-      - name: Configure Git
-        run: |
-          git config --global user.name "GitHub Action"
-          git config --global user.email "actions@github.com"
-      
-      - name: Generate Diagrams
-        run: |
-          reqvire generate-diagrams
-
-      - name: Check for Changes
-        id: check_changes
-        run: |
-          if [[ -n "$(git status --porcelain)" ]]; then
-            echo "HAS_CHANGES=true" >> $GITHUB_ENV
-          else
-            echo "HAS_CHANGES=false" >> $GITHUB_ENV
-          fi
-      
-      - name: Commit and Push Changes
-        if: env.HAS_CHANGES == 'true'
-        run: |
-          git add -A
-          git commit -m "Auto-generate diagrams after PR merge to main"
-          git push origin main # Change if needed
+          path: reports/validation_report.txt
 ```
 
 ### GitHub Issue Comment Commands
