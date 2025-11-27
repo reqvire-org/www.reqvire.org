@@ -243,15 +243,7 @@ reqvire add requirements/Requirements.md < element.md
 echo "### My Requirement..." | reqvire add requirements/Requirements.md
 ```
 
-The element will be appended to the end of the file. You can specify an index (0-based) to insert at a specific position:
-
-```bash
-# Insert at position 0 (beginning)
-cat element.md | reqvire add requirements/Requirements.md 0
-
-# Insert at position 2
-reqvire add requirements/Requirements.md 2 < element.md
-```
+The element will be appended to the end of the file following the Element Ordering Behavior (parents before children, siblings alphabetically).
 
 #### Preview Changes
 
@@ -298,17 +290,14 @@ Move an element to a different location:
 ```bash
 # Move to different file
 reqvire mv "Auth Requirement" "specs/Security.md"
-
-# Move to specific position in file (0-based index)
-reqvire mv "Auth Requirement" "specs/Reqs.md" 0
 ```
 
 The move operation:
 - Accepts element name (globally unique in model)
 - Accepts target file path as second argument
-- Accepts optional index as third argument (0-based, defaults to end of file)
 - Updates the element's identifier to reflect new location
 - Updates all relations pointing to the moved element
+- Places element following Element Ordering Behavior (parents before children, siblings alphabetically)
 - Maintains model consistency automatically
 
 #### Preview Move
