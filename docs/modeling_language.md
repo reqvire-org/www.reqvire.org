@@ -116,7 +116,7 @@ Element types are identified through the `type` metadata property:
 - **behavior** - Behavioral specification or state machine
 - **specification** - Detailed specification document
 
-Refinement elements are special elements that **cannot have Relations subsections**. They are used to provide additional detail and can be attached to requirements via the Attachments subsection.
+Refinement elements are special elements that **can only have `satisfy` relations** pointing to requirements. They are used to provide additional detail and can be attached to requirements via the Attachments subsection.
 
 ### Type Determination
 
