@@ -520,6 +520,16 @@ Apply automatic fixes to formatting issues:
 reqvire format --fix
 ```
 
+### Element Ordering
+
+The format command reorders elements within each file following a hierarchical ordering principle:
+
+- **Parents before children**: Elements are ordered so parent elements appear before their children based on file-local `derivedFrom` relations
+- **Alphabetical siblings**: Elements at the same level (siblings) are sorted alphabetically by name
+- **Root elements first**: Elements without file-local parents are treated as roots and sorted alphabetically
+
+This ordering makes files more readable by ensuring you encounter parent requirements before their derived children.
+
 ## Linting
 
 The lint command analyzes model quality and detects issues in requirements relations, such as redundant verify relations and potentially redundant hierarchical relations.
