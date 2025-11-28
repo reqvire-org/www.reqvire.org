@@ -17,6 +17,7 @@ This user guide provides detailed instructions on how to install and use Reqvire
 - [Linting](#linting)
 - [Generating Documentation](#generating-documentation)
 - [Traceability](#traceability)
+- [Resources Report](#resources-report)
 - [Search and Filtering](#search-and-filtering)
 - [Model Commands](#model-commands)
 - [Change Impact Report](#change-impact-report)
@@ -548,6 +549,28 @@ The format command reorders elements within each file following a hierarchical o
 
 This ordering makes files more readable by ensuring you encounter parent requirements before their derived children.
 
+### Relation Ordering
+
+Relations within each element are sorted for deterministic output:
+
+- **Primary sort**: Alphabetically by relation type name (e.g., `derivedFrom` before `satisfiedBy`)
+- **Secondary sort**: Alphabetically by target identifier within the same relation type
+
+### Include All Relations
+
+By default, the format command only outputs user-created relations. To include auto-generated inverse relations (e.g., `derive` from `derivedFrom`, `verify` from `verifiedBy`):
+
+```bash
+reqvire format --fix --with-full-relations
+```
+
+This is useful for:
+- Reviewing complete traceability in the model
+- Generating documentation with bidirectional links
+- Debugging relation issues
+
+**Note:** HTML export always includes full relations automatically.
+
 ## Linting
 
 The lint command analyzes model quality and detects issues in requirements relations, such as redundant verify relations and potentially redundant hierarchical relations.
@@ -652,6 +675,63 @@ reqvire traces --links-with-blobs
 ```
 
 By default, traces use relative links in Mermaid diagrams. Use `--links-with-blobs` to generate diagrams with GitHub blob URLs, which makes clickable links work properly when viewing trace diagrams directly in the GitHub web interface.
+
+## Resources Report
+
+The `resources` command lists all files referenced by the model through relations and attachments. This helps you understand which implementation files, design documents, and other assets are connected to your requirements.
+
+### Basic Usage
+
+```bash
+# Generate resources report in text format (default)
+reqvire resources
+
+# Generate resources report in JSON format
+reqvire resources --json
+```
+
+### Report Structure
+
+The resources report has two sections:
+
+**Relations Section**
+Lists files referenced through InternalPath relations (satisfiedBy, trace, etc.):
+- Files sorted alphabetically by path
+- Each file shows the relation type and referencing element
+- References sorted by relation type, then by element identifier
+
+**Attachments Section**
+Lists files referenced through FilePath attachments:
+- Files sorted alphabetically by path
+- Each file shows the referencing element
+- References sorted by element identifier
+
+### Example Output
+
+```markdown
+## Relations
+
+### core/src/impl.rs
+  * [Data Integrity](requirements/Requirements.md#data-integrity) (via satisfiedBy)
+  * [System Performance](requirements/Requirements.md#system-performance) (via satisfiedBy)
+
+### docs/design.md
+  * [Architecture Overview](requirements/Architecture.md#architecture-overview) (via trace)
+
+## Attachments
+
+### docs/api-spec.md
+  * [API Requirements](requirements/Requirements.md#api-requirements)
+
+## Summary
+
+- **Relation Files:** 2 (3 references)
+- **Attachment Files:** 1 (1 references)
+```
+
+### HTML Export Integration
+
+The resources report is also available in the HTML export as a dedicated "Resources" page accessible from the navigation bar. This provides a browsable view of all referenced files with clickable links to the referencing elements.
 
 ## Search and Filtering
 
