@@ -471,26 +471,44 @@ Use `--dry-run` to preview the operation:
 reqvire detach "My Requirement" "docs/spec.pdf" --dry-run
 ```
 
-### Move Attachment
+### Move Asset
 
-Move an attachment from one element to another:
+Move or rename an asset file and update all references (both Attachments and Relations) across the model:
 
 ```bash
-reqvire mv-attachment "Source Element" "Target Element" "attachment-path-or-name"
+reqvire mv-asset "old/path/doc.pdf" "new/path/doc.pdf"
 ```
+
+This command:
+- Finds all elements referencing the file in Attachments subsections
+- Finds all elements with InternalPath relations (satisfiedBy, satisfy, trace) pointing to the file
+- Updates all references to the new path
+- Moves the physical file on disk
 
 #### Preview Move
 
 ```bash
-reqvire mv-attachment "Source" "Target" "doc.pdf" --dry-run
+reqvire mv-asset "docs/spec.pdf" "documents/spec.pdf" --dry-run
 ```
 
-### Remove Attachment
+### Remove Asset
 
-Remove an attachment from an element (alias for detach):
+Remove an asset file and remove all references from the model:
 
 ```bash
-reqvire rm-attachment "Element Name" "attachment-path-or-name"
+reqvire rm-asset "path/to/file.pdf"
+```
+
+This command:
+- Finds all elements referencing the file in Attachments subsections
+- Finds all elements with InternalPath relations pointing to the file
+- Removes all attachment entries and relation lines
+- Deletes the physical file from disk
+
+#### Preview Removal
+
+```bash
+reqvire rm-asset "docs/obsolete.pdf" --dry-run
 ```
 
 ## Validation
