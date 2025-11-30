@@ -3,15 +3,26 @@ layout: page
 title: About
 ---
 
-**Reqvire** is the lightweight Git-native **Requirements As a Code** framework that transforms how modern engineering teams build software. Seamlessly blending system modeling, requirements management, and AI-assisted development. Reqvire empowers teams to deliver better products faster with complete traceability and intelligent automation.
+## What is Reqvire?
 
-Experience the future of development where your requirements live alongside your code, evolve with your project, and unlock the full potential of AI-powered engineering—from intelligent requirement synthesis to automated code generation—all within your familiar Git workflow.
+**Reqvire** is a lightweight, Git-native **Requirements-as-Context** framework that transforms how modern engineering teams build software. 
+
+It seamlessly blends system modeling, requirements management, and AI-assisted development, empowering teams to deliver better products faster with complete traceability and intelligent automation.
+
+Experience the future of development where requirements and specifications live alongside your code, managed like code, evolve with your project, and unlock the full potential of AI-powered engineering: from intelligent requirement synthesis and optimized **task planning** to automated code generation—all within your familiar Git workflow.
+
 
 Reqvire unlocks:
-  - 🚀 **Requirements as Code**: Transform requirements from static documents into living, version-controlled assets that evolve with your codebase
+  - 🧠 **Requirements-as-Context**: Establish a single source of truth that structures project context. Reqvire ensures AI tools can retrieve and manage precise information, guiding them to understand precisely what needs to be built, where to make changes, and how all system components connect.
+  - 🚀 **Requirements as Code**: Transform requirements from static documents into living, version-controlled assets that evolve with your codebase, ensuring that the foundational system model remains intact and accessible over time, rather than getting lost in transient task documents
+  - 💡 **Intelligent Engineering**: 
+    - **Context-Aware Generation**: Understand the "why" behind every component through Reqvire's traceability structure.
+    - **Specification-Driven Coding**: Generate code directly tied to specific requirements, reducing guesswork and misinterpretation.
+    - **Verification-Backed Validation**: Refer to defined verifications to ensure implementation meets intended behavior.
+    - **Trace-Based Refactoring**: Assist in propagating requirement changes efficiently through the codebase and related artifacts.  
   - ⚡ **Effortless Integration**: Plug seamlessly into your existing workflow with Git branches, pull requests, and CI/CD pipelines—no disruption, just enhancement
-  - 🤖 **Smart Automation**: Automatically generates diagrams, traceability matrices, and impact analysis—keeping documentation synchronized with your requirements
-  - 🧠 **AI-Ready Context**: Your requirements become high-quality context for AI tools—enabling assisted requirements management and coding where AI understands what needs to be built, where to make changes, and how everything connects
+  - 🪄 **Smart Automation**: Automatically generates diagrams, traceability matrices, and impact analysis—keeping documentation synchronized with your requirements
+
 
 ## Reqvire Modeling Language
 
@@ -23,8 +34,6 @@ By sticking to a semi-structured Markdown format:
 - AI tools don’t need complex parsers or DSL interpreters
 - Models can be used as-is by LLMs like ChatGPT, Claude, or private copilots
 - Validation and generation become trivial to automate
-
-This makes Reqvire models not only powerful for humans but **highly interoperable with AI systems**, whether embedded in CI/CD, editors, or code review bots.
 
 ---
 
@@ -41,38 +50,6 @@ Each Reqvire model is made up of Markdown files and elements representing:
 These documents are written using simple conventions, headers, and embedded tags.
 
 ---
-
-
-## AI Compatibility
-
-Reqvire is built to be **AI-friendly from the ground up**.
-
-### Example AI Use Cases
-
-#### 1. Requirement Analysis
-LLMs can analyze Markdown-based requirements to identify missing elements, suggest clearer phrasing, propose edge cases, and generate acceptance criteria or verification steps.
-
-#### 2. Architecture Suggestion
-By understanding relationships in architecture files, AI can detect inconsistent component relationships, propose modular design improvements, and suggest missing interfaces or dependencies.
-
-#### 3. Traceability & Impact Prediction
-AI tools can automatically trace which tests or requirements are impacted by changes, flag affected downstream areas, and summarize model diffs for engineering teams.
-
-#### 4. Test Coverage Assistance
-Based on requirements and use cases, AI can recommend missing test scenarios and create verifications based on test criteria extracted from requirements chain.
-
-#### 5. Code Generation Assistance
-
-AI can leverage structured requirements for:
-- **Context-Aware Generation**: Understanding the "why" behind every component through Reqvire's traceability structure
-- **Specification-Driven Coding**: Generating code directly tied to specific requirements, reducing guesswork or misinterpretation
-- **Verification-Backed Validation**: Referring to defined verifications to ensure implementation meets intended behavior
-- **Trace-Based Refactoring**: Assisting in propagating requirement changes through the codebase and related artifacts
-
-#### 6. Report Generation
-
-AI can automatically generate traceability reports, summarize system architecture, and prepare documentation for releases or reviews.
-
 
 ### Human in Control — Always
 
