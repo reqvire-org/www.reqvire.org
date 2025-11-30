@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Modeling Language
+title: false
 ---
 
 ## Table of Contents

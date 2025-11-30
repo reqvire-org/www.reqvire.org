@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Claude Code Plugin
+title: false
 ---
 
 ## Installation

@@ -1,6 +1,6 @@
 ---
 layout: page
-title: MBSE in Reqvire
+title: false
 ---
 
 ## Reqvire's MBSE Integration: Overview

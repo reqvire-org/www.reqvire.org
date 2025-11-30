@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Verifications
+title: false
 ---
 
 ## Conceptual Overview

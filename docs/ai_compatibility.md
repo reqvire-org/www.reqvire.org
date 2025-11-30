@@ -1,6 +1,6 @@
 ---
 layout: page
-title: AI Compatibility
+title: false
 ---
 
 ## Table of Contents
