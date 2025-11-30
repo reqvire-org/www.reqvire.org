@@ -1,5 +1,6 @@
 ---
 layout: page
+title: About
 ---
 
 ## What is Reqvire?
@@ -40,32 +41,22 @@ Bring Model-Based Systems Engineering (MBSE) directly into your Git workflow:
 
 ## Reqvire Modeling Language
 
-Reqvire uses a lightweight, opinionated modeling language based on **semi-structured Markdown**.
+Reqvire uses a lightweight, human- and AI-friendly modeling language built on **semi-structured Markdown**.
 
-### Why Markdown Matters
+### Why Semi-Structured Markdown?
+Choosing Markdown as the foundation gives Reqvire several superpowers:
 
-By sticking to a semi-structured Markdown format:
-- AI tools don’t need complex parsers or DSL interpreters
-- Models can be used as-is by LLMs like ChatGPT, Claude, or private copilots
-- Validation and generation become trivial to automate
+- **Zero friction for AI** – LLMs (Claude, ChatGPT, Cursor, local models, etc.) can read, write, and reason about requirements and models without custom parsers  
+- **Git-native from day one** – models live as regular `.md` files, fully diffable and reviewable in pull requests  
+- **Instant validation & automation** – simple rules make it trivial to lint, auto-format, and generate artifacts  
+- **No learning curve** – engineers already know Markdown; no new DSL or proprietary syntax to learn  
 
----
+The result: requirements and system models that are simultaneously precise enough for traceability and loose enough for everyday editing and AI assistance.
 
-### Key Elements
-
-Each Reqvire model is made up of Markdown files and elements representing:
-
-- **Requirements** – User needs, constraints, and system-level behaviors.
-- **System Structure** – Components, modules, and their interconnections.
-- **Behaviors** – States, flows, and operations.
-- **Traceability Links** – Relations between requirements, architecture, and test cases.
-- **Verification Definitions** – Mappings between requirements and their validation/test strategies.
-
-These documents are written using simple conventions, headers, and embedded tags.
 
 ---
 
-### Human in Control — Always
+## Human in Control — Always
 
 While Reqvire empowers AI tools to act as smart collaborators, the **human engineer remains the system’s captain** — setting direction, making decisions, and approving outcomes.
 
@@ -80,16 +71,13 @@ Reqvire ensures that:
 
 Reqvire automatically parses structured Markdown to generate:
 - **Architecture diagrams** (component hierarchies, interfaces, dependencies)
-- **Traceability matrices** linking requirements to architecture, verifications, and tests
+- **Traceability reports** linking requirements to architecture, verifications, and tests
 - **Impact reports** showing what was changed, and what it affects
 - **Requirement flow diagrams** visualizing hierarchical relationships and derivations
 - **Verification coverage maps** showing which leaf requirements are verified and how
 - **Change propagation analysis** identifying all downstream effects of modifications
-- **Compliance matrices** mapping requirements to standards, regulations, or policies
 - **Model summary reports** providing overview statistics and health metrics
 - **Interactive HTML documentation** with clickable diagrams and searchable content
-- **Mermaid diagram exports** for integration with documentation platforms
-- **JSON/CSV exports** for integration with external tools and dashboards
 
 ---
 
@@ -98,10 +86,8 @@ Reqvire automatically parses structured Markdown to generate:
 Reqvire is designed for automation. In typical Git-based workflows, you can:
 
 - **Validate Markdown structure** using static checks
-- **Auto-generate diagrams** during CI builds or PRs
 - **Generate traceability and change impact reports** for stakeholder review
 - **Block PRs** if requirements are incomplete or broken
 - **Package models** into versioned documentation releases
 - **Integrate with GitHub Actions/GitLab CI** for automated validation
-- **Generate reports** that become part of your release artifacts
 

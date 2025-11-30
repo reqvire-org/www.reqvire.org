@@ -1,5 +1,6 @@
 ---
 layout: page
+Title: Modeling Language
 ---
 
 ## Table of Contents
