@@ -9,19 +9,16 @@ title: About
 
 It seamlessly blends system modeling, requirements management, and AI-assisted development, empowering teams to deliver better products faster with complete traceability and intelligent automation.
 
-Experience the future of development where requirements and specifications live alongside your code, managed like code, evolve with your project, and unlock the full potential of AI-powered engineering: from intelligent requirement synthesis and optimized **task planning** to automated code generation—all within your familiar Git workflow.
+## Reqvire unlocks
 
-
-Reqvire unlocks:
-  - 🧠 **Requirements-as-Context**: Establish a single source of truth that structures project context. Reqvire ensures AI tools can retrieve and manage precise information, guiding them to understand precisely what needs to be built, where to make changes, and how all system components connect.
-  - 🚀 **Requirements as Code**: Transform requirements from static documents into living, version-controlled assets that evolve with your codebase, ensuring that the foundational system model remains intact and accessible over time, rather than getting lost in transient task documents
-  - 💡 **Intelligent Engineering**: 
-    - **Context-Aware Generation**: Understand the "why" behind every component through Reqvire's traceability structure.
-    - **Specification-Driven Coding**: Generate code directly tied to specific requirements, reducing guesswork and misinterpretation.
-    - **Verification-Backed Validation**: Refer to defined verifications to ensure implementation meets intended behavior.
-    - **Trace-Based Refactoring**: Assist in propagating requirement changes efficiently through the codebase and related artifacts.  
-  - ⚡ **Effortless Integration**: Plug seamlessly into your existing workflow with Git branches, pull requests, and CI/CD pipelines—no disruption, just enhancement
-  - 🪄 **Smart Automation**: Automatically generates diagrams, traceability matrices, and impact analysis—keeping documentation synchronized with your requirements
+- **Requirements-as-Context**: Establish a single source of truth that structures project context. Reqvire ensures AI tools can retrieve and manage precise information, guiding them to understand precisely what needs to be built, where to make changes, and how all system components connect.
+- **Requirements as Code**: Transform requirements from static documents into living, version-controlled assets that evolve with your codebase, ensuring that the foundational system model remains intact and accessible over time, rather than getting lost in transient task documents
+- **Intelligent Engineering**: 
+  - **Context-Aware Generation**: Understand the "why" behind every component through Reqvire's traceability structure.
+  - **Specification-Driven Coding**: Generate code directly tied to specific requirements, reducing guesswork and misinterpretation.
+  - **Verification-Backed Validation**: Refer to defined verifications to ensure implementation meets intended behavior.
+  - **Trace-Based Refactoring**: Assist in propagating requirement changes efficiently through the codebase and related artifacts.  
+- **Effortless Integration**: Plug seamlessly into your existing workflow with Git branches, pull requests, and CI/CD pipelines—no disruption, just enhancement
 
 
 ## Reqvire Modeling Language
