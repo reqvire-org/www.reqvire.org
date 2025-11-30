@@ -1,6 +1,7 @@
 ---
 layout: page
-Title: User Guide
+nav_order: 3
+title: User Guide
 ---
 
 This user guide provides detailed instructions on how to install and use Reqvire effectively.

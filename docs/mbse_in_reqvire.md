@@ -1,9 +1,12 @@
 ---
 layout: page
+nav_order: 7
 title: MBSE in Reqvire
 ---
 
 ## Reqvire's MBSE Integration: Overview
+
+---
 
 Reqvire brings true Git-native Model-Based Systems Engineering to modern engineering teams.
 
@@ -18,6 +21,9 @@ Reqvire integrates MBSE by embedding model-driven principles directly into its G
 The core idea: **Requirements act as the canonical source of truth**, while system models provide structured representations of how those requirements translate into system behavior and architecture. This unification enables automated workflows that keep everything aligned, traceable, and adaptable to changes.
 
 ## How It Works: Key Mechanisms
+
+---
+
 Reqvire's MBSE features are designed for seamless integration without disrupting Git workflows. Here's how it unifies requirements, system models, and AI:
 
 1. **Version-Controlled System Modeling**  
@@ -41,6 +47,9 @@ Reqvire's MBSE features are designed for seamless integration without disrupting
    - Integration with plugins like Claude allows natural-language interactions, e.g., "Refine the control system model based on updated safety requirements."
 
 ## Example Workflow in Reqvire
+
+---
+
 A typical MBSE-driven workflow might look like this:
 
 1. **Define Requirements**: Author structured specs in Git/.
@@ -52,6 +61,9 @@ A typical MBSE-driven workflow might look like this:
 7. **Merge and Deploy**: Full audit trail ensures the deployed system matches the model.
 
 ## Benefits for Engineering Teams
+
+---
+
 - **Eliminates Outdated Docs**: Models and requirements stay synchronized in Git, avoiding the "doc rot" common in traditional MBSE.  
 - **Boosts Efficiency**: Automation cuts manual tracing by 50–70% (based on similar tools), accelerating delivery.  
 - **Enhances Quality**: Full traceability and validation reduce compliance risks in regulated industries.  

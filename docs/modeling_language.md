@@ -1,6 +1,7 @@
 ---
 layout: page
-Title: Modeling Language
+nav_order: 6
+title: Modeling Language
 ---
 
 ## Table of Contents
@@ -12,6 +13,8 @@ Title: Modeling Language
 ---
 
 ## Reqvire Modeling Language
+
+---
 
 Reqvire uses a lightweight modeling language based on **semi-structured Markdown**, inspired by SysML core concepts.
 

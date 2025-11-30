@@ -1,8 +1,12 @@
 ---
 layout: page
+nav_order: 4
+title: Requirements
 ---
 
 ## Conceptual Overview
+
+---
 
 Reqvire is a tool, framework, and methodology for requirements management. In Reqvire, a **requirement** represents a stakeholder's need, system capability, or constraint that the system must fulfill. Requirements define:
 
@@ -20,6 +24,8 @@ For detailed specifications on document structure and formatting, refer to: [Spe
 
 ## Requirement Types and Classification
 
+---
+
 Reqvire organizes requirements into **two main categories**:
 
 - **User Requirements**  
@@ -30,9 +36,10 @@ Reqvire organizes requirements into **two main categories**:
 
 This structure supports a **progressive refinement** approach, ensuring traceability from high-level stakeholder expectations down to technical implementation.
 
----
 
 ## User Requirements
+
+---
 
 **User requirements** represent **stakeholder needs**, **mission objectives**, **user expectations**, and **WHAT-focused requirements**. These describe *what* the system must do from an external point of view, without specifying technical implementation details.
 
@@ -49,6 +56,8 @@ User requirements serve as the **foundation for system design**, ensuring that a
 
 ## System Requirements
 
+---
+
 **System requirements** specify **HOW** the system will fulfill the user and mission requirements. They define detailed **technical** and **functional** specifications, covering:
 
 - System behaviors
@@ -59,6 +68,8 @@ User requirements serve as the **foundation for system design**, ensuring that a
 System requirements are derived from user requirements and are structured to map directly to **subsystems** or **components** of the overall system, ensuring **modularity** and **traceability**.
 
 ## Requirement Containment
+
+---
 
 Reqvire manages **requirement containment** through its **file and folder structure** rather than explicit containment relationships. This approach provides a natural and intuitive way to organize and group related requirements.
 
@@ -99,11 +110,13 @@ In this example:
 
 ## Diagram summary
 
+---
 
 The diagram below demonstrates how requirements, their relationships, and hierarchical structures are organized within the **Reqvire methodology**. 
 It showcases the connection between stakeholder needs, user requirements, mission requirements, system requirements, and their links to verifications, specification documents, and other system elements.
 
 ```mermaid
+
 graph TD
     subgraph Requirements Design
   
@@ -195,11 +208,6 @@ graph TD
 end
 
 ```
-
-## Visual Representation
-
-Reqvire automatically generates visual representations of requirements and their relationships using Mermaid diagrams. For more information on diagrams, see the [User Guide](./user_guide.md#diagrams) and [Specifications](https://github.com/reqvire-org/reqvire/blob/main/requirements/SpecificationsRequirements.md).
-
 
 
 

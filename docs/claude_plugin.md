@@ -1,11 +1,14 @@
 ---
 layout: page
+nav_order: 2
 title: Claude Plugin
 ---
 
 ## Installation
 
 ### Prerequisites
+
+---
 
 Before installing the plugin, ensure you have:
 
@@ -21,6 +24,8 @@ curl -fsSL https://raw.githubusercontent.com/reqvire-org/reqvire/main/scripts/in
 For detailed CLI installation options, see the [Installation Guide](https://www.reqvire.org/user_guide#installation).
 
 ### Installing the Plugin
+
+---
 
 The Reqvire plugin is available through the reqvire-org marketplace for Claude Code:
 
@@ -38,9 +43,12 @@ The Reqvire plugin is available through the reqvire-org marketplace for Claude C
 
 ## About the Plugin
 
+---
+
 Reqvire offers a plugin for Claude Code, bringing AI-native requirements engineering capabilities directly into your Claude Code workflow through the reqvire-org marketplace.
 
-## What's Included
+### What's Included
+
 
 The Reqvire plugin for Claude Code provides:
 
@@ -76,6 +84,8 @@ The plugin provides the following slash commands (all prefixed with `reqvire:`):
 - `/reqvire:rm` - Remove an element and update all relations
 
 ## Getting Started
+
+---
 
 Once installed, you can immediately start using Reqvire's capabilities:
 
@@ -124,6 +134,8 @@ This generates a verification coverage report showing which requirements are ver
 
 ## Use Cases
 
+---
+
 ### Requirements Engineering
 
 Use the plugin to:
@@ -149,6 +161,8 @@ Support Model-Based Systems Engineering practices:
 - Track change propagation
 
 ## Examples
+
+---
 
 ### Analyzing Your Model
 
@@ -232,8 +246,4 @@ The system shall provide formatting capability...
   * satisfiedBy: [format.rs]
 ```
 
-## Learn More
 
-- [User Guide](./user_guide.md) - Complete guide to using Reqvire
-- [Modeling Language](./modeling_language.md) - Understanding Reqvire's modeling concepts
-- [GitHub Repository](https://github.com/reqvire-org/reqvire) - Source code and plugin files

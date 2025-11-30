@@ -1,15 +1,20 @@
 ---
 layout: page
-Title: Verifications
+nav_order: 5
+title: Verifications
 ---
 
 ## Conceptual Overview
+
+---
 
 In Reqvire, **verification** is the process of confirming that a system or its components meet specified **requirements**. Verification ensures that the system has been **built right**, checking whether it conforms to the defined functional and non-functional requirements at each level of system decomposition.
 
 Verification activities are integrated into the **requirements structure**, maintaining clear **traceability** between requirements and their associated **verification methods** and **test artifacts**.
 
 ## Verification Element Types
+
+---
 
 Reqvire supports several verification element types that align with standard systems engineering verification methods:
 
@@ -26,6 +31,8 @@ Reqvire supports several verification element types that align with standard sys
 - **trace relations**: Always allowed for any verification type
 
 ## Coverage Philosophy
+
+---
 
 Reqvire uses a **Verification Roll-up approach**, where verification of detailed requirements provides coverage for their parent requirements through the requirements hierarchy.
 
@@ -55,6 +62,8 @@ The verification coverage system tracks:
 - **Coverage percentages**: Calculated separately for leaf requirements verification and test-verification satisfaction
 
 ## Two-Level Verification System
+
+---
 
 Reqvire implements a two-level verification approach:
 
@@ -87,6 +96,8 @@ Reqvire automatically maintains bidirectional relations:
 - This ensures complete traceability in both directions
 
 ## Verification Coverage
+
+---
 
 Generate verification coverage reports to track verification status of your requirements.
 

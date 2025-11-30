@@ -1,35 +1,95 @@
-# Jekyll configuration for Reqvire documentation
+# _config.yml – replace everything with this
+remote_theme: just-the-docs/just-the-docs
+
 title: Reqvire
-description: The AI-Native Requirements As A Code framework for Modern Engineering Teams
+description: Requirements-as-context framework for modern engineering teams.
+
+logo: "/assets/images/logo.png"
+favicon_ico: "/assets/images/favicon.ico"
+
+repository: reqvire-org/reqvire # for github-metadata
+
+permalink: pretty
+
 url: "https://www.reqvire.org"
-baseurl: ""
 
-# Theme
-theme: minima
+defaults:
+  - scope:
+      path: "docs" # an empty string here means all files in the project
+      type: "pages"
+    values:
+    
+      layout: "default"
 
-# Navigation
-header_pages:
-  - index.md
-  - claude_plugin.md
-  - user_guide.md
-  - modeling_language.md
-  - mbse_in_reqvire.md  
 
-# Markdown settings
-markdown: kramdown
-kramdown:
-  input: GFM
-  syntax_highlighter: rouge
+# For copy button on code
+enable_copy_code_button: true
 
-# Plugins
-plugins:
-  - jekyll-relative-links
+# Navigation (exactly what you already have)
+nav_enabled: true
+nav_order: 1
 
-# Build settings
-relative_links:
-  enabled: true
-  collections: false
+heading_anchors: true
 
-# Exclude files from processing
-exclude:
-  - README.md
+aux_links:
+  "Reqvire on GitHub" : "https://github.com/reqvire-org/reqvire"
+
+# External navigation links
+nav_external_links:
+  - title: Reqvire on GitHub
+    url: https://github.com/reqvire-org/reqvire
+
+
+# Collections become automatic pages
+collections:
+  docs:
+    output: true
+
+# Beautiful defaults
+color_scheme: reqvire
+
+search_enabled: false
+ 
+mermaid:
+  # Version of mermaid library
+  # Pick an available version from https://cdn.jsdelivr.net/npm/mermaid/
+  version: "11.12.1"
+  enabled: true  
+  
+
+liquid:
+  error_mode: strict
+  strict_filters: true
+
+# Footer content
+# appears at the bottom of every page's main content
+
+# Back to top link
+back_to_top: false
+back_to_top_text: "Back to top"
+
+footer_content: ''
+# Footer last edited timestamp
+last_edit_timestamp: false # show or hide edit time - page must have `last_modified_date` defined in the frontmatter
+
+# Footer "Edit this page on GitHub" link text
+gh_edit_link: false # show or hide edit this page link
+
+
+callouts_level: quiet # or loud
+callouts:
+  highlight:
+    color: yellow
+  important:
+    title: Important
+    color: blue
+  new:
+    title: New
+    color: green
+  note:
+    title: Note
+    color: purple
+  warning:
+    title: Warning
+    color: red
+

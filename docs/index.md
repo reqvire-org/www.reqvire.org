@@ -1,16 +1,25 @@
 ---
-layout: page
-title: About
+layout: home
+nav_order: 1
+title: About Reqvire
+permalink: /
 ---
 
-## What is Reqvire?
+# What is Reqvire?
+{: .fs-9 }
 
 **Reqvire** is a lightweight, Git-native **Requirements-as-Context** framework that redefines how modern engineering teams design, build, and maintain software.
+{: .fs-6 .fw-300 }
 
-It unifies system modeling, requirements management, and AI-assisted development into a single workflow—providing complete traceability, intelligent automation, and faster delivery while staying fully aligned with your codebase.
+It unifies system modeling, requirements management, context engineering and AI-assisted development into a single workflow—providing complete traceability, intelligent automation, and faster delivery while staying fully aligned with your codebase.
+
+[View it on GitHub](https://github.com/reqvire-org/reqvire){: .btn .fs-5 .mb-4 .mb-md-0 }
+
 
 
 ## Key Features
+
+---
 
 ### **Requirements-as-Context**
 Create a structured, canonical source of truth for your project.  
@@ -41,6 +50,8 @@ Bring Model-Based Systems Engineering (MBSE) directly into your Git workflow:
 
 ## Reqvire Modeling Language
 
+---
+
 Reqvire uses a lightweight, human- and AI-friendly modeling language built on **semi-structured Markdown**.
 
 ### Why Semi-Structured Markdown?
@@ -54,9 +65,9 @@ Choosing Markdown as the foundation gives Reqvire several superpowers:
 The result: requirements and system models that are simultaneously precise enough for traceability and loose enough for everyday editing and AI assistance.
 
 
----
-
 ## Human in Control — Always
+
+---
 
 While Reqvire empowers AI tools to act as smart collaborators, the **human engineer remains the system’s captain** — setting direction, making decisions, and approving outcomes.
 
@@ -65,9 +76,9 @@ Reqvire ensures that:
 - System evolution remains understandable and documented
 - AI tooling acts in service of the engineer’s intent, not in place of it
 
----
-
 ## Diagram & Traceability Automation
+
+---
 
 Reqvire automatically parses structured Markdown to generate:
 - **Architecture diagrams** (component hierarchies, interfaces, dependencies)
@@ -79,9 +90,9 @@ Reqvire automatically parses structured Markdown to generate:
 - **Model summary reports** providing overview statistics and health metrics
 - **Interactive HTML documentation** with clickable diagrams and searchable content
 
----
-
 ## CI/CD Integration
+
+---
 
 Reqvire is designed for automation. In typical Git-based workflows, you can:
 
