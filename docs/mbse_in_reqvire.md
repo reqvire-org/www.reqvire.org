@@ -1,13 +1,18 @@
 ---
 layout: page
-title: MBSE in Reqvire: Git-Native Model-Based Systems Engineering
+title: MBSE in Reqvire
 ---
 
-## What is MBSE?
+## Reqvire's MBSE Integration: Overview
+
+Reqvire brings true Git-native Model-Based Systems Engineering to modern engineering teams.
+
+### What is MBSE?
 
 Model-Based Systems Engineering (MBSE) is a methodology that shifts from traditional document-based approaches to using formal, digital models as the primary means of representing, analyzing, and verifying complex systems. It emphasizes creating interconnected models of system requirements, architecture, behavior, and interfaces to improve traceability, reduce errors, and support collaborative development—especially in fields like aerospace, automotive, and software engineering.
 
-## Reqvire's MBSE Integration: Overview
+### MBSE in Reqvire
+
 Reqvire integrates MBSE by embedding model-driven principles directly into its Git-native "Requirements-as-Context" framework. Rather than treating models as siloed artifacts in specialized tools (e.g., SysML diagramming software), Reqvire unifies them with requirements management and AI-assisted development in a single, version-controlled Git repository. This creates a "living" system model that's queryable by AI tools (like the Claude Code plugin) and enforceable across the development lifecycle.
 
 The core idea: **Requirements act as the canonical source of truth**, while system models provide structured representations of how those requirements translate into system behavior and architecture. This unification enables automated workflows that keep everything aligned, traceable, and adaptable to changes.
