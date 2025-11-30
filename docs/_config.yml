@@ -13,6 +13,7 @@ header_pages:
   - claude_plugin.md
   - user_guide.md
   - modeling_language.md
+  - mbse_in_reqvire.md  
 
 # Markdown settings
 markdown: kramdown
