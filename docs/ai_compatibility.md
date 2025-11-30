@@ -1,6 +1,5 @@
 ---
 layout: page
-title: false
 ---
 
 ## Table of Contents
