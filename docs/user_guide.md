@@ -12,6 +12,8 @@ This user guide provides detailed instructions on how to install and use Reqvire
 - [File Exclusion Patterns](#file-exclusion-patterns)
 - [Working with Requirements](#working-with-requirements)
 - [Element Manipulation](#element-manipulation)
+- [Attachment Commands](#attachment-commands)
+- [Relation Commands](#relation-commands)
 - [Validation](#validation)
 - [Formatting](#formatting)
 - [Linting](#linting)
@@ -510,6 +512,95 @@ This command:
 
 ```bash
 reqvire rm-asset "docs/obsolete.pdf" --dry-run
+```
+
+## Relation Commands
+
+Reqvire provides commands to link and unlink relations between elements directly from the command line. These operations allow you to establish and manage traceability relationships without manually editing markdown files.
+
+### Link
+
+Create a relation between two elements:
+
+```bash
+# Link two elements with a relation type
+reqvire link "<source-element>" "<relation-type>" "<target-element>"
+
+# Examples
+reqvire link "Feature Requirement" "derivedFrom" "User Story"
+reqvire link "System Requirement" "derive" "Feature Requirement"
+reqvire link "Authentication Requirement" "verifiedBy" "Auth Test Case"
+reqvire link "Element A" "trace" "Element B"
+```
+
+The link command:
+- Accepts element names (globally unique in model)
+- Adds the relation to the source element's Relations section
+- Creates the Relations section if it doesn't exist
+- Calculates correct relative paths for cross-file links
+- Is idempotent (duplicate links are silently ignored)
+
+**Supported relation types:**
+
+| Relation Type | Description |
+|---------------|-------------|
+| `derivedFrom` | Source derives from target (child to parent) |
+| `derive` | Source has derived target (parent to child) |
+| `verifiedBy` | Source is verified by target |
+| `verify` | Source verifies target |
+| `satisfiedBy` | Source is satisfied by target |
+| `satisfy` | Source satisfies target |
+| `trace` | General traceability link |
+
+#### Preview Link
+
+Use `--dry-run` to preview the operation:
+
+```bash
+reqvire link "Feature Requirement" "derivedFrom" "User Story" --dry-run
+```
+
+#### JSON Output
+
+Get structured output for programmatic processing:
+
+```bash
+reqvire link "Feature Requirement" "derivedFrom" "User Story" --json
+```
+
+### Unlink
+
+Remove an existing relation between two elements:
+
+```bash
+# Remove a relation between elements
+reqvire unlink "<source-element>" "<relation-type>" "<target-element>"
+
+# Examples
+reqvire unlink "Feature Requirement" "derivedFrom" "User Story"
+reqvire unlink "Requirement" "verifiedBy" "Test Case"
+```
+
+The unlink command:
+- Accepts element names (globally unique in model)
+- Removes the specified relation from the source element
+- Cleans up empty Relations sections automatically
+- Only removes user-created relations (not auto-generated inverse relations)
+
+#### Preview Unlink
+
+Use `--dry-run` to preview the operation:
+
+```bash
+reqvire unlink "Feature Requirement" "derivedFrom" "User Story" --dry-run
+```
+
+#### JSON Output
+
+Get structured output for programmatic processing:
+
+```bash
+reqvire unlink "Feature Requirement" "derivedFrom" "User Story" --json
 ```
 
 ## Validation
