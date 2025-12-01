@@ -13,8 +13,7 @@ This user guide provides detailed instructions on how to install and use Reqvire
 - [File Exclusion Patterns](#file-exclusion-patterns)
 - [Working with Requirements](#working-with-requirements)
 - [Element Manipulation](#element-manipulation)
-- [Attachment Commands](#attachment-commands)
-- [Relation Commands](#relation-commands)
+- [Link and Unlink Commands](#link-and-unlink-commands)
 - [Validation](#validation)
 - [Formatting](#formatting)
 - [Linting](#linting)
@@ -416,63 +415,102 @@ Get structured output with element mappings:
 reqvire mv-file "specs/Old.md" "specs/New.md" --json
 ```
 
-## Attachment Commands
+## Link and Unlink Commands
 
-Reqvire supports attaching external files and Refinement elements to any element. Attachments are stored in the element's `#### Attachments` subsection.
+Reqvire provides unified commands to manage both relations and attachments between elements. The `link` command creates relations or attachments, while `unlink` removes them with auto-detection.
 
-### Attach
+### Link
 
-Attach a file or Refinement element to an element:
+Create a relation between elements or attach files/refinement elements:
 
 ```bash
-# Attach a file
-reqvire attach "docs/sla-document.pdf" "Performance Requirement"
+# Link two elements with a relation type
+reqvire link "<source>" "<relation-type>" "<target>"
 
-# Attach a Refinement element (constraint, behavior, or specification)
-reqvire attach "Rate Limiting Constraint" "API Endpoint Requirement"
+# Examples - linking elements
+reqvire link "Feature Requirement" "derivedFrom" "User Story"
+reqvire link "System Requirement" "derive" "Feature Requirement"
+reqvire link "Authentication Requirement" "verifiedBy" "Auth Test Case"
+
+# Link to implementation file or external URL
+reqvire link "System Requirement" "satisfiedBy" "src/auth/login.rs"
+reqvire link "Compliance Requirement" "trace" "https://example.com/spec.html"
+
+# Attach file or Refinement element (use 'attaching' keyword)
+reqvire link "<element>" attaching "<path-or-refinement>"
+reqvire link "Performance Requirement" attaching "docs/sla-document.pdf"
+reqvire link "API Endpoint Requirement" attaching "Rate Limiting Constraint"
 ```
+
+The link command:
+- Accepts element names (globally unique in model)
+- Adds the relation to the source element's Relations section
+- Creates the Relations/Attachments section if it doesn't exist
+- Calculates correct relative paths for cross-file links
+- Is idempotent (duplicate links are silently ignored)
+
+**Supported relation types:**
+
+| Relation Type | Description |
+|---------------|-------------|
+| `derivedFrom` | Source derives from target (child to parent) |
+| `derive` | Source has derived target (parent to child) |
+| `verifiedBy` | Source is verified by target |
+| `verify` | Source verifies target |
+| `satisfiedBy` | Source is satisfied by target |
+| `satisfy` | Source satisfies target |
+| `trace` | General traceability link |
+
+**Target types for relations:**
+- Element name (e.g., "User Story")
+- Internal file path (e.g., "src/auth/login.rs")
+- External URL (e.g., "https://example.com/spec.html")
+
+**Attaching (use `attaching` keyword instead of relation type):**
+- Internal file path (e.g., "docs/sla-document.pdf")
+- Refinement element name (constraint, behavior, or specification)
+
+#### Preview Link
+
+Use `--dry-run` to preview the operation:
+
+```bash
+reqvire link "Feature Requirement" "derivedFrom" "User Story" --dry-run
+reqvire link "Performance Requirement" attaching "docs/spec.pdf" --dry-run
+```
+
+### Unlink
+
+Remove an existing relation or attachment (auto-detects type):
+
+```bash
+# Remove a relation or attachment between elements
+reqvire unlink "<source>" "<target>"
+
+# Examples
+reqvire unlink "Feature Requirement" "User Story"
+reqvire unlink "Requirement" "Test Case"
+reqvire unlink "Performance Requirement" "docs/sla-document.pdf"
+```
+
+The unlink command:
+- Accepts element names (globally unique in model)
+- **Auto-detects** whether to remove a relation or attachment
+- Searches relations first (by element name), then attachments
+- Cleans up empty Relations/Attachments sections automatically
+- Only removes user-created relations (not auto-generated inverse relations)
 
 **Auto-detection behavior:**
-1. The system first checks if the attachment exists as a file (relative to cwd or git root)
-2. If file exists: attaches as file path
-3. If no file exists: looks up element by name (must be Refinement type: constraint, behavior, or specification)
-4. Error if neither file nor element found
+1. First: searches for a relation from source to target element
+2. Then: if no relation found, searches for an attachment matching the target
+3. Only one relation per source-target pair is allowed, so no ambiguity
 
-**Result:**
-```markdown
-#### Attachments
-  * [sla-document.pdf](docs/sla-document.pdf)
-  * [Rate Limiting Constraint](Behaviors.md#rate-limiting-constraint)
-```
-
-#### Preview Attachment
+#### Preview Unlink
 
 Use `--dry-run` to preview the operation:
 
 ```bash
-reqvire attach "docs/spec.pdf" "My Requirement" --dry-run
-```
-
-### Detach
-
-Remove an attachment from an element:
-
-```bash
-# Detach a file
-reqvire detach "Performance Requirement" "docs/sla-document.pdf"
-
-# Detach a Refinement element
-reqvire detach "API Endpoint Requirement" "Rate Limiting Constraint"
-```
-
-The same auto-detection logic applies: file paths are checked first, then element names.
-
-#### Preview Detachment
-
-Use `--dry-run` to preview the operation:
-
-```bash
-reqvire detach "My Requirement" "docs/spec.pdf" --dry-run
+reqvire unlink "Feature Requirement" "User Story" --dry-run
 ```
 
 ### Move Asset
@@ -513,95 +551,6 @@ This command:
 
 ```bash
 reqvire rm-asset "docs/obsolete.pdf" --dry-run
-```
-
-## Relation Commands
-
-Reqvire provides commands to link and unlink relations between elements directly from the command line. These operations allow you to establish and manage traceability relationships without manually editing markdown files.
-
-### Link
-
-Create a relation between two elements:
-
-```bash
-# Link two elements with a relation type
-reqvire link "<source-element>" "<relation-type>" "<target-element>"
-
-# Examples
-reqvire link "Feature Requirement" "derivedFrom" "User Story"
-reqvire link "System Requirement" "derive" "Feature Requirement"
-reqvire link "Authentication Requirement" "verifiedBy" "Auth Test Case"
-reqvire link "Element A" "trace" "Element B"
-```
-
-The link command:
-- Accepts element names (globally unique in model)
-- Adds the relation to the source element's Relations section
-- Creates the Relations section if it doesn't exist
-- Calculates correct relative paths for cross-file links
-- Is idempotent (duplicate links are silently ignored)
-
-**Supported relation types:**
-
-| Relation Type | Description |
-|---------------|-------------|
-| `derivedFrom` | Source derives from target (child to parent) |
-| `derive` | Source has derived target (parent to child) |
-| `verifiedBy` | Source is verified by target |
-| `verify` | Source verifies target |
-| `satisfiedBy` | Source is satisfied by target |
-| `satisfy` | Source satisfies target |
-| `trace` | General traceability link |
-
-#### Preview Link
-
-Use `--dry-run` to preview the operation:
-
-```bash
-reqvire link "Feature Requirement" "derivedFrom" "User Story" --dry-run
-```
-
-#### JSON Output
-
-Get structured output for programmatic processing:
-
-```bash
-reqvire link "Feature Requirement" "derivedFrom" "User Story" --json
-```
-
-### Unlink
-
-Remove an existing relation between two elements:
-
-```bash
-# Remove a relation between elements
-reqvire unlink "<source-element>" "<relation-type>" "<target-element>"
-
-# Examples
-reqvire unlink "Feature Requirement" "derivedFrom" "User Story"
-reqvire unlink "Requirement" "verifiedBy" "Test Case"
-```
-
-The unlink command:
-- Accepts element names (globally unique in model)
-- Removes the specified relation from the source element
-- Cleans up empty Relations sections automatically
-- Only removes user-created relations (not auto-generated inverse relations)
-
-#### Preview Unlink
-
-Use `--dry-run` to preview the operation:
-
-```bash
-reqvire unlink "Feature Requirement" "derivedFrom" "User Story" --dry-run
-```
-
-#### JSON Output
-
-Get structured output for programmatic processing:
-
-```bash
-reqvire unlink "Feature Requirement" "derivedFrom" "User Story" --json
 ```
 
 ## Validation
