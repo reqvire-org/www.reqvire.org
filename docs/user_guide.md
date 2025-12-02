@@ -264,6 +264,35 @@ Get structured output for programmatic processing:
 reqvire add "specs/Reqs.md" --json < element.md
 ```
 
+#### Override Existing Element
+
+Use `--override` to replace an existing element with the same name. This removes the old element and adds the new one:
+
+```bash
+# Replace an existing element with updated content
+reqvire add "requirements/Requirements.md" --override <<'EOF'
+### Existing Requirement Name
+
+Updated content with new details.
+
+#### Details
+
+New consolidated details after merge cleanup.
+
+#### Metadata
+  * type: system-requirement
+
+#### Relations
+  * derivedFrom: Requirements.md#parent-requirement
+EOF
+```
+
+This is particularly useful for cleanup after `reqvire merge`:
+1. Run `reqvire merge` to combine elements (creates "Merged Details" artifacts)
+2. Read the merged element to see the raw output
+3. Prepare a clean version with proper structure
+4. Use `reqvire add --override` to replace with the clean version
+
 ### Remove Element
 
 Remove an element by its name:
@@ -932,7 +961,7 @@ reqvire search --json --short
 
 ## Model Commands
 
-The `model` command generates a model-centric view showing requirements and verifications with their nested relations as a hierarchical tree structure.
+The `model` command generates a model-centric view showing requirements and verifications with their nested relations as a hierarchical tree structure. It supports both forward traversal (root to leaves) and reverse traversal (leaves to roots).
 
 ### Generate Model-Centric Structure
 
@@ -964,6 +993,48 @@ reqvire model --from "Data Storage System"
 
 This includes only the specified element and elements reachable by following forward relations (derive, satisfiedBy, verifiedBy, trace) from it.
 
+### Reverse Traversal
+
+Use `--reverse` to traverse from leaf elements upward to root requirements:
+
+```bash
+# Traverse from verifications up to requirements
+reqvire model --reverse
+
+# Reverse traversal with JSON output
+reqvire model --reverse --json
+```
+
+In reverse mode:
+- Starting elements are "leaf" elements (elements with backward relations but no forward children)
+- Traversal follows backward relations: derivedFrom, satisfy, verify
+- Useful for understanding how verifications trace back to requirements
+- Shows the upward path from implementation to high-level requirements
+
+### Filter by Element Type
+
+Filter starting elements by type using `--filter-type`:
+
+```bash
+# Show model starting only from user requirements
+reqvire model --filter-type="user-requirement"
+
+# Show model starting only from verifications
+reqvire model --filter-type="test-verification"
+
+# Combine with reverse to trace specific verification types upward
+reqvire model --reverse --filter-type="test-verification"
+
+# Multiple types (comma-separated)
+reqvire model --filter-type="user-requirement,requirement"
+```
+
+**Valid element types:**
+- `user-requirement`, `requirement` (requirements)
+- `test-verification`, `analysis-verification`, `inspection-verification`, `demonstration-verification` (verifications)
+- `constraint`, `behavior`, `specification` (refinements)
+- `other-TYPENAME` for custom types (e.g., `other-use-case`)
+
 ### Output Format Options
 
 ```bash
@@ -978,6 +1049,9 @@ reqvire model --json
 
 # Generate filtered JSON starting from specific element
 reqvire model --from "API Layer" --json
+
+# Reverse traversal with type filter and JSON output
+reqvire model --reverse --filter-type="test-verification" --json
 ```
 
 The JSON output contains the nested model structure with elements containing their forward-related child elements, making it suitable for programmatic analysis and integration with other tools.
