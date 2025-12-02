@@ -447,7 +447,8 @@ The link command:
 - Adds the relation to the source element's Relations section
 - Creates the Relations/Attachments section if it doesn't exist
 - Calculates correct relative paths for cross-file links
-- Is idempotent (duplicate links are silently ignored)
+- Fails with error if duplicate relation or attachment already exists
+- Fails with error if target exists in the other section (cross-section duplicate)
 
 **Supported relation types:**
 
