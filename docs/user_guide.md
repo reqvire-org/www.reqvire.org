@@ -20,6 +20,7 @@ This user guide provides detailed instructions on how to install and use Reqvire
 - [Generating Documentation](#generating-documentation)
 - [Traceability](#traceability)
 - [Resources Report](#resources-report)
+- [Collect Content](#collect-content)
 - [Search and Filtering](#search-and-filtering)
 - [Model Commands](#model-commands)
 - [Change Impact Report](#change-impact-report)
@@ -863,6 +864,94 @@ Lists files referenced through FilePath attachments:
 ### HTML Export Integration
 
 The resources report is also available in the HTML export as a dedicated "Resources" page accessible from the navigation bar. This provides a browsable view of all referenced files with clickable links to the referencing elements.
+
+## Collect Content
+
+The `collect` command aggregates content from a requirement element and all its ancestors via derivedFrom relations, including attachment contents, with source citations.
+
+### Basic Usage
+
+```bash
+# Collect content in text format (default)
+reqvire collect "Feature Requirement"
+
+# Collect content in JSON format
+reqvire collect "Feature Requirement" --json
+```
+
+### How It Works
+
+The collect command:
+1. Starts from the specified requirement element
+2. Traverses derivedFrom relations in reverse direction (child to parents)
+3. Collects content from each element and their attachments
+4. Outputs consolidated content with source citations
+
+### Content Collection Rules
+
+**Element Content:**
+- Collects the main body text including Details section from each element
+
+**Attachments:**
+- `.md` files: Content is read and included
+- Other file types: Included as markdown links
+- Element identifier attachments: Referenced element's content is included
+
+### Output Format
+
+**Text Output:**
+Each content block is followed by a source citation and separator:
+
+```
+[Content from element or attachment]
+
+— Source: [Element Name](file.md#element-id)
+
+---
+
+```
+
+**Citation Formats:**
+| Source Type | Citation Format |
+|-------------|-----------------|
+| Element | `— Source: [Element Name](file.md#element-id)` |
+| Attachment File | `— Source: [filename.md](path) attached to [Element Name](file.md#element-id)` |
+| Refinement Element | `— Source: [Refinement Name](file.md#id) satisfying [Element Name](file.md#element-id)` |
+
+**JSON Output:**
+```json
+{
+  "starting_element": "file.md#element-id",
+  "items": [
+    {
+      "name": "Element Name",
+      "identifier": "file.md#element-id",
+      "file_path": "path/to/file.md",
+      "element_type": "requirement",
+      "content": "The collected content...",
+      "depth": 0,
+      "source_type": "element"
+    }
+  ],
+  "metadata": {
+    "element_count": 3,
+    "attachment_count": 1,
+    "total_items": 4
+  }
+}
+```
+
+### Output Ordering
+
+- Ancestors appear first (root at depth 0)
+- Same-level elements sorted alphabetically by name
+- Attachments appear after their parent element
+
+### Error Handling
+
+The command will error if:
+- Element name is not found
+- Element is not a requirement type (only `requirement` and `user-requirement` are supported)
 
 ## Search and Filtering
 
