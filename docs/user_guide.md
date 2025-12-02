@@ -344,6 +344,58 @@ Get structured output for programmatic processing:
 reqvire rename "Old Name" "New Name" --json
 ```
 
+### Merge Elements
+
+Merge multiple source elements into a target element, combining content, relations, and attachments:
+
+```bash
+# Merge single source into target
+reqvire merge "Target Requirement" "Source Requirement"
+
+# Merge multiple sources into target
+reqvire merge "Target Requirement" "Source One" "Source Two" "Source Three"
+```
+
+The merge operation:
+- Accepts target element name as first argument (must exist)
+- Accepts one or more source element names as subsequent arguments (must exist)
+- Validates type compatibility (requirements into requirements, verifications into verifications, etc.)
+- Appends source main content to target's `#### Details` section
+- Creates `#### Merged Details (Source Name)` subsections for each source's Details content
+- Merges and deduplicates relations (same relation type + target = duplicate)
+- Merges and deduplicates attachments
+- Updates all relations pointing to source elements to point to target
+- Deletes source elements after successful merge
+- Removes empty source files when no elements remain
+
+**Type Compatibility:**
+- Requirements can merge with other requirements (any subtype)
+- Verifications can merge with other verifications (any subtype)
+- Refinements (constraint, behavior, specification) can merge with other refinements
+- Other element types can merge with other elements of the same main category
+
+**Error Conditions:**
+- Target element does not exist
+- Any source element does not exist
+- Source and target types are incompatible
+- Attempting to merge an element into itself
+
+#### Preview Merge
+
+Use `--dry-run` to preview the operation:
+
+```bash
+reqvire merge "Target" "Source One" "Source Two" --dry-run
+```
+
+#### JSON Output
+
+Get structured output for programmatic processing:
+
+```bash
+reqvire merge "Target" "Source" --json
+```
+
 ### Move File
 
 Move an entire specification file with all its elements to a new location:
