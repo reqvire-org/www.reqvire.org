@@ -74,6 +74,7 @@ The plugin provides the following slash commands (all prefixed with `reqvire:`):
 - `/reqvire:add-feature` - Add a complete feature with requirements and verifications
 - `/reqvire:analyze-coverage` - Generate verification coverage reports
 - `/reqvire:analyze-impact` - Analyze change impact across the model
+- `/reqvire:collect` - Collect and summarize complete requirement context as readable documentation
 - `/reqvire:lint-model` - Check model quality and detect issues
 - `/reqvire:consolidate` - Consolidate refinement-only requirements into parent Details subsections
 - `/reqvire:generate-tasks` - Generate implementation tasks from requirements
@@ -245,5 +246,29 @@ The system shall provide formatting capability...
 #### Relations
   * satisfiedBy: [format.rs]
 ```
+
+### Collecting Requirement Context
+
+```
+/reqvire:collect "CLI Search Filtering"
+```
+
+Generate comprehensive, readable documentation for any requirement by collecting its complete context via the derivedFrom chain. The command produces a narrative document that includes:
+
+- **Complete background**: Full derivation chain explaining why the requirement exists
+- **All specifications**: Every detail and specification rephrased as coherent narrative
+- **Implementation details**: How the requirement is satisfied with code references
+- **Verification**: How it's tested and acceptance criteria
+- **Related documentation**: Insights from attached design docs
+- **Full traceability**: All source references consolidated at the end
+
+**Use this when:**
+- Onboarding new team members who need to understand a feature
+- Creating documentation for stakeholders
+- Understanding complex requirements with long derivation chains
+- Preparing for implementation work requiring full context
+- Reviewing features before making changes
+
+**Output scales automatically** - simple features produce 1-2 page summaries, complex features with many specifications might produce 5-10 page comprehensive documents.
 
 
