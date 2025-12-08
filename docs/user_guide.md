@@ -975,10 +975,14 @@ reqvire search --short
 Filter elements by their metadata properties:
 
 ```bash
-# Filter by element type
+# Filter by element type (supports comma-separated list)
 reqvire search --filter-type="user-requirement"
 reqvire search --filter-type="system-requirement"
 reqvire search --filter-type="test-verification"
+
+# Filter by multiple types (OR logic)
+reqvire search --filter-type="requirement,user-requirement"
+reqvire search --filter-type="requirement,test-verification,behavior"
 
 # Filter by file path (glob pattern)
 reqvire search --filter-file="requirements/**/*.md"
@@ -1122,8 +1126,9 @@ reqvire model --filter-type="test-verification"
 # Combine with reverse to trace specific verification types upward
 reqvire model --reverse --filter-type="test-verification"
 
-# Multiple types (comma-separated)
+# Multiple types (comma-separated, OR logic)
 reqvire model --filter-type="user-requirement,requirement"
+reqvire model --filter-type="test-verification,analysis-verification"
 ```
 
 **Valid element types:**
