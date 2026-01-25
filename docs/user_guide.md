@@ -553,6 +553,11 @@ The link command:
 - Internal file path (e.g., "docs/sla-document.pdf")
 - Refinement element name (constraint, behavior, or specification)
 
+**Attachment constraints for Refinement elements:**
+- Refinements must have a `satisfy` relation first (establishing an owner requirement)
+- Attachments only allowed from requirements **outside** the owner's derivation hierarchy
+- Requirements in the same hierarchy access refinements through the hierarchy, not attachments
+
 #### Preview Link
 
 Use `--dry-run` to preview the operation:

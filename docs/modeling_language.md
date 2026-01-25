@@ -98,7 +98,14 @@ Attachments are defined in a subsection with the header `#### Attachments` and c
 - **File paths** - References to files (design documents, images, PDFs, etc.)
 - **Refinement element identifiers** - References to Refinement elements (constraint, behavior, specification)
 
-Attachments to Refinement elements provide a way to associate detailed specifications, constraints, and behavioral definitions with requirements without creating formal relations.
+**Attachment scope constraints for Refinement elements:**
+1. **Satisfied Refinement Constraint** - Refinements must have a `satisfy` relation (establishing an owner requirement) before they can be attached
+2. **Hierarchical Independence Constraint** - Attachments are only allowed from requirements **outside** the owner's derivation hierarchy
+
+These constraints ensure that:
+- The owner requirement uses `satisfiedBy` to define ownership
+- Requirements in the same hierarchy access refinements through the hierarchy relationship
+- Cross-hierarchy attachments enable requirements from separate branches to reference shared specifications
 
 ### Element Types
 
