@@ -1,7 +1,40 @@
-@import "./color_schemes/light";
+// Reqvire MONO Theme - Grayscale color scheme
+$color-scheme: light;
 
+// Core grayscale palette
+$mono-darkest: #1c1c1c;
+$mono-darker: #2a2a2a;
+$mono-dark: #333333;
+$mono-medium: #4a4a4a;
+$mono-light: #8a8a8a;
+$mono-lighter: #d0d0d0;
+$mono-lightest: #eeeeee;
 
-$link-color: #3490de;
-// Optional: if you also want the variable $purple-000 to point to the new color
-$purple-000: #3490de;
+// Background colors
+$body-background-color: #fafafa;
+$sidebar-color: $mono-darkest;
+$table-background-color: #ffffff;
+$search-background-color: #ffffff;
+$code-background-color: #f6f8fa;
+$feedback-color: $mono-darker;
 
+// Text colors
+$body-heading-color: #212121;
+$body-text-color: #424242;
+$nav-child-link-color: $mono-lightest;  // Bright for dark sidebar
+$search-result-preview-color: #757575;
+
+// Link colors - grayscale
+$link-color: $mono-dark;
+$purple-000: $mono-dark;
+
+// Button colors
+$base-button-color: $mono-dark;
+$btn-primary-color: $mono-dark;
+
+// Header/Nav overrides
+$header-bg: $mono-darkest;
+$header-border-bottom-color: $mono-darker;
+
+// Sidebar nav links - must be bright on dark background
+$nav-link-color: $mono-lightest;

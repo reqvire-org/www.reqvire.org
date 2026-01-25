@@ -1,1 +1,138 @@
 // custom SCSS (or CSS) goes here
+
+// MONO Theme colors
+$mono-darkest: #1c1c1c;
+$mono-dark: #333333;
+
+// Sidebar navigation - white links on dark background
+.site-nav {
+  .nav-list-link {
+    color: #ffffff !important;
+
+    &:hover {
+      color: #ffffff !important;
+    }
+  }
+
+  // External link (GitHub) - white icon
+  .nav-list-link.external {
+    color: #ffffff !important;
+
+    svg {
+      fill: #ffffff;
+      color: #ffffff;
+    }
+  }
+}
+
+// Aux nav (top right GitHub button) - dark gray instead of blue/red
+.aux-nav {
+  a, .btn {
+    background-color: $mono-dark !important;
+    color: #ffffff !important;
+    border-color: $mono-dark !important;
+
+    &:hover {
+      background-color: $mono-darkest !important;
+    }
+  }
+}
+
+// All buttons - dark gray theme with white text
+.btn,
+.btn-primary,
+.btn-purple,
+a.btn,
+a.btn-primary {
+  background-color: $mono-dark !important;
+  color: #ffffff !important;
+  border-color: $mono-dark !important;
+  text-decoration: none !important;
+}
+
+.btn:hover,
+.btn-primary:hover,
+.btn-purple:hover,
+a.btn:hover,
+a.btn-primary:hover {
+  background-color: $mono-darkest !important;
+  border-color: $mono-darkest !important;
+  color: #ffffff !important;
+}
+
+// Footer - dark background with visible links
+.site-footer,
+footer,
+.main-content-wrap + footer {
+  background-color: $mono-darkest !important;
+  color: #d0d0d0 !important;
+  border-top: 1px solid $mono-dark !important;
+}
+
+// All footer links - white
+.site-footer a,
+footer a,
+.main-content-wrap + footer a {
+  color: #ffffff !important;
+  text-decoration: none !important;
+}
+
+.site-footer a:hover,
+footer a:hover {
+  color: #eeeeee !important;
+}
+
+footer a strong,
+.site-footer a strong {
+  color: #ffffff !important;
+}
+
+footer a small,
+.site-footer a small {
+  color: #d0d0d0 !important;
+}
+
+footer svg,
+.site-footer svg,
+footer a svg {
+  fill: #ffffff !important;
+  color: #ffffff !important;
+}
+
+.site-footer p,
+.site-footer span,
+footer p,
+footer span {
+  color: #d0d0d0 !important;
+}
+
+// Footer edit link and other footer elements
+.edit-link a,
+.footer-nav a {
+  color: #ffffff !important;
+}
+
+// Copyright text
+.text-grey-dk-100 {
+  color: #d0d0d0 !important;
+}
+
+// Content links - dark gray for MONO theme (exclude buttons)
+.main-content a:not(.btn),
+.main-content-wrap a:not(.btn) {
+  color: $mono-dark !important;
+  text-decoration: underline !important;
+}
+
+.main-content a:not(.btn):hover,
+.main-content-wrap a:not(.btn):hover,
+.main-content a:not(.btn):focus,
+.main-content-wrap a:not(.btn):focus {
+  color: $mono-darkest !important;
+  text-decoration: none !important;
+}
+
+// Code/inline code links
+.main-content a code {
+  color: $mono-dark !important;
+}
