@@ -702,7 +702,7 @@ This is useful for:
 
 ## Linting
 
-The lint command analyzes model quality and detects issues in requirements relations, such as redundant verify relations, redundant hierarchical relations, and redundant attachments.
+The lint command analyzes model quality and detects issues in requirements relations, such as redundant verify relations and redundant hierarchical relations.
 
 ### Analyze All Issues
 
@@ -732,7 +732,7 @@ Apply automatic fixes for auto-fixable issues:
 reqvire lint --fix
 ```
 
-**Note:** Only auto-fixable issues (like redundant verify relations, redundant direct chain hierarchical relations, or redundant hierarchical attachments) will be fixed. Issues marked as requiring manual review (auditable) must be addressed manually.
+**Note:** Only auto-fixable issues (like redundant verify relations or redundant direct chain hierarchical relations) will be fixed. Issues marked as requiring manual review (auditable) must be addressed manually.
 
 ### Detected Issue Types
 
@@ -740,7 +740,6 @@ reqvire lint --fix
 |------------|-------------|----------|
 | Redundant verify relations | Verification verifies both leaf and parent requirement | Yes |
 | Redundant hierarchical relations | Direct derivedFrom when indirect path exists | Yes (single chain) / Manual (multi-branch) |
-| Redundant hierarchical attachments | Child element has same attachment as an ancestor | Yes |
 
 ### JSON Output
 
