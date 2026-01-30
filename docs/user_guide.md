@@ -1179,8 +1179,12 @@ The report identifies:
 - **Relocated elements** - Elements moved between files (shown with old/new locations)
 - **New elements** - Newly added elements
 - **Removed elements** - Deleted elements
+- **Impact scope** - Per-branch common parent requirements covering all impacted elements, giving reviewers a high-level summary of affected model areas
+- **Invalidated verifications** - Verification elements that need re-review due to requirement changes
 
 Elements that are both relocated and changed will appear in both the "Relocated" and "Changed" sections.
+
+The impact scope computes the lowest common ancestors of all impacted requirements through the `derivedFrom` hierarchy. When sibling requirements are both affected, they merge into their parent. This provides a concise summary of which model areas are impacted.
 
 #### Options
 
