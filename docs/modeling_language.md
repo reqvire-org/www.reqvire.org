@@ -32,7 +32,7 @@ Each Reqvire model consists of:
 
 - **Requirements** – User requirements and system requirements organized in a hierarchical structure through derivation relations
 - **Verifications** – Test verifications, analysis verifications, inspection verifications, and demonstration verifications linked to requirements
-- **Relations** – Explicit connections between elements including derivedFrom (requirement hierarchy), verifiedBy/verify (requirement-verification links), satisfiedBy (requirement-implementation links), and trace (soft traceability)
+- **Relations** – Explicit connections between elements including derivedFrom (requirement hierarchy), verifiedBy/verify (requirement-verification links), satisfiedBy (requirement-implementation links), refinedBy/refine (requirement-refinement links), and trace (soft traceability)
 - **Files and Folders** – Organizational structure using Markdown files and folders to group related elements
 
 Elements are defined using simple Markdown headers (`###`) with metadata and relations specified in subsections.
@@ -72,6 +72,7 @@ Relations are defined in a subsection with the header `#### Relations` and conta
   * derivedFrom: [Parent Requirement](file.md#parent-requirement)
   * verifiedBy: [Test Verification](verifications.md#test-name)
   * satisfiedBy: src/implementation.rs
+  * refinedBy: [Rate Limit Constraint](constraints.md#rate-limit-constraint)
 ```
 
 **Supported relation types:**
@@ -81,7 +82,9 @@ Relations are defined in a subsection with the header `#### Relations` and conta
 | `derivedFrom` | Child → Parent | Requirement hierarchy (child derives from parent) |
 | `verifiedBy` | Requirement → Verification | Links requirement to its verifications |
 | `verify` | Verification → Requirement | Links verification to requirements it verifies |
-| `satisfiedBy` | Requirement → Implementation/Refinement | Links to code/test files or refinement elements (behavior, specification, constraint) that satisfy the requirement |
+| `satisfiedBy` | Requirement → Implementation | Links to code files and test implementations that satisfy the requirement |
+| `refinedBy` | Requirement → Refinement | Links requirement to its refinement elements (specification, constraint, behavior) establishing ownership |
+| `refine` | Refinement → Requirement | Links refinement element back to its owning requirement (auto-generated from refinedBy) |
 | `trace` | Element → Element | Soft traceability link between elements |
 
 #### Attachments
@@ -99,11 +102,11 @@ Attachments are defined in a subsection with the header `#### Attachments` and c
 - **Refinement element identifiers** - References to Refinement elements (constraint, behavior, specification)
 
 **Attachment scope constraints for Refinement elements:**
-1. **Satisfied Refinement Constraint** - Refinements must have a `satisfy` relation (establishing an owner requirement) before they can be attached
+1. **Satisfied Refinement Constraint** - Refinements must have a `refine` relation (establishing an owner requirement via `refinedBy`) before they can be attached
 2. **Hierarchical Independence Constraint** - Attachments are only allowed from requirements **outside** the owner's derivation hierarchy
 
 These constraints ensure that:
-- The owner requirement uses `satisfiedBy` to define ownership
+- The owner requirement uses `refinedBy` to define ownership
 - Requirements in the same hierarchy access refinements through the hierarchy relationship
 - Cross-hierarchy attachments enable requirements from separate branches to reference shared specifications
 
@@ -126,7 +129,7 @@ Element types are identified through the `type` metadata property:
 - **behavior** - Behavioral specification or state machine
 - **specification** - Detailed specification document
 
-Refinement elements are special elements that **can only have `satisfy` relations** pointing to requirements. They are used to provide additional detail and can be attached to requirements via the Attachments subsection. **Refinement elements cannot have their own Attachments subsection** - they are atomic documentation units meant to be attached to requirements, not to have attachments themselves.
+Refinement elements are special elements that **can only have `refine` relations** pointing to requirements. They are used to provide additional detail and can be attached to requirements via the Attachments subsection. **Refinement elements cannot have their own Attachments subsection** - they are atomic documentation units meant to be attached to requirements, not to have attachments themselves.
 
 ### Type Determination
 
@@ -432,7 +435,7 @@ Reqvire supports several verification element types that align with standard sys
 - **inspection-verification** - Verification through formal examination of documentation, code, or physical components
 - **demonstration-verification** - Verification through showing functionality in an operational-like environment
 
-#### SatisfiedBy Requirements by Type
+#### Relation Requirements by Verification Type
 - **test-verification**: MUST have `satisfiedBy` relations pointing to actual test implementations
 - **analysis-verification, inspection-verification, demonstration-verification**: Do NOT require `satisfiedBy` relations (considered satisfied by default)
 - **trace relations**: Always allowed for any verification type

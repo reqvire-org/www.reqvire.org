@@ -516,6 +516,7 @@ reqvire link "Authentication Requirement" "verifiedBy" "Auth Test Case"
 
 # Link to implementation file or external URL
 reqvire link "System Requirement" "satisfiedBy" "src/auth/login.rs"
+reqvire link "System Requirement" "refinedBy" "Auth Constraint"
 reqvire link "Compliance Requirement" "trace" "https://example.com/spec.html"
 
 # Attach file or Refinement element (use 'attaching' keyword)
@@ -540,8 +541,10 @@ The link command:
 | `derive` | Source has derived target (parent to child) |
 | `verifiedBy` | Source is verified by target |
 | `verify` | Source verifies target |
-| `satisfiedBy` | Source is satisfied by target |
-| `satisfy` | Source satisfies target |
+| `satisfiedBy` | Source is satisfied by target (code implementations) |
+| `satisfy` | Source satisfies target (code implementations) |
+| `refinedBy` | Source owns target as refinement element |
+| `refine` | Source refines target requirement (auto-generated) |
 | `trace` | General traceability link |
 
 **Target types for relations:**
@@ -554,7 +557,7 @@ The link command:
 - Refinement element name (constraint, behavior, or specification)
 
 **Attachment constraints for Refinement elements:**
-- Refinements must have a `satisfy` relation first (establishing an owner requirement)
+- Refinements must have a `refine` relation (established via requirement's `refinedBy`)
 - Attachments only allowed from requirements **outside** the owner's derivation hierarchy
 - Requirements in the same hierarchy access refinements through the hierarchy, not attachments
 
@@ -920,7 +923,7 @@ Each content block is followed by a source citation and separator:
 |-------------|-----------------|
 | Element | `— Source: [Element Name](file.md#element-id)` |
 | Attachment File | `— Source: [filename.md](path) attached to [Element Name](file.md#element-id)` |
-| Refinement Element | `— Source: [Refinement Name](file.md#id) satisfying [Element Name](file.md#element-id)` |
+| Refinement Element | `— Source: [Refinement Name](file.md#id) refining [Element Name](file.md#element-id)` |
 
 **JSON Output:**
 ```json
@@ -1079,7 +1082,7 @@ reqvire model
 This generates a hierarchical structure showing:
 - Root requirements (level 1)
 - Their nested child requirements and relations
-- Complete forward relation chains (derive, satisfiedBy, verifiedBy, trace)
+- Complete forward relation chains (derive, satisfiedBy, refinedBy, verifiedBy, trace)
 - Mermaid diagrams for each element showing its relations
 
 Each element in the output includes a Mermaid diagram visualizing its forward relations to other elements.
@@ -1096,7 +1099,7 @@ reqvire model --from "User Authentication"
 reqvire model --from "Data Storage System"
 ```
 
-This includes only the specified element and elements reachable by following forward relations (derive, satisfiedBy, verifiedBy, trace) from it.
+This includes only the specified element and elements reachable by following forward relations (derive, satisfiedBy, refinedBy, verifiedBy, trace) from it.
 
 ### Reverse Traversal
 
@@ -1112,7 +1115,7 @@ reqvire model --reverse --json
 
 In reverse mode:
 - Starting elements are "leaf" elements (elements with backward relations but no forward children)
-- Traversal follows backward relations: derivedFrom, satisfy, verify
+- Traversal follows backward relations: derivedFrom, satisfy, refine, verify
 - Useful for understanding how verifications trace back to requirements
 - Shows the upward path from implementation to high-level requirements
 
