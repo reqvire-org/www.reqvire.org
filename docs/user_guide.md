@@ -10,6 +10,7 @@ This user guide provides detailed instructions on how to install and use Reqvire
 
 - [Installation](#installation)
 - [Basic Commands](#basic-commands)
+- [JSON File Output](#json-file-output)
 - [File Exclusion Patterns](#file-exclusion-patterns)
 - [Working with Requirements](#working-with-requirements)
 - [Element Manipulation](#element-manipulation)
@@ -84,6 +85,34 @@ Display the current version:
 ```bash
 reqvire --version
 ```
+
+## JSON File Output
+
+Many Reqvire commands support `--json` for machine-readable output. You can combine it with `--output <FILE>` to write the JSON directly to a file instead of stdout.
+
+### Usage
+
+```bash
+# Write JSON output to a file
+reqvire validate --json --output results.json
+
+# Works with any command that supports --json
+reqvire search --json --output search-results.json
+reqvire lint --json --output lint-report.json
+reqvire change-impact --json --output impact.json
+```
+
+When `--output` is used, a confirmation message is printed to stdout and the JSON content is written to the specified file. The file is created if it doesn't exist and overwritten if it does.
+
+### Requirements
+
+- `--output` requires `--json` to also be set. Using `--output` without `--json` produces an error.
+
+### Supported Commands
+
+The `--output` option is available on all commands that support `--json`: `format`, `validate`, `search`, `change-impact`, `traces`, `coverage`, `model`, `lint`, `add`, `rm`, `mv`, `rename`, `merge`, `mv-file`, `containment`, `resources`, and `collect`.
+
+---
 
 ## File Exclusion Patterns
 
