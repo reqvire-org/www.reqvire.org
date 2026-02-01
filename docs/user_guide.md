@@ -224,7 +224,19 @@ Reqvire provides commands to add, move, and remove elements directly from the co
 Add a new element to your model from Markdown content:
 
 ```bash
-# Add element using heredoc
+# Add element using --content flag
+reqvire add "requirements/Requirements.md" --content '### New Security Requirement
+
+The system SHALL enforce authentication for all API endpoints.
+
+#### Metadata
+  * type: system-requirement
+
+#### Relations
+  * derivedFrom: Requirements.md#user-authentication
+'
+
+# Add element using heredoc (stdin)
 reqvire add "requirements/Requirements.md" <<'EOF'
 ### New Security Requirement
 
@@ -242,10 +254,9 @@ cat element.md | reqvire add requirements/Requirements.md
 
 # Add from file using input redirection
 reqvire add requirements/Requirements.md < element.md
-
-# Add inline using echo and pipe
-echo "### My Requirement..." | reqvire add requirements/Requirements.md
 ```
+
+The `--content` flag provides the element markdown directly as an argument, while stdin methods (heredoc, pipe, redirection) are also supported. When `--content` is provided, stdin is not read.
 
 The element will be appended to the end of the file following the Element Ordering Behavior (parents before children, siblings alphabetically).
 
