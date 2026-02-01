@@ -914,25 +914,41 @@ The resources report is also available in the HTML export as a dedicated "Resour
 
 ## Collect Content
 
-The `collect` command aggregates content from a requirement element and all its ancestors via derivedFrom relations, including attachment contents, with source citations.
+The `collect` command aggregates content from a requirement element and its related requirements, including attachment contents, with source citations. It supports traversal in two directions: upstream (ancestors) or downstream (descendants).
 
 ### Basic Usage
 
 ```bash
-# Collect content in text format (default)
+# Collect content upstream - ancestors via derivedFrom (default)
 reqvire collect "Feature Requirement"
+
+# Collect content downstream - descendants via derive
+reqvire collect "Feature Requirement" --direction DOWNSTREAM
+
+# Explicit upstream direction
+reqvire collect "Feature Requirement" --direction UPSTREAM
 
 # Collect content in JSON format
 reqvire collect "Feature Requirement" --json
+reqvire collect "Feature Requirement" --direction DOWNSTREAM --json
 ```
 
 ### How It Works
 
 The collect command:
 1. Starts from the specified requirement element
-2. Traverses derivedFrom relations in reverse direction (child to parents)
+2. Traverses the requirement chain in the specified direction:
+   - **UPSTREAM** (default): Follows derivedFrom relations from child to parents until root ancestors are reached
+   - **DOWNSTREAM**: Follows derive relations from parent to children until leaf requirements are reached
 3. Collects content from each element and their attachments
 4. Outputs consolidated content with source citations
+
+### Output Ordering
+
+- **UPSTREAM**: Ancestors appear first (root at depth 0), starting element last
+- **DOWNSTREAM**: Starting element appears first (depth 0), descendants at increasing depth
+- Same-depth elements sorted alphabetically by name
+- Attachments appear after their parent element
 
 ### Content Collection Rules
 
