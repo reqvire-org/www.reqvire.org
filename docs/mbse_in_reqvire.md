@@ -16,7 +16,7 @@ Model-Based Systems Engineering (MBSE) is a methodology that shifts from traditi
 
 ### MBSE in Reqvire
 
-Reqvire integrates MBSE by embedding model-driven principles directly into its Git-native "Requirements-as-Context" framework. Rather than treating models as siloed artifacts in specialized tools (e.g., SysML diagramming software), Reqvire unifies them with requirements management and AI-assisted development in a single, version-controlled Git repository. This creates a "living" system model that's queryable by AI tools (like the Claude Code plugin) and enforceable across the development lifecycle.
+Reqvire integrates MBSE by embedding model-driven principles directly into its Git-native "Requirements-as-Context" framework. Rather than treating models as siloed artifacts in specialized tools (e.g., SysML diagramming software), Reqvire unifies them with requirements management and AI-assisted development in a single, version-controlled Git repository. This creates a "living" system model that's queryable by coding assistants (for example Claude Code plugin workflows or Codex skills) and enforceable across the development lifecycle.
 
 The core idea: **Requirements act as the canonical source of truth**, while system models provide structured representations of how those requirements translate into system behavior and architecture. This unification enables automated workflows that keep everything aligned, traceable, and adaptable to changes.
 
@@ -44,7 +44,7 @@ Reqvire's MBSE features are designed for seamless integration without disrupting
 
 5. **AI-Enhanced Reasoning**  
    - AI tools query the unified context (requirements + models) to suggest model refinements, generate compliant code, or simulate behaviors.  
-   - Integration with plugins like Claude allows natural-language interactions, e.g., "Refine the control system model based on updated safety requirements."
+   - Integration with coding assistants allows natural-language interactions, e.g., "Refine the control system model based on updated safety requirements."
 
 ## Example Workflow in Reqvire
 
@@ -53,9 +53,9 @@ Reqvire's MBSE features are designed for seamless integration without disrupting
 A typical MBSE-driven workflow might look like this:
 
 1. **Define Requirements**: Author structured specs in Git/.
-2. **Build System Model**: Create linked model elements or derived requirements (e.g., state machines or block definitions) using reqvire cli or AI codings assistants.
+2. **Build System Model**: Create linked model elements or derived requirements (e.g., state machines or block definitions) using reqvire CLI or AI coding assistants.
 3. **Trace and Link**: Use Reqvire commands to analyse traces, coverages and understand model.
-4. **AI-Assisted Iteration**: Query via Claude: "Generate test cases for this subsystem model," pulling context from the unified repo.  
+4. **AI-Assisted Iteration**: Query your coding assistant: "Generate test cases for this subsystem model," pulling context from the unified repo.  
 5. **Propagate Changes**: Edit a requirement; Reqvire flags model updates needed and automates propagation.  
 6. **Validate in PR**: During code review, visualize traceability and change impact to confirm compliance or iterate over required updates.
 7. **Merge and Deploy**: Full audit trail ensures the deployed system matches the model.
@@ -72,4 +72,4 @@ A typical MBSE-driven workflow might look like this:
 
 In essence, Reqvire democratizes MBSE by making it lightweight and developer-friendly, turning complex systems engineering into an intelligent, traceable extension of everyday Git workflows.
 
-For hands-on details, check the [installation guide](https://www.reqvire.org/user_guide#installation) or [Claude plugin docs](https://www.reqvire.org/claude_plugin.html).
+For hands-on details, check the [installation guide](https://www.reqvire.org/user_guide#installation) or the [Coding Assistants guide](https://www.reqvire.org/coding_assistants.html).
