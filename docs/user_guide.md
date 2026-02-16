@@ -233,13 +233,30 @@ This hierarchy naturally reflects the progressive refinement from high-level use
 
 ### Requirements and general Markdown files format
 
-**Important:** All specification files must begin with `# Elements` as the first level-1 heading. This header identifies the file as a Reqvire specification file. Files without this header are silently ignored during model parsing.
+**Important:** Model files must begin with either:
+- `# Elements` for multi-element files
+- `# Documents` for single-element document files
+
+Files without a supported first heading are silently ignored during model parsing.
 
 ```markdown
 # Elements
 
 ### My Requirement
 ...
+```
+
+```markdown
+# Documents
+
+## Metadata
+  * type: specification
+
+## Relations
+  * refine: [Some Requirement](Requirements.md#some-requirement)
+
+## MyDocumentElement
+Any markdown content is allowed here.
 ```
 
 For detailed specifications, read [SpecificationsRequirements.md](https://github.com/reqvire-org/reqvire/blob/main/requirements/SpecificationsRequirements.md)
@@ -591,6 +608,10 @@ The link command:
 - Element name (e.g., "User Story")
 - Internal file path (e.g., "src/auth/login.rs")
 - External URL (e.g., "https://example.com/spec.html")
+
+`refinedBy` constraint:
+- `refinedBy` must target a refinement element identifier (constraint, behavior, or specification), including refinement elements defined in `# Documents` files.
+- Plain file-path targets for `refinedBy` are rejected.
 
 **Attaching (use `attaching` keyword instead of relation type):**
 - Internal file path (e.g., "docs/sla-document.pdf")
@@ -1524,4 +1545,3 @@ jobs:
 ```
 
 These commands provide valuable insights during the pull request review process, helping reviewers understand the impact of changes on the requirements model.
-

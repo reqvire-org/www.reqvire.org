@@ -139,13 +139,30 @@ If no explicit type is specified, Reqvire uses intelligent defaults:
 
 ### File Header Requirement
 
-All specification files must begin with the header `# Elements` as the first level-1 heading. This header identifies the file as a Reqvire specification file. Files without this header are ignored during model parsing.
+Reqvire supports two model file formats. A model file must begin with one of these first level-1 headings:
+- `# Elements` for multi-element files
+- `# Documents` for single-element document files
+
+Files without a supported first heading are ignored during model parsing.
 
 ```markdown
 # Elements
 
 ### My Requirement
 ...
+```
+
+```markdown
+# Documents
+
+## Metadata
+  * type: specification
+
+## Relations
+  * refine: [Some Requirement](Requirements.md#some-requirement)
+
+## MyDocumentElement
+Any markdown content is allowed here.
 ```
 
 ### Example Document
