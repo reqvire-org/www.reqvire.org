@@ -538,16 +538,10 @@ The coverage report includes a **verification coverage** section focused on leaf
 - Breakdown by verification type
 - Test-verification satisfaction status
 
-It also includes a **requirement implementation coverage** section:
-- Total requirements in scope (`requirement` only; excludes `user-requirement`)
-- Covered/uncovered requirement counts and percentage
-- Coverage source classification:
-  - `direct_satisfied`
-  - `refinement_contract_satisfied_via_attachment`
-  - `refinement_contract_satisfied_via_child`
-- Covered/uncovered requirement listings with evidence
+It also includes a **requirement implementation coverage** section.
 
-All coverage percentages are emitted with at most 2 decimal places.
+Implementation coverage rules, scope, and output details are documented in:
+- [Implementation Coverage](implementation_coverage.md)
 
 #### Coverage Strategy
 
