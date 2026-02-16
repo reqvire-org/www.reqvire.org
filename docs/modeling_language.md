@@ -520,7 +520,7 @@ Reqvire automatically maintains bidirectional relations:
 
 ### Verification Coverage
 
-Generate verification coverage reports to track verification status of your requirements.
+Generate coverage reports to track both verification status and implementation coverage of your requirements.
 
 #### Coverage Command
 
@@ -532,11 +532,22 @@ reqvire coverage
 reqvire coverage --json
 ```
 
-The coverage report focuses on **leaf requirements** and provides:
+The coverage report includes a **verification coverage** section focused on leaf requirements:
 - Percentage of verified/unverified leaf requirements
 - Breakdown by file
 - Breakdown by verification type
 - Test-verification satisfaction status
+
+It also includes a **requirement implementation coverage** section:
+- Total requirements in scope (`requirement` only; excludes `user-requirement`)
+- Covered/uncovered requirement counts and percentage
+- Coverage source classification:
+  - `direct_satisfied`
+  - `refinement_contract_satisfied_via_attachment`
+  - `refinement_contract_satisfied_via_child`
+- Covered/uncovered requirement listings with evidence
+
+All coverage percentages are emitted with at most 2 decimal places.
 
 #### Coverage Strategy
 
