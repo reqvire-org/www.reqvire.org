@@ -737,6 +737,11 @@ Any functional reqvire command that needs to parse model will as a first step pe
 Errors must be fixed before command can execute.
 After mutating commands (`link`, `merge`, `mv`, `relink`, etc.), run `reqvire validate` to confirm post-change structural integrity, including single-root hierarchy ownership.
 
+Why single-root hierarchy ownership matters:
+- Every `requirement` must belong to exactly one top-level `user-requirement` tree.
+- This keeps ownership unambiguous and prevents conflicting model boundaries.
+- It also keeps coverage roll-up, `collect`, and change-impact results deterministic and explainable.
+
 ## Formatting
 
 Formatting helps maintain consistent formatting and style.
