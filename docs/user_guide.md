@@ -454,6 +454,7 @@ The merge operation:
 - Updates all relations pointing to source elements to point to target
 - Deletes source elements after successful merge
 - Removes empty source files when no elements remain
+- Must preserve single-root hierarchy ownership for requirements; violations are rejected or reported by validation
 
 **Type Compatibility:**
 - Requirements can merge with other requirements (any subtype)
@@ -466,6 +467,7 @@ The merge operation:
 - Any source element does not exist
 - Source and target types are incompatible
 - Attempting to merge an element into itself
+- Operation would violate single-root hierarchy ownership
 
 #### Preview Merge
 
@@ -589,6 +591,7 @@ The link command:
 - Calculates correct relative paths for cross-file links
 - Fails with error if duplicate relation or attachment already exists
 - Fails with error if target exists in the other section (cross-section duplicate)
+- Must preserve single-root hierarchy ownership for hierarchical relations; violations are rejected or reported by validation
 
 **Supported relation types:**
 
@@ -665,6 +668,29 @@ Use `--dry-run` to preview the operation:
 reqvire unlink "Feature Requirement" "User Story" --dry-run
 ```
 
+### Relink
+
+Replace one relation target with another in a single operation:
+
+```bash
+reqvire relink "<source>" "<relation-type>" "<from-target>" "<to-target>"
+
+# Example
+reqvire relink "Child Requirement" "derivedFrom" "Old Parent" "New Parent"
+```
+
+The relink command:
+- Replaces the specified relation while preserving relation type
+- Performs operation atomically (no partial updates)
+- Supports dry-run preview
+- Enforces model constraints, including single-root hierarchy ownership for hierarchical relations
+
+#### Preview Relink
+
+```bash
+reqvire relink "Child Requirement" "derivedFrom" "Old Parent" "New Parent" --dry-run
+```
+
 ### Move Asset
 
 Move or rename an asset file and update all references (both Attachments and Relations) across the model:
@@ -709,6 +735,7 @@ reqvire rm-asset "docs/obsolete.pdf" --dry-run
 
 Any functional reqvire command that needs to parse model will as a first step perform model validation and report any errors found.
 Errors must be fixed before command can execute.
+After mutating commands (`link`, `merge`, `mv`, `relink`, etc.), run `reqvire validate` to confirm post-change structural integrity, including single-root hierarchy ownership.
 
 ## Formatting
 

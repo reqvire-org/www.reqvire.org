@@ -37,6 +37,13 @@ Each Reqvire model consists of:
 
 Elements are defined using simple Markdown headers (`###`) with metadata and relations specified in subsections.
 
+### Hierarchy Ownership Rule
+
+Reqvire enforces a single-root hierarchy ownership rule for requirements:
+- Every requirement hierarchy chain must resolve to exactly one top root `user-requirement`
+- Models that resolve a requirement to multiple top roots are invalid
+- Use `reqvire validate` to detect and fix ownership violations
+
 ### Document Structure
 
 #### Elements
