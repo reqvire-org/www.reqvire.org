@@ -88,6 +88,7 @@ Reqvire automatically parses structured Markdown to generate:
 - **Verification coverage maps** showing which leaf requirements are verified and how
 - **Change propagation analysis** identifying all downstream effects of modifications
 - **Model summary reports** providing overview statistics and health metrics
+- **Submodels/subgraphs analysis** exposing independent hierarchies and cross-boundary couplings
 - **Interactive HTML documentation** with clickable diagrams and searchable content
 
 ## CI/CD Integration
@@ -101,4 +102,3 @@ Reqvire is designed for automation. In typical Git-based workflows, you can:
 - **Block PRs** if requirements are incomplete or broken
 - **Package models** into versioned documentation releases
 - **Integrate with GitHub Actions/GitLab CI** for automated validation
-

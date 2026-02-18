@@ -21,6 +21,7 @@ This user guide provides detailed instructions on how to install and use Reqvire
 - [Generating Documentation](#generating-documentation)
 - [Traceability](#traceability)
 - [Resources Report](#resources-report)
+- [Submodels Report](#submodels-report)
 - [Collect Content](#collect-content)
 - [Search and Filtering](#search-and-filtering)
 - [Model Commands](#model-commands)
@@ -110,7 +111,7 @@ When `--output` is used, a confirmation message is printed to stdout and the JSO
 
 ### Supported Commands
 
-The `--output` option is available on all commands that support `--json`: `format`, `validate`, `search`, `change-impact`, `traces`, `coverage`, `model`, `lint`, `add`, `rm`, `mv`, `rename`, `merge`, `mv-file`, `containment`, `resources`, and `collect`.
+The `--output` option is available on all commands that support `--json`: `format`, `validate`, `search`, `change-impact`, `traces`, `coverage`, `model`, `submodels`, `lint`, `add`, `rm`, `mv`, `rename`, `merge`, `mv-file`, `containment`, `resources`, and `collect`.
 
 ---
 
@@ -965,6 +966,38 @@ Lists files referenced through FilePath attachments:
 
 The resources report is also available in the HTML export as a dedicated "Resources" page accessible from the navigation bar. This provides a browsable view of all referenced files with clickable links to the referencing elements.
 
+## Submodels Report
+
+The `submodels` command analyzes requirement **subgraphs** (independent hierarchies) and cross-submodel couplings.
+
+```bash
+# Full report (all top-level submodels)
+reqvire submodels
+
+# JSON output
+reqvire submodels --json
+
+# Scoped report from one root
+reqvire submodels --from "Platform System"
+```
+
+What the report includes:
+- `Submodels`: independent requirement hierarchies resolved through `derivedFrom`
+- `Cross-Submodel Couplings`: requirement-to-requirement relations across different top roots
+- `Summary`: totals for submodels, requirements, and couplings
+
+Why this is useful:
+- Identify unnecessary coupling between otherwise independent parts of the model
+- Check whether boundaries are clean before large refactors
+- Support attachment-boundary modeling by making cross-submodel relations explicit
+
+`--from` behavior:
+- The selected root defines the scope boundary
+- The selected root itself is **not** listed as a submodel entry
+- First-level scoped branches under the selected root become reported submodels
+ 
+For deeper semantics and JSON structure, see [Submodels and Subgraphs](submodels.md).
+
 ## Collect Content
 
 The `collect` command aggregates content from a requirement element and its related requirements, including attachment contents, with source citations. It supports traversal in two directions: upstream (ancestors) or downstream (descendants).
@@ -1177,6 +1210,10 @@ reqvire search --json --short
 ```
 
 ## Model Commands
+
+Reqvire provides two complementary model-structure commands:
+- `model` for relation-centric nested structure visualization
+- `submodels` for independent requirement subgraph and coupling analysis
 
 The `model` command generates a model-centric view showing requirements and verifications with their nested relations as a hierarchical tree structure. It supports both forward traversal (root to leaves) and reverse traversal (leaves to roots).
 
