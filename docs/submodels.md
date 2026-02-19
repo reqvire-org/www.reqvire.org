@@ -31,6 +31,8 @@ The report includes requirement-to-requirement relations where source and target
 
 This makes cross-boundary dependencies explicit and reviewable.
 
+Use `reqvire lint --auditable` / `reqvire lint --auditable --json` to get remediation-ready hints for individual cross-root links before applying structural changes.
+
 ## Commands
 
 ```bash

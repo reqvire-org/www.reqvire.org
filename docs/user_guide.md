@@ -801,6 +801,8 @@ This is useful for:
 
 The lint command analyzes model quality and detects issues in requirements relations, such as redundant verify relations and redundant hierarchical relations.
 
+It is a model hygiene signal, not a model hard-stop: cross-submodel and other manual-review findings are surfaced for refactoring guidance and must be addressed intentionally.
+
 ### Analyze All Issues
 
 Run lint to detect all model quality issues:
@@ -837,6 +839,7 @@ reqvire lint --fix
 |------------|-------------|----------|
 | Redundant verify relations | Verification verifies both leaf and parent requirement | Yes |
 | Redundant hierarchical relations | Direct derivedFrom when indirect path exists | Yes (single chain) / Manual (multi-branch) |
+| Cross-submodel hierarchical relation | Hierarchical link between different ownership roots | No |
 
 ### JSON Output
 
