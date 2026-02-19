@@ -96,16 +96,15 @@ Relations are defined in a subsection with the header `#### Relations` and conta
 
 #### Attachments
 
-Attachments are defined in a subsection with the header `#### Attachments` and contain references to supporting files or Refinement elements:
+Attachments are defined in a subsection with the header `#### Attachments` and contain references to Refinement elements:
 
 ```markdown
 #### Attachments
-  * [Design Document](docs/design.md)
+  * [Constraint Definition](#memory-constraint)
   * [Constraint Definition](constraints.md#memory-constraint)
 ```
 
 **Supported attachment targets:**
-- **File paths** - References to files (design documents, images, PDFs, etc.)
 - **Refinement element identifiers** - References to Refinement elements (constraint, behavior, specification)
 
 **Attachment scope constraints for Refinement elements:**

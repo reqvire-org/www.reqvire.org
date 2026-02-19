@@ -563,7 +563,7 @@ Reqvire provides unified commands to manage both relations and attachments betwe
 
 ### Link
 
-Create a relation between elements or attach files/refinement elements:
+Create a relation between elements or attach refinement element identifiers:
 
 ```bash
 # Link two elements with a relation type
@@ -579,10 +579,10 @@ reqvire link "System Requirement" "satisfiedBy" "src/auth/login.rs"
 reqvire link "System Requirement" "refinedBy" "Auth Constraint"
 reqvire link "Compliance Requirement" "trace" "https://example.com/spec.html"
 
-# Attach file or Refinement element (use 'attaching' keyword)
-reqvire link "<element>" attaching "<path-or-refinement>"
-reqvire link "Performance Requirement" attaching "docs/sla-document.pdf"
-reqvire link "API Endpoint Requirement" attaching "Rate Limiting Constraint"
+# Attach refinement element identifier (use 'attaching' keyword)
+reqvire link "<element>" attaching "<refinement-identifier>"
+reqvire link "Performance Requirement" attaching "#rate-limiting-constraint"
+reqvire link "API Endpoint Requirement" attaching "constraints/RateLimits.md#rate-limiting-constraint"
 ```
 
 The link command:
@@ -618,8 +618,8 @@ The link command:
 - Plain file-path targets for `refinedBy` are rejected.
 
 **Attaching (use `attaching` keyword instead of relation type):**
-- Internal file path (e.g., "docs/sla-document.pdf")
-- Refinement element name (constraint, behavior, or specification)
+- Same-file refinement identifier (e.g., `#rate-limiting-constraint`)
+- Cross-file refinement identifier (e.g., `constraints/RateLimits.md#rate-limiting-constraint`)
 
 **Attachment constraints for Refinement elements:**
 - Refinements must have a `refine` relation (established via requirement's `refinedBy`)
@@ -632,7 +632,7 @@ Use `--dry-run` to preview the operation:
 
 ```bash
 reqvire link "Feature Requirement" "derivedFrom" "User Story" --dry-run
-reqvire link "Performance Requirement" attaching "docs/spec.pdf" --dry-run
+reqvire link "Performance Requirement" attaching "#rate-limiting-constraint" --dry-run
 ```
 
 ### Unlink
@@ -646,7 +646,7 @@ reqvire unlink "<source>" "<target>"
 # Examples
 reqvire unlink "Feature Requirement" "User Story"
 reqvire unlink "Requirement" "Test Case"
-reqvire unlink "Performance Requirement" "docs/sla-document.pdf"
+reqvire unlink "Performance Requirement" "#rate-limiting-constraint"
 ```
 
 The unlink command:
@@ -914,7 +914,7 @@ By default, traces use relative links in Mermaid diagrams. Use `--links-with-blo
 
 ## Resources Report
 
-The `resources` command lists all files referenced by the model through relations and attachments. This helps you understand which implementation files, design documents, and other assets are connected to your requirements.
+The `resources` command lists files referenced by the model through relations. Attachment links use refinement element identifiers and are resolved as model elements rather than file resources.
 
 ### Basic Usage
 
@@ -937,10 +937,7 @@ Lists files referenced through InternalPath relations (satisfiedBy, trace, etc.)
 - References sorted by relation type, then by element identifier
 
 **Attachments Section**
-Lists files referenced through FilePath attachments:
-- Files sorted alphabetically by path
-- Each file shows the referencing element
-- References sorted by element identifier
+Shows file-based attachment references when present. In identifier-only models, this section is empty.
 
 ### Example Output
 
@@ -954,15 +951,10 @@ Lists files referenced through FilePath attachments:
 ### docs/design.md
   * [Architecture Overview](requirements/Architecture.md#architecture-overview) (via trace)
 
-## Attachments
-
-### docs/api-spec.md
-  * [API Requirements](requirements/Requirements.md#api-requirements)
-
 ## Summary
 
 - **Relation Files:** 2 (3 references)
-- **Attachment Files:** 1 (1 references)
+- **Attachment Files:** 0 (0 references)
 ```
 
 ### HTML Export Integration
@@ -1045,8 +1037,6 @@ The collect command:
 - Collects the main body text including Details section from each element
 
 **Attachments:**
-- `.md` files: Content is read and included
-- Other file types: Included as markdown links
 - Element identifier attachments: Referenced element's content is included
 
 ### Output Format
@@ -1067,8 +1057,8 @@ Each content block is followed by a source citation and separator:
 | Source Type | Citation Format |
 |-------------|-----------------|
 | Element | `— Source: [Element Name](file.md#element-id)` |
-| Attachment File | `— Source: [filename.md](path) attached to [Element Name](file.md#element-id)` |
-| Refinement Element | `— Source: [Refinement Name](file.md#id) refining [Element Name](file.md#element-id)` |
+| Attachment Element | `— Source: [Refinement Name](file.md#id) attached to [Element Name](file.md#element-id)` |
+| RefinedBy Element | `— Source: [Refinement Name](file.md#id) refining [Element Name](file.md#element-id)` |
 
 **JSON Output:**
 ```json
