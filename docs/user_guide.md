@@ -111,7 +111,7 @@ When `--output` is used, a confirmation message is printed to stdout and the JSO
 
 ### Supported Commands
 
-The `--output` option is available on all commands that support `--json`: `format`, `validate`, `search`, `change-impact`, `traces`, `coverage`, `model`, `submodels`, `lint`, `add`, `rm`, `mv`, `rename`, `merge`, `mv-file`, `containment`, `resources`, and `collect`.
+The `--output` option is available on all commands that support `--json`: `format`, `validate`, `search`, `change-impact`, `traces`, `coverage`, `model`, `submodels`, `lint`, `add`, `rm`, `mv`, `rename`, `merge`, `mv-file`, `link`, `unlink`, `relink`, `mv-asset`, `rm-asset`, `containment`, `resources`, and `collect`.
 
 ---
 
@@ -635,6 +635,15 @@ reqvire link "Feature Requirement" "derivedFrom" "User Story" --dry-run
 reqvire link "Performance Requirement" attaching "#rate-limiting-constraint" --dry-run
 ```
 
+#### JSON Output
+
+Get structured output for programmatic processing or write it to a file:
+
+```bash
+reqvire link "Feature Requirement" "derivedFrom" "User Story" --json
+reqvire link "Feature Requirement" "derivedFrom" "User Story" --dry-run --json --output link-result.json
+```
+
 ### Unlink
 
 Remove an existing relation or attachment (auto-detects type):
@@ -669,6 +678,15 @@ Use `--dry-run` to preview the operation:
 reqvire unlink "Feature Requirement" "User Story" --dry-run
 ```
 
+#### JSON Output
+
+Get structured output for programmatic processing or write it to a file:
+
+```bash
+reqvire unlink "Feature Requirement" "User Story" --json
+reqvire unlink "Feature Requirement" "User Story" --dry-run --json --output unlink-result.json
+```
+
 ### Relink
 
 Replace one relation target with another in a single operation:
@@ -692,6 +710,15 @@ The relink command:
 reqvire relink "Child Requirement" "derivedFrom" "Old Parent" "New Parent" --dry-run
 ```
 
+#### JSON Output
+
+Get structured output for programmatic processing or write it to a file:
+
+```bash
+reqvire relink "Child Requirement" "derivedFrom" "Old Parent" "New Parent" --json
+reqvire relink "Child Requirement" "derivedFrom" "Old Parent" "New Parent" --dry-run --json --output relink-result.json
+```
+
 ### Move Asset
 
 Move or rename an asset file and update all references (both Attachments and Relations) across the model:
@@ -710,6 +737,15 @@ This command:
 
 ```bash
 reqvire mv-asset "docs/spec.pdf" "documents/spec.pdf" --dry-run
+```
+
+#### JSON Output
+
+Get structured output for programmatic processing or write it to a file:
+
+```bash
+reqvire mv-asset "docs/spec.pdf" "documents/spec.pdf" --json
+reqvire mv-asset "docs/spec.pdf" "documents/spec.pdf" --dry-run --json --output mv-asset-result.json
 ```
 
 ### Remove Asset
@@ -732,11 +768,20 @@ This command:
 reqvire rm-asset "docs/obsolete.pdf" --dry-run
 ```
 
+#### JSON Output
+
+Get structured output for programmatic processing or write it to a file:
+
+```bash
+reqvire rm-asset "docs/obsolete.pdf" --json
+reqvire rm-asset "docs/obsolete.pdf" --dry-run --json --output rm-asset-result.json
+```
+
 ## Validation
 
 Any functional reqvire command that needs to parse model will as a first step perform model validation and report any errors found.
 Errors must be fixed before command can execute.
-After mutating commands (`link`, `merge`, `mv`, `relink`, etc.), run `reqvire validate` to confirm post-change structural integrity, including single-root hierarchy ownership.
+After mutating commands (`link`, `unlink`, `merge`, `mv`, `relink`, `mv-asset`, `rm-asset`, etc.), run `reqvire validate` to confirm post-change structural integrity, including single-root hierarchy ownership.
 
 Why single-root hierarchy ownership matters:
 - Every `requirement` must belong to exactly one top-level `user-requirement` tree.
