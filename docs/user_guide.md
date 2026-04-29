@@ -10,6 +10,8 @@ This user guide provides detailed instructions on how to install and use Reqvire
 
 - [Installation](#installation)
 - [Basic Commands](#basic-commands)
+- [Workspace Selection](#workspace-selection)
+- [MCP Server](#mcp-server)
 - [JSON File Output](#json-file-output)
 - [File Exclusion Patterns](#file-exclusion-patterns)
 - [Working with Requirements](#working-with-requirements)
@@ -86,6 +88,35 @@ Display the current version:
 ```bash
 reqvire --version
 ```
+
+## Workspace Selection
+
+Use the global `--workspace <DIR>` option to run Reqvire against a model repository from another current working directory:
+
+```bash
+reqvire --workspace /path/to/repository validate
+reqvire --workspace /path/to/repository search --filter-type requirement
+reqvire --workspace /path/to/repository mcp
+```
+
+The option applies to normal CLI commands and to the MCP server. Reqvire changes into the selected workspace before loading the model, reading git state, or applying mutations.
+
+## MCP Server
+
+Reqvire includes an MCP server for coding assistants that support the Model Context Protocol:
+
+```bash
+reqvire mcp
+```
+
+The default transport is stdio and the default tool set is read/report only. HTTP transport and mutation tools are available through explicit options:
+
+```bash
+reqvire mcp --transport http --host 127.0.0.1 --port 8081
+reqvire mcp --enable-mutations
+```
+
+See the [MCP Server](/mcp_server/) page for transport details, tool discovery, resources, mutation mode, and error handling.
 
 ## JSON File Output
 

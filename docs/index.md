@@ -90,6 +90,7 @@ Reqvire automatically parses structured Markdown to generate:
 - **Model summary reports** providing overview statistics and health metrics
 - **Submodels/subgraphs analysis** exposing independent hierarchies and cross-boundary couplings
 - **Interactive HTML documentation** with clickable diagrams and searchable content
+- **MCP server integration** exposing structured model tools to MCP-capable coding assistants
 
 ## CI/CD Integration
 

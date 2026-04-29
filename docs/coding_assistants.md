@@ -8,12 +8,13 @@ title: Coding Assistants
 
 ---
 
-Reqvire integrates with coding assistants through two main approaches:
+Reqvire integrates with coding assistants through three main approaches:
 
 1. **Claude Code plugin** (marketplace plugin with slash commands and skills)
 2. **Codex skill package** (installable to `$CODEX_HOME/skills`)
+3. **MCP server** (standard tool interface for MCP-capable clients)
 
-Both approaches support MBSE-first, requirements-as-code workflows.
+All approaches support MBSE-first, requirements-as-code workflows.
 
 ## Prerequisites
 
@@ -99,6 +100,20 @@ This installs the skill to:
 The installer removes any existing `reqvire-syseng` before copying the latest repo version.
 
 For complete instructions, see [Codex Skills Guide](https://github.com/reqvire-org/reqvire/blob/main/doc/CODEX_SKILLS.md).
+
+## Option 3: MCP Server
+
+---
+
+Reqvire can run as an MCP server for assistants that discover and call tools through the Model Context Protocol:
+
+```bash
+reqvire mcp
+```
+
+The default MCP server uses stdio and advertises read/report tools. Mutation tools are only advertised when started with `--enable-mutations`.
+
+For transport details and the active tool contract, see the [MCP Server](/mcp_server/) guide.
 
 ## Recommended Workflow (Any Assistant)
 
