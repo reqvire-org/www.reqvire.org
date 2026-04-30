@@ -32,6 +32,26 @@ reqvire --workspace /path/to/repository mcp
 
 Reqvire validates the model before the MCP server starts. If startup validation fails, the server exits with the same kind of Reqvire validation diagnostics that CLI users already see.
 
+## Element Size Estimates
+
+Start the MCP server with `--with-size-estimates` when MCP clients need approximate context sizing for model evidence:
+
+```bash
+reqvire mcp --with-size-estimates
+```
+
+When enabled, tools that return model elements, such as `reqvire.read_element` and `reqvire.model`, include an element-level `size_estimate` record:
+
+```json
+"size_estimate": {
+  "content_bytes": 123,
+  "rendered_context_bytes": 456,
+  "estimated_tokens": 114
+}
+```
+
+The flag is a server startup option, not a per-tool argument. Without it, MCP model evidence omits size estimates. The active state is reported as `size_estimates_enabled` in `reqvire.workspace_status` and in the tool contract resource.
+
 ## HTTP Transport
 
 Reqvire can also expose MCP over HTTP:

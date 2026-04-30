@@ -1376,9 +1376,24 @@ reqvire model --from "API Layer" --json
 
 # Reverse traversal with type filter and JSON output
 reqvire model --reverse --filter-type="test-verification" --json
+
+# Include element size estimates in JSON output
+reqvire model --json --with-size-estimates
 ```
 
 The JSON output contains the nested model structure with elements containing their forward-related child elements, making it suitable for programmatic analysis and integration with other tools.
+
+Use `--with-size-estimates` with `--json` when a downstream tool needs approximate context sizing for model elements. Each element payload includes:
+
+```json
+"size_estimate": {
+  "content_bytes": 123,
+  "rendered_context_bytes": 456,
+  "estimated_tokens": 114
+}
+```
+
+Size estimates are opt-in, are not written to Markdown files, and are available only for JSON model evidence. Running `reqvire model --with-size-estimates` without `--json` fails with a clear diagnostic.
 
 ## Change Impact Report
 
