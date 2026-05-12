@@ -69,6 +69,20 @@ Metadata is defined in a subsection with the header `#### Metadata` and contains
 
 **Reserved properties:**
 - `type` - Defines the element type (requirement, user-requirement, verification, etc.)
+- `status`, `priority`, `risk`, `owner` - Requirement governance metadata, valid only on requirement-family elements
+
+Requirement governance metadata has these meanings:
+
+| Key | Meaning | Accepted values |
+|-----|---------|-----------------|
+| `status` | Requirement lifecycle state | `draft`, `review`, `approved` |
+| `priority` | Planning importance | `low`, `medium`, `high`, `critical` |
+| `risk` | Realization risk | `low`, `medium`, `high`, `critical` |
+| `owner` | Accountable person, role, or team | free-form string |
+
+Defaults are `status: approved`, `priority: medium`, `risk: low`, and unassigned owner. Child requirements inherit missing governance fields from their nearest parent requirement. Inherited and default values appear in search JSON, MCP search results, and search summaries, but formatting only writes metadata that was explicitly authored.
+
+Refinement and verification elements must not author requirement governance metadata. Refinements receive governance context from their owning requirement through `refinedBy` / `refine`.
 
 #### Relations
 

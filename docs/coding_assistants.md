@@ -111,11 +111,11 @@ Reqvire can run as an MCP server for assistants that discover and call tools thr
 reqvire mcp
 ```
 
-The default MCP server uses stdio and advertises read/report tools. Mutation tools are only advertised when started with `--enable-mutations`.
+The MCP server uses RMCP Streamable HTTP and advertises read/report tools by default. Mutation tools are only advertised when started with `--enable-mutations`.
 
 For assistants that need context-sizing metadata, start the server with `--with-size-estimates`. This adds `size_estimate` records to MCP model evidence returned by tools such as `reqvire.read_element` and `reqvire.model`.
 
-For transport details and the active tool contract, see the [MCP Server](/mcp_server/) guide.
+For Streamable HTTP request details and the active tool contract, see the [MCP Server](/mcp_server/) guide.
 
 ## Recommended Workflow (Any Assistant)
 

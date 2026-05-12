@@ -14,11 +14,11 @@ The MCP server is a Reqvire CLI subcommand:
 reqvire mcp
 ```
 
-By default, the server uses stdio transport and advertises read/report tools only. Mutation tools are not advertised unless explicitly enabled.
+The server uses RMCP Streamable HTTP and advertises read/report tools only by default. Mutation tools are not advertised unless explicitly enabled.
 
 ## Startup
 
-Start the default stdio server from the repository that contains the Reqvire model:
+Start the Streamable HTTP server from the repository that contains the Reqvire model:
 
 ```bash
 reqvire mcp
@@ -54,10 +54,10 @@ The flag is a server startup option, not a per-tool argument. Without it, MCP mo
 
 ## HTTP Transport
 
-Reqvire can also expose MCP over HTTP:
+Reqvire exposes MCP over Streamable HTTP:
 
 ```bash
-reqvire mcp --transport http --host 127.0.0.1 --port 8081
+reqvire mcp --host 127.0.0.1 --port 8081
 ```
 
 The HTTP endpoint is fixed:
@@ -66,13 +66,15 @@ The HTTP endpoint is fixed:
 http://127.0.0.1:8081/mcp
 ```
 
-HTTP requests use JSON-RPC POST bodies.
+HTTP requests use JSON-RPC POST bodies. Streamable HTTP clients must send `Accept: application/json, text/event-stream`; non-initialize requests should also send the negotiated `Mcp-Protocol-Version` header.
 
 Example HTTP request:
 
 ```bash
 curl -sS \
   -H 'Content-Type: application/json' \
+  -H 'Accept: application/json, text/event-stream' \
+  -H 'Mcp-Protocol-Version: 2025-11-25' \
   -d '{"jsonrpc":"2.0","id":1,"method":"tools/list","params":{}}' \
   http://127.0.0.1:8081/mcp
 ```
@@ -86,7 +88,7 @@ Reqvire reports MCP protocol version `2025-11-25`.
 Example initialize request:
 
 ```json
-{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-11-25"}}
+{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-11-25","capabilities":{},"clientInfo":{"name":"client","version":"1.0"}}}
 ```
 
 The initialize response advertises `tools` and `resources` capabilities. Unsupported capabilities are not advertised.
@@ -141,6 +143,14 @@ Example search call:
 {"jsonrpc":"2.0","id":3,"method":"tools/call","params":{"name":"reqvire.search","arguments":{"filter_type":"requirement","short":true}}}
 ```
 
+Search supports governance metadata filters:
+
+```json
+{"jsonrpc":"2.0","id":3,"method":"tools/call","params":{"name":"reqvire.search","arguments":{"filter_status":"review","filter_priority":"high,critical","filter_owner":"Platform.*"}}}
+```
+
+Full structured search results include effective `governance_metadata` for requirement-family elements and global governance summary counters under `global_counters.total_governance_metadata`.
+
 ## Resources
 
 Reqvire exposes these MCP resources:
@@ -161,12 +171,6 @@ Mutation tools are disabled by default. Enable them explicitly:
 
 ```bash
 reqvire mcp --enable-mutations
-```
-
-For HTTP:
-
-```bash
-reqvire mcp --transport http --enable-mutations
 ```
 
 When mutation mode is enabled, Reqvire advertises additional tools:

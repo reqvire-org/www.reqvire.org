@@ -67,6 +67,32 @@ User requirements serve as the **foundation for system design**, ensuring that a
 
 System requirements are derived from user requirements and are structured to map directly to **subsystems** or **components** of the overall system, ensuring **modularity** and **traceability**.
 
+## Requirement Governance Metadata
+
+---
+
+Reqvire supports requirement governance metadata directly on `requirement` and `user-requirement` elements:
+
+```markdown
+#### Metadata
+  * type: requirement
+  * status: review
+  * priority: high
+  * risk: medium
+  * owner: Platform Team
+```
+
+Governance metadata describes management context:
+
+- `status`: lifecycle state (`draft`, `review`, `approved`)
+- `priority`: planning importance (`low`, `medium`, `high`, `critical`)
+- `risk`: realization risk (`low`, `medium`, `high`, `critical`)
+- `owner`: accountable person, role, or team
+
+Defaults are `status: approved`, `priority: medium`, `risk: low`, and unassigned owner. Child requirements inherit missing values from their nearest parent requirement. Reqvire exposes the effective values in full search JSON output, MCP search results, and search summary counters while preserving only explicitly authored metadata in Markdown.
+
+Refinement elements and verification elements cannot declare these governance keys; they inherit context from their owning or related requirements.
+
 ## Requirement Containment
 
 ---
@@ -208,7 +234,6 @@ graph TD
 end
 
 ```
-
 
 
 

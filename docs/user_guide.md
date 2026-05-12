@@ -109,14 +109,19 @@ Reqvire includes an MCP server for coding assistants that support the Model Cont
 reqvire mcp
 ```
 
-The default transport is stdio and the default tool set is read/report only. HTTP transport and mutation tools are available through explicit options:
+The MCP server uses RMCP Streamable HTTP and binds to `127.0.0.1:8081` by default. The fixed endpoint is `/mcp`:
 
 ```bash
-reqvire mcp --transport http --host 127.0.0.1 --port 8081
+reqvire mcp --host 127.0.0.1 --port 8081
+```
+
+The default tool set is read/report only. Mutation tools are available only when explicitly enabled:
+
+```bash
 reqvire mcp --enable-mutations
 ```
 
-See the [MCP Server](/mcp_server/) page for transport details, tool discovery, resources, mutation mode, and error handling.
+See the [MCP Server](/mcp_server/) page for Streamable HTTP request details, tool discovery, resources, mutation mode, and error handling.
 
 ## JSON File Output
 
@@ -292,6 +297,32 @@ Any markdown content is allowed here.
 ```
 
 For detailed specifications, read [SpecificationsRequirements.md](https://github.com/reqvire-org/reqvire/blob/main/requirements/SpecificationsRequirements.md)
+
+### Requirement Governance Metadata
+
+Requirement elements can declare governance metadata in `#### Metadata`:
+
+```markdown
+#### Metadata
+  * type: requirement
+  * status: review
+  * priority: high
+  * risk: medium
+  * owner: Platform Team
+```
+
+Governance metadata applies only to requirement-family elements (`requirement` and `user-requirement`):
+
+| Key | Values | Default |
+|-----|--------|---------|
+| `status` | `draft`, `review`, `approved` | `approved` |
+| `priority` | `low`, `medium`, `high`, `critical` | `medium` |
+| `risk` | `low`, `medium`, `high`, `critical` | `low` |
+| `owner` | free-form person, role, or team | unassigned |
+
+Child requirements inherit missing governance fields from their nearest owning parent requirement through the requirement hierarchy. If no parent defines a field, Reqvire uses the default effective value. Only explicitly authored metadata is written back to Markdown; inherited and default values appear in structured outputs as effective metadata.
+
+Refinement elements (`specification`, `constraint`, and `behavior`) must not declare `status`, `priority`, `risk`, or `owner`. They receive governance context from the requirement that owns them via `refinedBy` / `refine`.
 
 ## Element Manipulation
 
@@ -1208,6 +1239,29 @@ reqvire search --filter-file="requirements/**/*.md"
 # Filter by element name (regex)
 reqvire search --filter-name=".*authentication.*"
 ```
+
+Requirement governance metadata can be filtered by effective values, including inherited and default values:
+
+```bash
+# Find requirements currently in review
+reqvire search --filter-status=review
+
+# Find high or critical priority requirements
+reqvire search --filter-priority=high,critical
+
+# Find high-risk requirements owned by a team name pattern
+reqvire search --filter-risk=high --filter-owner="Platform|Safety"
+
+# Combine governance filters with normal filters
+reqvire search --filter-type=requirement \
+               --filter-status=approved \
+               --filter-priority=critical \
+               --json
+```
+
+Full JSON search output includes `governance_metadata` for requirement-family elements. Each field reports the effective `value`, its `source` (`explicit`, `inherited`, or `default`), and `source_identifier` when inherited from a parent requirement.
+
+Full text and JSON search summaries also include governance metadata counters for matched requirement-family elements. JSON exposes these under `global_counters.total_governance_metadata`; text output renders the same counts in the `Requirement Governance Metadata` summary section. Unassigned owners are summarized as `unassigned`.
 
 ### Filtering by Content
 
