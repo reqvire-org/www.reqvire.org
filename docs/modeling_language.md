@@ -31,7 +31,7 @@ This makes Reqvire models powerful for both humans and **highly interoperable wi
 Each Reqvire model consists of:
 
 - **Requirements** – User requirements and system requirements organized in a hierarchical structure through derivation relations
-- **Verifications** – Test verifications, analysis verifications, inspection verifications, and demonstration verifications linked to requirements
+- **Verifications** – Test verifications, formal proof verifications, analysis verifications, inspection verifications, and demonstration verifications linked to requirements
 - **Relations** – Explicit connections between elements including derivedFrom (requirement hierarchy), verifiedBy/verify (requirement-verification links), satisfiedBy (requirement-implementation links), refinedBy/refine (requirement-refinement links), and trace (soft traceability)
 - **Files and Folders** – Organizational structure using Markdown files and folders to group related elements
 
@@ -103,8 +103,8 @@ Relations are defined in a subsection with the header `#### Relations` and conta
 | `derivedFrom` | Child → Parent | Requirement hierarchy (child derives from parent) |
 | `verifiedBy` | Requirement → Verification | Links requirement to its verifications |
 | `verify` | Verification → Requirement | Links verification to requirements it verifies |
-| `satisfiedBy` | Requirement → Implementation | Links to code files and test implementations that satisfy the requirement |
-| `refinedBy` | Requirement → Refinement | Links requirement to its refinement elements (specification, constraint, behavior) establishing ownership |
+| `satisfiedBy` | Requirement or evidence-backed verification → Implementation/evidence | Links to code files, test implementations, proof artifacts, generated fixtures, or other artifacts that satisfy the requirement or verification evidence |
+| `refinedBy` | Requirement → Refinement | Links requirement to its refinement elements (specification, constraint, behavior, state, input-output) establishing ownership |
 | `refine` | Refinement → Requirement | Links refinement element back to its owning requirement (auto-generated from refinedBy) |
 | `trace` | Element → Element | Soft traceability link between elements |
 
@@ -119,7 +119,7 @@ Attachments are defined in a subsection with the header `#### Attachments` and c
 ```
 
 **Supported attachment targets:**
-- **Refinement element identifiers** - References to Refinement elements (constraint, behavior, specification)
+- **Refinement element identifiers** - References to Refinement elements (constraint, behavior, specification, state, input-output)
 
 **Attachment scope constraints for Refinement elements:**
 1. **Satisfied Refinement Constraint** - Refinements must have a `refine` relation (establishing an owner requirement via `refinedBy`) before they can be attached
@@ -143,11 +143,14 @@ Element types are identified through the `type` metadata property:
 - **analysis-verification** - Verification through analysis
 - **inspection-verification** - Verification through inspection
 - **demonstration-verification** - Verification through demonstration
+- **formal-proof-verification** - Verification through formal proof, model checking, theorem proving, generated fixtures, or proof reports
 
 **Refinement Types:**
 - **constraint** - Design or implementation constraint
-- **behavior** - Behavioral specification or state machine
+- **behavior** - Behavioral specification
 - **specification** - Detailed specification document
+- **state** - Lifecycle states, state machines, allowed transitions, terminal states, and state-dependent contracts
+- **input-output** - Payloads, messages, documents, schemas, fixtures, and data contracts
 
 Refinement elements are special elements that **can only have `refine` relations** pointing to requirements. They are used to provide additional detail and can be attached to requirements via the Attachments subsection. **Refinement elements cannot have their own Attachments subsection** - they are atomic documentation units meant to be attached to requirements, not to have attachments themselves.
 
@@ -502,16 +505,16 @@ The recommended strategy is to **verify leaf requirements** rather than intermed
 #### Coverage Metrics
 The verification coverage system tracks:
 - **Verified leaf requirements**: Leaf requirements with `verifiedBy` relations pointing to verification elements
-- **Satisfied test-verifications**: Test-verification elements with `satisfiedBy` relations pointing to actual test implementations
-- **Unsatisfied test-verifications**: Test-verification elements missing `satisfiedBy` relations (flagged as incomplete)
-- **Coverage percentages**: Calculated separately for leaf requirements verification and test-verification satisfaction
+- **Satisfied evidence-backed verifications**: Test-verification and formal-proof-verification elements with `satisfiedBy` relations pointing to actual test implementations or proof evidence
+- **Unsatisfied evidence-backed verifications**: Test-verification and formal-proof-verification elements missing `satisfiedBy` relations (flagged as incomplete)
+- **Coverage percentages**: Calculated separately for leaf requirements verification and evidence-backed verification satisfaction
 
 ### Two-Level Verification System
 
 Reqvire implements a two-level verification approach:
 
 1. **Requirements → Verifications**: Requirements link to verification elements via `verifiedBy` relations
-2. **Test-Verifications → Test Implementations**: Test-verification elements link to actual test scripts/artifacts via `satisfiedBy` relations
+2. **Evidence-backed Verifications → Evidence Artifacts**: Test-verification and formal-proof-verification elements link to actual test scripts, proof artifacts, theorem files, generated fixtures, or proof reports via `satisfiedBy` relations
 
 ```markdown
 ### My Requirement
@@ -570,7 +573,7 @@ The coverage system implements the **verification roll-up approach**:
 - **Leaf requirements** MUST be verified - these represent the actual testable functionality
 - **Parent requirements** are automatically covered when their leaf requirements are verified
 - One verification can verify multiple leaf requirements, providing coverage for entire requirement chains
-- **Test-verifications** require `satisfiedBy` relations to actual test implementations
+- **Evidence-backed verifications** (`test-verification` and `formal-proof-verification`) require `satisfiedBy` relations to actual test implementations or proof evidence
 - **Analysis/inspection/demonstration verifications** are considered satisfied by default (no `satisfiedBy` required)
 
 #### Coverage Flags
@@ -578,4 +581,6 @@ The coverage system implements the **verification roll-up approach**:
 The coverage system will flag:
 - ✅ **Satisfied test-verifications**: Those with valid `satisfiedBy` relations to test implementations
 - ❌ **Unsatisfied test-verifications**: Those missing `satisfiedBy` relations
+- ✅ **Satisfied formal-proof-verifications**: Those with valid `satisfiedBy` relations to proof evidence
+- ❌ **Unsatisfied formal-proof-verifications**: Those missing `satisfiedBy` relations
 - ✅ **Analysis/inspection/demonstration verifications**: Considered satisfied by default (no `satisfiedBy` required)

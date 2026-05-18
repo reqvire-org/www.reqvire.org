@@ -522,7 +522,7 @@ The merge operation:
 **Type Compatibility:**
 - Requirements can merge with other requirements (any subtype)
 - Verifications can merge with other verifications (any subtype)
-- Refinements (constraint, behavior, specification) can merge with other refinements
+- Refinements (constraint, behavior, specification, state, input-output) can merge with other refinements
 - Other element types can merge with other elements of the same main category
 
 **Error Conditions:**

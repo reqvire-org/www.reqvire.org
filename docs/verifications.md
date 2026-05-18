@@ -21,12 +21,14 @@ Reqvire supports several verification element types that align with standard sys
 ### Primary Verification Types
 - **verification** - Default verification through testing (equivalent to test-verification)
 - **test-verification** - Formal testing with documented test procedures and expected outcomes
+- **formal-proof-verification** - Formal verification through proof, model checking, theorem proving, generated fixtures, or proof reports
 - **analysis-verification** - Verification through systematic analysis of documentation or code without physical testing
 - **inspection-verification** - Verification through formal examination of documentation, code, or physical components
 - **demonstration-verification** - Verification through showing functionality in an operational-like environment
 
 ### SatisfiedBy Requirements by Type
 - **test-verification**: MUST have `satisfiedBy` relations pointing to actual test implementations
+- **formal-proof-verification**: MUST have `satisfiedBy` relations pointing to proof evidence, such as theorem files, model-checking artifacts, generated fixtures, or proof reports
 - **analysis-verification, inspection-verification, demonstration-verification**: Do NOT require `satisfiedBy` relations (considered satisfied by default)
 - **trace relations**: Always allowed for any verification type
 
@@ -57,9 +59,9 @@ The recommended strategy is to **verify leaf requirements** rather than intermed
 ### Coverage Metrics
 The verification coverage system tracks:
 - **Verified leaf requirements**: Leaf requirements with `verifiedBy` relations pointing to verification elements
-- **Satisfied test-verifications**: Test-verification elements with `satisfiedBy` relations pointing to actual test implementations
-- **Unsatisfied test-verifications**: Test-verification elements missing `satisfiedBy` relations (flagged as incomplete)
-- **Coverage percentages**: Calculated separately for leaf requirements verification and test-verification satisfaction
+- **Satisfied evidence-backed verifications**: Test-verification and formal-proof-verification elements with `satisfiedBy` relations pointing to actual test implementations or proof evidence
+- **Unsatisfied evidence-backed verifications**: Test-verification and formal-proof-verification elements missing `satisfiedBy` relations (flagged as incomplete)
+- **Coverage percentages**: Calculated separately for leaf requirements verification and evidence-backed verification satisfaction
 
 ## Two-Level Verification System
 
@@ -127,7 +129,7 @@ The coverage system implements the **verification roll-up approach**:
 - **Leaf requirements** MUST be verified - these represent the actual testable functionality
 - **Parent requirements** are automatically covered when their leaf requirements are verified
 - One verification can verify multiple leaf requirements, providing coverage for entire requirement chains
-- **Test-verifications** require `satisfiedBy` relations to actual test implementations
+- **Evidence-backed verifications** (`test-verification` and `formal-proof-verification`) require `satisfiedBy` relations to actual test implementations or proof evidence
 - **Analysis/inspection/demonstration verifications** are considered satisfied by default (no `satisfiedBy` required)
 
 ### Coverage Flags
@@ -135,6 +137,8 @@ The coverage system implements the **verification roll-up approach**:
 The coverage system will flag:
 - ✅ **Satisfied test-verifications**: Those with valid `satisfiedBy` relations to test implementations
 - ❌ **Unsatisfied test-verifications**: Those missing `satisfiedBy` relations
+- ✅ **Satisfied formal-proof-verifications**: Those with valid `satisfiedBy` relations to proof evidence
+- ❌ **Unsatisfied formal-proof-verifications**: Those missing `satisfiedBy` relations
 - ✅ **Analysis/inspection/demonstration verifications**: Considered satisfied by default (no `satisfiedBy` required)
 
 ---
