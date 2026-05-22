@@ -115,6 +115,8 @@ The MCP server uses RMCP Streamable HTTP and advertises read/report tools by def
 
 For assistants that need context-sizing metadata, start the server with `--with-size-estimates`. This adds `size_estimate` records to MCP model evidence returned by tools such as `reqvire.read_element` and `reqvire.model`.
 
+For semantic model workflows, call `reqvire.ontologies` through MCP to collect ontology `#### Ontology` blocks and semantic-contract `#### Shapes` blocks as Turtle or JSON-LD. Pass `full: true` when the assistant also needs generated Reqvire model context triples for elements, relations, attachments, concept references, ontology declarations, and shape references.
+
 For Streamable HTTP request details and the active tool contract, see the [MCP Server](/mcp_server/) guide.
 
 ## Recommended Workflow (Any Assistant)

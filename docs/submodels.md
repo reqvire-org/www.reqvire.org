@@ -6,15 +6,18 @@ title: Submodels and Subgraphs
 
 # Submodels and Subgraphs
 
-Reqvire `submodels` report helps you analyze **independent requirement subgraphs** and the couplings between them.
+Reqvire `submodels` report helps you analyze **independent feature-rooted subgraphs** and the couplings between them.
 
 ## What Is a Submodel
 
-A submodel is a requirement hierarchy resolved through `derivedFrom` relations.
+A submodel is a feature-rooted graph:
 
-- In full mode (`reqvire submodels`), each submodel is rooted at a top requirement with no parent.
-- In scoped mode (`reqvire submodels --from "<ROOT_NAME>"`), the selected root becomes the scope boundary and is not itself reported as a submodel entry.
-- Scoped submodels are the first independent branch roots below the selected root.
+- Feature hierarchy is resolved through feature `derive` / `derivedFrom`.
+- Requirements enter the graph through `specifiedBy` / `specify`.
+- Requirement hierarchy is resolved through requirement `derive` / `derivedFrom`.
+- In full mode (`reqvire submodels`), each submodel is rooted at a feature with no feature parent.
+- In scoped mode (`reqvire submodels --from "<ROOT_NAME>"`), the selected feature or requirement becomes the scope boundary and is not itself reported as a submodel entry.
+- Scoped submodels are the first independent branch roots below the selected scope.
 
 ## Why It Is Useful
 
@@ -27,11 +30,11 @@ Use this report to:
 
 ## Cross-Submodel Couplings
 
-The report includes requirement-to-requirement relations where source and target belong to different resolved top roots.
+The report includes requirement-to-requirement relations where source and target belong to different feature roots.
 
 This makes cross-boundary dependencies explicit and reviewable.
 
-Use `reqvire lint --auditable` / `reqvire lint --auditable --json` to get remediation-ready hints for individual cross-root links before applying structural changes.
+Use `reqvire lint --auditable` / `reqvire lint --auditable --json` to get remediation-ready hints for individual cross-feature links before applying structural changes.
 
 ## Commands
 
@@ -42,8 +45,8 @@ reqvire submodels
 # JSON report
 reqvire submodels --json
 
-# Scope by one root name
-reqvire submodels --from "Platform System"
+# Scope by one feature or requirement name
+reqvire submodels --from "API Authentication"
 ```
 
 ## Output Shape

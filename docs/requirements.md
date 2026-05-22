@@ -6,234 +6,289 @@ title: Requirements
 
 ## Conceptual Overview
 
----
+Reqvire separates product intent from system obligations:
 
-Reqvire is a tool, framework, and methodology for requirements management. In Reqvire, a **requirement** represents a stakeholder's need, system capability, or constraint that the system must fulfill. Requirements define:
+- **Features** define product capability, stakeholder scope, regulatory context, ownership, and shared ontology context.
+- **Ontologies** define reusable domain/model meaning that features attach and requirements inherit.
+- **Requirements** define what the system shall do for those features.
+- **Refinements** add detailed contracts to features or requirements.
+- **Verifications** prove requirements.
 
-- **What** the system must do
-- **How** the system does it (including functional implementation details and non-functional aspects such as performance, security, and quality attributes)
+This keeps the model close to MBSE practice: features describe the capability and domain context, while requirements remain testable obligations with implementation and verification evidence.
 
-These requirements serve as the foundation for system design, development, and verification.
+## Features
 
-Reqvire enforces a **consistent structure** for organizing and presenting requirements across the project. However, it does **not impose a specific syntax** for how the content of requirements is written. This provides flexibility for teams to tailor requirement expressions based on project context.
+A `feature` answers:
 
-The use of structured syntaxes like **EARS (Easy Approach to Requirements Syntax)** is encouraged to enhance clarity and consistency but is **not mandatory**.
+- What product capability, stakeholder need, regulatory area, external obligation, or domain slice is this?
+- Why does this area exist in the product model?
+- Who owns the scope and routing for this slice?
+- What source material or ontology defines the domain context?
+- Which requirements belong under this capability?
 
-For detailed specifications on document structure and formatting, refer to: [Specifications](https://github.com/reqvire-org/reqvire/blob/main/requirements/SpecificationsRequirements.md).
+Feature:
 
+```text
+API Authentication
+```
 
-## Requirement Types and Classification
+Answers:
 
----
+- What capability/domain is this?
+- Why does this area exist in the product model?
+- What stakeholder, regulatory, source, or policy context owns it?
+- What ontology defines its domain language?
+- Which requirements belong under this capability?
 
-Reqvire organizes requirements into **two main categories**:
+A feature is not a weaker requirement. It is the capability anchor for a product, stakeholder, regulatory, or external context. It defines the scope and language of the model area before individual system obligations are written.
 
-- **User Requirements**  
-  (includes Stakeholder Needs, Mission Requirements, User Stories, and other WHAT-focused requirements)
+Because a feature owns the capability context, it can own `source` refinements and attach `ontology` elements from `requirements/Ontologies`. Those define vocabulary, source authority, external context, domain structure, and reusable meaning for the capability. They are not implementation obligations by themselves.
 
-- **System Requirements**  
-  (detailed technical and functional specifications describing HOW the system will fulfill user needs)
+Features can form feature hierarchies using `derive` / `derivedFrom` with other features, and they connect to requirements through `specifiedBy` / `specify`.
 
-This structure supports a **progressive refinement** approach, ensuring traceability from high-level stakeholder expectations down to technical implementation.
+Features are not directly verified or satisfied. Feature verification and implementation coverage roll up from the requirements that specify them.
 
+Do not create one universal top feature that owns every ontology and is specified by every requirement. That collapses the model into one feature-root subgraph and hides change impact. Use a top feature when requirements truly specify the same capability. Use subfeatures only when the capability has meaningful product, interface, stakeholder, regulatory, or domain slices that need their own ownership, collection, or coverage view. Attach shared ontology explicitly from the consuming feature.
 
-## User Requirements
+For example, one `System Model Interfaces` feature can attach the interface ontology and be specified by CLI, web documentation, and MCP interface requirements when those are all obligations for the same interface capability. A separate feature root should attach the interface ontology only when it depends on that language without implementing the interface capability.
 
----
+```markdown
+### API Authentication
 
-**User requirements** represent **stakeholder needs**, **mission objectives**, **user expectations**, and **WHAT-focused requirements**. These describe *what* the system must do from an external point of view, without specifying technical implementation details.
+API authentication capability and access-token domain context.
 
-User requirements include:
+#### Metadata
+  * type: feature
 
-- **Stakeholder needs**: High-level expressions of expectations from users, customers, operators, and regulatory bodies.
-- **Mission requirements**: Enterprise-level objectives the system must support.
-- **User stories**: Informal narratives that describe system interactions or functionalities from a user's perspective.
-- **WHAT-focused requirements**: Formalized requirements that define system capabilities, behaviors, or constraints without dictating the solution approach.
+#### Attachments
+  * [Access Token Ontology](AuthContracts.md#access-token-ontology)
 
-User requirements serve as the **foundation for system design**, ensuring that all stakeholder concerns and operational goals are captured before technical development begins.
+#### Relations
+  * specifiedBy: [API Access Token Validation](AuthRequirements.md#api-access-token-validation)
+```
 
+## Requirements
 
+A `requirement` answers:
 
-## System Requirements
+- What shall the system do?
+- Under what condition, state, interface, or operational scope?
+- What implementation or evidence can satisfy it?
+- What verification proves it?
 
----
+Requirement:
 
-**System requirements** specify **HOW** the system will fulfill the user and mission requirements. They define detailed **technical** and **functional** specifications, covering:
+```text
+The system shall reject API requests whose access token does not conform to the access token semantic contract.
+```
 
-- System behaviors
-- Performance criteria
-- Interfaces and data flows
-- Design and regulatory constraints
+Answers:
 
-System requirements are derived from user requirements and are structured to map directly to **subsystems** or **components** of the overall system, ensuring **modularity** and **traceability**.
+- What must the system do?
+- Under what condition, interface, state, or scope?
+- What implementation or evidence can satisfy it?
+- What verification proves it?
 
-## Requirement Governance Metadata
+A requirement is the obligation anchor. It should stay testable, implementation-facing, and evidence-facing. Requirements are where Reqvire tracks verification, implementation satisfaction, and coverage.
 
----
+Requirements can derive from other requirements through `derive` / `derivedFrom`, and top-level requirements are specified by a feature through `specify`.
 
-Reqvire supports requirement governance metadata directly on `requirement` and `user-requirement` elements:
+Requirements may also own shapes-only `semantic-contract` refinements when a specific obligation needs a SHACL profile over ontology terms already reachable from the owning requirement context.
+
+```markdown
+### API Access Token Validation
+
+The system shall reject API requests whose access token does not conform to the access token semantic contract.
+
+#### Metadata
+  * type: requirement
+
+#### Relations
+  * specify: [API Authentication](Features.md#api-authentication)
+  * verifiedBy: [Access Token Contract Test](Verifications.md#access-token-contract-test)
+  * satisfiedBy: [auth_middleware.rs](../src/auth_middleware.rs)
+```
+
+## Ontologies and Semantic Contracts
+
+An `ontology` element is a first-class semantic model. It carries Turtle/OWL vocabulary and reusable terms such as classes, properties, relationships, allowed semantic categories, and stable model rules. Keep authored ontology elements in a dedicated `requirements/Ontologies` folder; feature files attach those ontology elements to make terms reachable for their descendant features and specifying requirements.
+
+Use ontology for:
+
+- domain vocabulary and concept definitions,
+- ontology classes and properties,
+- business object structure,
+- allowed semantic relationships,
+- shared model/domain meaning across feature subgraphs through explicit attachments.
+
+Use requirement-owned `semantic-contract` for:
+
+- SHACL validation constraints for one obligation,
+- payload or state profiles over reachable ontology,
+- examples or validation targets for a requirement-specific contract.
+
+Use a requirement instead when the statement is a system obligation.
+
+Rule of thumb:
+
+- `X is...`, `X has...`, `X relates to Y...` may belong in ontology.
+- `These fields form a valid object...` may belong in a requirement-owned semantic contract.
+- `This domain term means...` may belong in ontology.
+- `The system shall...` belongs in a requirement.
+
+This split prevents requirements from becoming overloaded with vocabulary and data-model definitions. Ontology defines what domain objects mean; the requirement states what the system must do; the requirement semantic contract can define the exact shape/profile that makes the obligation precise.
+
+````markdown
+### Access Token Ontology
+
+Defines access token domain meaning.
+
+#### Metadata
+  * type: ontology
+
+#### Ontology
+
+```turtle
+@prefix auth: <urn:reqvire:auth:> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+auth:AccessToken a owl:Class .
+auth:subject a owl:ObjectProperty .
+```
+
+````
+
+Requirement-owned shape contract:
+
+````markdown
+### Access Token Validation Shape Contract
+
+Defines the SHACL profile for one access-token validation requirement.
+
+#### Metadata
+  * type: semantic-contract
+
+#### Relations
+  * refine: [API Access Token Validation](AuthRequirements.md#api-access-token-validation)
+
+#### Shapes
+
+```turtle
+@prefix auth: <urn:reqvire:auth:> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+
+auth:AccessTokenValidationShape
+  a sh:NodeShape ;
+  sh:targetClass auth:AccessToken ;
+  sh:property [
+    sh:path auth:subject ;
+    sh:minCount 1 ;
+  ] .
+```
+````
+
+## Sources
+
+A `source` is a feature-owned refinement for stakeholder, regulatory, contractual, or external source material.
+
+Use sources to capture why a feature exists without turning the source text into implementation requirements.
+
+```markdown
+### OAuth Provider Token Source
+
+OAuth provider documentation defining access token claims, issuer, subject, and expiration semantics.
+
+#### Metadata
+  * type: source
+
+#### Relations
+  * refine: [API Authentication](Features.md#api-authentication)
+```
+
+## Governance Metadata
+
+Reqvire supports governance metadata directly on `feature` and `requirement` elements:
 
 ```markdown
 #### Metadata
-  * type: requirement
+  * type: feature
   * status: review
   * priority: high
   * risk: medium
-  * owner: Platform Team
+  * owner: Identity Team
 ```
 
-Governance metadata describes management context:
+| Key | Meaning | Accepted values |
+|-----|---------|-----------------|
+| `status` | Lifecycle state | `draft`, `review`, `approved` |
+| `priority` | Planning importance | `low`, `medium`, `high`, `critical` |
+| `risk` | Realization risk | `low`, `medium`, `high`, `critical` |
+| `owner` | Accountable person, role, or team | free-form string |
 
-- `status`: lifecycle state (`draft`, `review`, `approved`)
-- `priority`: planning importance (`low`, `medium`, `high`, `critical`)
-- `risk`: realization risk (`low`, `medium`, `high`, `critical`)
-- `owner`: accountable person, role, or team
+Defaults are `status: approved`, `priority: medium`, `risk: low`, and unassigned owner. Requirements inherit missing values from the nearest parent requirement or owning feature. Features inherit missing values from parent features.
 
-Defaults are `status: approved`, `priority: medium`, `risk: low`, and unassigned owner. Child requirements inherit missing values from their nearest parent requirement. Reqvire exposes the effective values in full search JSON output, MCP search results, and search summary counters while preserving only explicitly authored metadata in Markdown.
+Refinement and verification elements must not declare these governance keys; they receive governance context from their owning or related feature/requirement.
 
-Refinement elements and verification elements cannot declare these governance keys; they inherit context from their owning or related requirements.
+## Model Structure
+
+The canonical structure is:
+
+```text
+feature
+  derive -> feature
+  refinedBy -> source
+  attach -> ontology
+  specifiedBy -> requirement
+
+requirement
+  derive -> requirement
+  refinedBy -> specification / constraint / behavior / state / input-output
+  verifiedBy -> verification
+  satisfiedBy -> implementation/evidence
+```
+
+`derivedFrom` / `derive` stays inside the same family:
+
+- feature to feature,
+- requirement to requirement.
+
+`specify` / `specifiedBy` is the bridge between requirements and features.
 
 ## Requirement Containment
 
----
+Reqvire uses files and folders for physical organization, while feature and requirement relations define the logical model.
 
-Reqvire manages **requirement containment** through its **file and folder structure** rather than explicit containment relationships. This approach provides a natural and intuitive way to organize and group related requirements.
+Example:
 
-### Files and Folders as Containers
-
-In Reqvire, requirements are organized hierarchically using:
-
-- **Folders**: Directory structure represents major system areas, subsystems, or requirement categories.
-- **Files**: Markdown files serve as containers for requirements, typically grouping related requirements within a folder.
-
-This file-and-folder based containment approach offers several advantages:
-
-- **Natural hierarchy**: The directory structure directly reflects the containment relationships.
-- **Simplified management**: No need to maintain explicit containment links between requirements.
-- **Clear organization**: The physical location of a requirement in the documentation hierarchy shows its containment.
-- **Flexible grouping**: Requirements can be easily reorganized by moving them between files or folders.
-
-### Example Structure
-
-```
-project/
-├── Requirements.md              # Top-level user requirements
-│   ├── REQ_AUTH
-│   └── REQ_SECURITY
-└── Authentication/
-    ├── PasswordAuth.md          # Password authentication requirements
-    │   └── REQ_PASSWORD
-    └── OAuthAuth.md             # OAuth authentication requirements
-        └── REQ_OAUTH
+```text
+requirements/
+├── Features.md
+├── Identity/
+│   ├── Requirements.md
+│   ├── SemanticContracts.md
+│   └── Verifications.md
+└── Security/
+    ├── Requirements.md
+    ├── Sources.md
+    └── Verifications.md
 ```
 
 In this example:
-- Top-level `Requirements.md` file contains high-level user requirements
-- `Authentication/` folder contains detailed system requirements for the authentication subsystem
-- Each file groups related requirements
-- The `derivedFrom` relationship traces technical requirements back to user requirements
-- Organization follows **architectural decomposition** by subsystem/component rather than by artifact type
 
-## Diagram summary
+- `Features.md` contains product/capability anchors.
+- `Ontologies/Identity.md` contains shared ontology elements.
+- `Identity/Requirements.md` contains system obligations specified by identity features.
+- `Identity/Verifications.md` contains evidence that verifies requirements.
 
----
+## Verification and Coverage
 
-The diagram below demonstrates how requirements, their relationships, and hierarchical structures are organized within the **Reqvire methodology**. 
-It showcases the connection between stakeholder needs, user requirements, mission requirements, system requirements, and their links to verifications, specification documents, and other system elements.
+Requirements are verified. Features receive coverage by roll-up from requirements.
 
-```mermaid
-
-graph TD
-    subgraph Requirements Design
-  
-
-      subgraph System Requirements        
-        subgraph IDP
-
-            REQ_ENCRYPT["**REQ_ID**: 2.1<br>**Text**: The system shall encrypt authentication data."]
-            style REQ_ENCRYPT font-color:#000000,fill:#FFCCCC,stroke:#FF0000,stroke-width:2px;
-
-
-            REQ_SESSION["**REQ_ID**: 2.2<br>**Text**: The system shall manage user sessions securely."]
-            style REQ_SESSION font-color:#000000,fill:#FFCCCC,stroke:#FF0000,stroke-width:2px;
-
-
-
-            REQ_PASSWORD["**REQ_ID**: 1.1<br>**Text**: The system shall support password-based authentication."]
-            style REQ_PASSWORD font-color:#000000,fill:#FFCCCC,stroke:#FF0000,stroke-width:2px;
-
-            REQ_OAUTH["**REQ_ID**: 1.2<br>**Text**: The system shall support federated login using OAuth."]
-            style REQ_OAUTH font-color:#000000,fill:#FFCCCC,stroke:#FF0000,stroke-width:2px;
-
-
-            %% Verifications (verifies)
-            VerifyPasswordStrength["Verification: Password Strength Validation"]
-            style VerifyPasswordStrength fill:#CCFFCC,stroke:#008000,stroke-width:2px;
-
-        end 
-
-      end
-
-      subgraph Stakeholder Needs
-
-        subgraph Mission Requirements
-
-                MOE_CPD["MOE_CPD: Decrease Costs and Increase Profitability"]
-    
-                REQ_LIMITS["**REQ_ID**: 3<br>**Text**:Specification Design Document for Resource Rates and Limits"]
-                style REQ_LIMITS font-color:#000001,fill:#FFCCCC,stroke:#FF0000,stroke-width:2px;
-
-                SDD_LIMITS["SDD_LIMITS_AND_RATES: Specification Design Document: Limits and Rates"]
-                style SDD_LIMITS font-color:#000001,fill:#FFA500,stroke:#db9d00,stroke-width:2px;
-
-        end
-        subgraph User Requirements
-
-                MOE_CR["MOE_CR: Maintain High Customer Retention by Reducing Churn"]
-                USER_STORY_PASSWORD["User Story: User Sign-Up and Sign-In"]
-                style USER_STORY_PASSWORD fill:#FFFF99,stroke:#FFD700,stroke-width:2px;
-    
-                REQ_AUTH["**REQ_ID**: 1<br>**Text**: The system shall provide user authentication."]
-                style REQ_AUTH font-color:#000000,fill:#FFCCCC,stroke:#FF0000,stroke-width:2px;  
-    
-                REQ_SECURITY["**REQ_ID**: 2<br>**Text**: The system shall ensure authentication security."]
-                style REQ_SECURITY font-color:#000001,fill:#FFCCCC,stroke:#FF0000,stroke-width:2px;
-
-        end    
-    end 
-
-    MOE_CPD -.->|trace| REQ_LIMITS
-    SDD_LIMITS -.->|satisfiedBy| REQ_LIMITS
-
-    MOE_CR -.->|trace| USER_STORY_PASSWORD
-    REQ_AUTH -.->|derivedFrom| USER_STORY_PASSWORD
-    REQ_SECURITY -.->|derivedFrom| USER_STORY_PASSWORD
-
-    %% Relationships
-    REQ_ENCRYPT -.->|derivedFrom| REQ_SECURITY
-    REQ_SESSION -.->|derivedFrom| REQ_SECURITY
-
-
-    REQ_PASSWORD -.->|derivedFrom| REQ_AUTH
-    REQ_OAUTH -.->|derivedFrom| REQ_AUTH
-
-
-    VerifyPasswordStrength -.->|verifiedBy| REQ_PASSWORD
-
-
-    %% Click Actions
-    click VerifyPasswordStrength href "https://example.com/docs/test-case-222" "Test Case Documentation"
-    click USER_STORY_PASSWORD href "https://example.com/docs/user-story-password-login" "User Story Documentation"
-    click USER_STORY_OAUTH href "https://example.com/docs/user-story-google-login" "User Story Documentation"
-    click AuthenticationSubsystem href "https://example.com/docs/authentication-subsystem" "Subsystem Documentation"
-    click LoginBehavior href "https://example.com/docs/login-behavior" "Behavior Documentation"
-
-
-
-
-end
-
+```text
+Feature
+  specifiedBy -> Requirement
+    verifiedBy -> Verification
+    satisfiedBy -> Code or evidence
 ```
 
-
-
+Implementation coverage applies to `requirement` elements. Feature coverage is computed from the requirements under the feature.

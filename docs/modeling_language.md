@@ -4,175 +4,56 @@ nav_order: 6
 title: Modeling Language
 ---
 
-## Table of Contents
-{:.no_toc}
-
-* TOC
-{:toc}
-
----
-
 ## Reqvire Modeling Language
 
----
+Reqvire uses semi-structured Markdown as a lightweight MBSE modeling language. Models stay readable in Git while still being machine-validated, queryable, and useful as context for coding assistants.
 
-Reqvire uses a lightweight modeling language based on **semi-structured Markdown**, inspired by SysML core concepts.
-
-### Why Markdown Matters
-
-By sticking to a semi-structured Markdown format:
-- Models are inherently human-readable, serving as living documentation alongside your code
-- Models can be used as-is by AI tools like ChatGPT, Claude, or local models
-
-This makes Reqvire models powerful for both humans and **highly interoperable with AI systems**, whether embedded in CI/CD, editors, or code review bots.
-
-### Model Structure
+## Core Elements
 
 Each Reqvire model consists of:
 
-- **Requirements** – User requirements and system requirements organized in a hierarchical structure through derivation relations
-- **Verifications** – Test verifications, formal proof verifications, analysis verifications, inspection verifications, and demonstration verifications linked to requirements
-- **Relations** – Explicit connections between elements including derivedFrom (requirement hierarchy), verifiedBy/verify (requirement-verification links), satisfiedBy (requirement-implementation links), refinedBy/refine (requirement-refinement links), and trace (soft traceability)
-- **Files and Folders** – Organizational structure using Markdown files and folders to group related elements
+- **Features** - product/capability, stakeholder, regulatory, or external-context anchors.
+- **Requirements** - implementable system obligations that specify features.
+- **Ontologies** - first-class OWL/Turtle vocabulary and reusable semantic model terms.
+- **Feature refinements** - `source` context owned by a feature.
+- **Requirement refinements** - `semantic-contract`, `specification`, `constraint`, `behavior`, `state`, and `input-output`.
+- **Verifications** - evidence that requirements are satisfied by tests, proofs, analysis, inspection, or demonstration.
+- **Relations** - explicit links between model elements and implementation/evidence artifacts.
+- **Files and folders** - physical organization for model content.
 
-Elements are defined using simple Markdown headers (`###`) with metadata and relations specified in subsections.
+Elements are defined using `###` Markdown headers. Metadata, relations, details, and attachments are represented as reserved `####` subsections.
 
-### Hierarchy Ownership Rule
+## Feature and Requirement Ownership
 
-Reqvire enforces a single-root hierarchy ownership rule for requirements:
-- Every requirement hierarchy chain must resolve to exactly one top root `user-requirement`
-- Models that resolve a requirement to multiple top roots are invalid
-- Use `reqvire validate` to detect and fix ownership violations
+Reqvire enforces feature-rooted ownership:
 
-### Document Structure
+- A `feature` may be a root.
+- A feature may derive from another feature.
+- A requirement must resolve to exactly one owning feature.
+- A top-level requirement connects to its owning feature through `specify`.
+- A child requirement may inherit ownership through `derivedFrom` to another requirement.
+- Cross-feature semantic dependencies must be explicit attachments so change impact is preserved.
 
-#### Elements
+This keeps ownership, change impact, and coverage roll-up auditable.
 
-An **Element** is a uniquely identifiable system element within a Markdown document. It starts with a `###` header and includes all content under that header until the next header of the same or higher hierarchy.
+Feature roots should remain real capability roots, not universal buckets. Use one top feature when its requirements truly specify the same capability. Use subfeatures only when the capability has meaningful product, interface, stakeholder, regulatory, or domain slices that need independent ownership or collection. Reuse shared ontology through explicit ontology attachments across feature roots instead of placing unrelated requirements under the same feature hierarchy.
 
-**Element names must be globally unique** across all files in your model. This ensures stable element identity when elements are moved between files.
+## Document Structure
 
-**Element structure:**
-1. Element Header (`###`) - Defines the start of an element
-2. Element Content - Description and details
-3. Subsections (`####`) - Metadata, Relations, Details
+Model files must begin with one of these level-1 headings:
 
-#### Metadata
-
-Metadata is defined in a subsection with the header `#### Metadata` and contains properties as list items:
-
-```markdown
-#### Metadata
-  * type: requirement
-  * priority: high
-```
-
-**Reserved properties:**
-- `type` - Defines the element type (requirement, user-requirement, verification, etc.)
-- `status`, `priority`, `risk`, `owner` - Requirement governance metadata, valid only on requirement-family elements
-
-Requirement governance metadata has these meanings:
-
-| Key | Meaning | Accepted values |
-|-----|---------|-----------------|
-| `status` | Requirement lifecycle state | `draft`, `review`, `approved` |
-| `priority` | Planning importance | `low`, `medium`, `high`, `critical` |
-| `risk` | Realization risk | `low`, `medium`, `high`, `critical` |
-| `owner` | Accountable person, role, or team | free-form string |
-
-Defaults are `status: approved`, `priority: medium`, `risk: low`, and unassigned owner. Child requirements inherit missing governance fields from their nearest parent requirement. Inherited and default values appear in search JSON, MCP search results, and search summaries, but formatting only writes metadata that was explicitly authored.
-
-Refinement and verification elements must not author requirement governance metadata. Refinements receive governance context from their owning requirement through `refinedBy` / `refine`.
-
-#### Relations
-
-Relations are defined in a subsection with the header `#### Relations` and contain links to related elements:
-
-```markdown
-#### Relations
-  * derivedFrom: [Parent Requirement](file.md#parent-requirement)
-  * verifiedBy: [Test Verification](verifications.md#test-name)
-  * satisfiedBy: src/implementation.rs
-  * refinedBy: [Rate Limit Constraint](constraints.md#rate-limit-constraint)
-```
-
-**Supported relation types:**
-
-| Relation | Direction | Description |
-|----------|-----------|-------------|
-| `derivedFrom` | Child → Parent | Requirement hierarchy (child derives from parent) |
-| `verifiedBy` | Requirement → Verification | Links requirement to its verifications |
-| `verify` | Verification → Requirement | Links verification to requirements it verifies |
-| `satisfiedBy` | Requirement or evidence-backed verification → Implementation/evidence | Links to code files, test implementations, proof artifacts, generated fixtures, or other artifacts that satisfy the requirement or verification evidence |
-| `refinedBy` | Requirement → Refinement | Links requirement to its refinement elements (specification, constraint, behavior, state, input-output) establishing ownership |
-| `refine` | Refinement → Requirement | Links refinement element back to its owning requirement (auto-generated from refinedBy) |
-| `trace` | Element → Element | Soft traceability link between elements |
-
-#### Attachments
-
-Attachments are defined in a subsection with the header `#### Attachments` and contain references to Refinement elements:
-
-```markdown
-#### Attachments
-  * [Constraint Definition](#memory-constraint)
-  * [Constraint Definition](constraints.md#memory-constraint)
-```
-
-**Supported attachment targets:**
-- **Refinement element identifiers** - References to Refinement elements (constraint, behavior, specification, state, input-output)
-
-**Attachment scope constraints for Refinement elements:**
-1. **Satisfied Refinement Constraint** - Refinements must have a `refine` relation (establishing an owner requirement via `refinedBy`) before they can be attached
-2. **Hierarchical Independence Constraint** - Attachments are only allowed from requirements **outside** the owner's derivation hierarchy
-
-These constraints ensure that:
-- The owner requirement uses `refinedBy` to define ownership
-- Requirements in the same hierarchy access refinements through the hierarchy relationship
-- Cross-hierarchy attachments enable requirements from separate branches to reference shared specifications
-
-### Element Types
-
-Element types are identified through the `type` metadata property:
-
-**Requirement Types:**
-- **requirement** - System requirement
-- **user-requirement** - User requirement
-
-**Verification Types:**
-- **verification** / **test-verification** - Verification through testing
-- **analysis-verification** - Verification through analysis
-- **inspection-verification** - Verification through inspection
-- **demonstration-verification** - Verification through demonstration
-- **formal-proof-verification** - Verification through formal proof, model checking, theorem proving, generated fixtures, or proof reports
-
-**Refinement Types:**
-- **constraint** - Design or implementation constraint
-- **behavior** - Behavioral specification
-- **specification** - Detailed specification document
-- **state** - Lifecycle states, state machines, allowed transitions, terminal states, and state-dependent contracts
-- **input-output** - Payloads, messages, documents, schemas, fixtures, and data contracts
-
-Refinement elements are special elements that **can only have `refine` relations** pointing to requirements. They are used to provide additional detail and can be attached to requirements via the Attachments subsection. **Refinement elements cannot have their own Attachments subsection** - they are atomic documentation units meant to be attached to requirements, not to have attachments themselves.
-
-### Type Determination
-
-If no explicit type is specified, Reqvire uses intelligent defaults:
-- Files in `Verifications/` directories default to `verification`
-- Other files default to `requirement`
-
-### File Header Requirement
-
-Reqvire supports two model file formats. A model file must begin with one of these first level-1 headings:
-- `# Elements` for multi-element files
-- `# Documents` for single-element document files
-
-Files without a supported first heading are ignored during model parsing.
+- `# Elements` for files containing multiple elements.
+- `# Documents` for a single document-style element.
 
 ```markdown
 # Elements
 
-### My Requirement
-...
+### My Feature
+
+Feature scope.
+
+#### Metadata
+  * type: feature
 ```
 
 ```markdown
@@ -184,403 +65,252 @@ Files without a supported first heading are ignored during model parsing.
 ## Relations
   * refine: [Some Requirement](Requirements.md#some-requirement)
 
-## MyDocumentElement
+## My Document Element
 Any markdown content is allowed here.
 ```
 
-### Example Document
+Element names must be globally unique across the model. Reqvire uses stable element identifiers so links can survive file moves and renames.
+
+## Metadata
+
+Metadata is defined in a `#### Metadata` subsection:
 
 ```markdown
+#### Metadata
+  * type: requirement
+  * priority: high
+  * owner: Platform Team
+```
+
+Reserved metadata:
+
+- `type` - element type.
+- `status`, `priority`, `risk`, `owner` - governance metadata, valid only on `feature` and `requirement` elements.
+
+Governance metadata defaults:
+
+| Key | Default | Accepted values |
+|-----|---------|-----------------|
+| `status` | `approved` | `draft`, `review`, `approved` |
+| `priority` | `medium` | `low`, `medium`, `high`, `critical` |
+| `risk` | `low` | `low`, `medium`, `high`, `critical` |
+| `owner` | unassigned | free-form string |
+
+Requirements inherit missing governance fields from the nearest parent requirement or owning feature. Features inherit missing values from parent features.
+
+Refinements and verifications must not declare governance metadata.
+
+## Element Types
+
+| Category | Type | Purpose |
+|----------|------|---------|
+| Feature | `feature` | Product/capability, stakeholder, regulatory, or external-context anchor |
+| Requirement | `requirement` | Implementable system obligation |
+| Ontology | `ontology` | OWL/Turtle vocabulary, concept, relation, and semantic model definitions |
+| Feature refinement | `source` | Stakeholder, regulatory, contractual, or external source material |
+| Requirement refinement | `semantic-contract` | Requirement-owned SHACL shape profile over reachable ontology |
+| Requirement refinement | `specification` | Detailed technical specification |
+| Requirement refinement | `constraint` | Limit or boundary |
+| Requirement refinement | `behavior` | Behavioral contract |
+| Requirement refinement | `state` | Lifecycle states, state machines, transitions, and state-dependent contracts |
+| Requirement refinement | `input-output` | Payloads, messages, schemas, fixtures, and data contracts |
+| Verification | `test-verification` | Test evidence; requires `satisfiedBy` |
+| Verification | `formal-proof-verification` | Proof/model-checking/theorem/fixture/report evidence; requires `satisfiedBy` |
+| Verification | `analysis-verification` | Analysis evidence |
+| Verification | `inspection-verification` | Inspection evidence |
+| Verification | `demonstration-verification` | Demonstration evidence |
+
+If no type is specified, normal model files default to `requirement`. Files in `Verifications/` directories default to verification.
+
+## Relations
+
+Relations are defined in `#### Relations`:
+
+```markdown
+#### Relations
+  * specify: [Parent Feature](Features.md#parent-feature)
+  * verifiedBy: [Contract Test](Verifications.md#contract-test)
+  * satisfiedBy: [implementation.rs](../src/implementation.rs)
+  * refinedBy: [Payload Contract](Contracts.md#payload-contract)
+```
+
+Supported core relations:
+
+| Relation | Direction | Description |
+|----------|-----------|-------------|
+| `derivedFrom` | child -> parent | Hierarchy inside the same family: feature-to-feature, requirement-to-requirement, or ontology-to-ontology |
+| `derive` | parent -> child | Inverse hierarchy relation |
+| `specify` | requirement -> feature | Requirement specifies a feature |
+| `specifiedBy` | feature -> requirement | Feature is specified by a requirement |
+| `verifiedBy` | requirement -> verification | Requirement is verified by a verification element |
+| `verify` | verification -> requirement | Verification verifies a requirement |
+| `satisfiedBy` | requirement or evidence-backed verification -> artifact | Links implementation or evidence artifacts |
+| `satisfy` | artifact -> requirement or evidence-backed verification | Inverse satisfaction relation |
+| `refinedBy` | owner -> refinement | Feature or requirement owns a subtype-compatible refinement |
+| `refine` | refinement -> owner | Refinement points to its owner |
+| `trace` | any -> any | Soft traceability |
+
+Feature-owned refinements:
+
+- `feature refinedBy source`
+
+Requirement-owned refinements:
+
+- `requirement refinedBy semantic-contract`
+- `requirement refinedBy specification`
+- `requirement refinedBy constraint`
+- `requirement refinedBy behavior`
+- `requirement refinedBy state`
+- `requirement refinedBy input-output`
+
+## Attachments
+
+Attachments reference existing ontology elements or compatible requirement-owned refinements across explicit subgraph boundaries:
+
+```markdown
+#### Attachments
+  * [Access Token Ontology](AuthContracts.md#access-token-ontology)
+```
+
+Attachment rules:
+
+- Features may attach `ontology` elements.
+- Requirements may attach `semantic-contract`, `specification`, `constraint`, `behavior`, `state`, or `input-output` refinements owned by other requirement subgraphs.
+- Refinements must already have a `refine` owner relation before they can be attached. Ontology elements are not refinements and are attached directly.
+- Attachments are used for cross-boundary contracts; elements in the same hierarchy use ownership relations instead.
+
+## Ontologies, Concept References, and Semantic Contracts
+
+Use `ontology` elements for reusable meaning:
+
+- `ontology` requires exactly one `#### Ontology` fenced Turtle block.
+- Authored ontology elements should live under `requirements/Ontologies`, not inside feature files.
+- Ontology elements can use `derive` / `derivedFrom` only with other ontology elements.
+- Ontology elements do not author `#### Attachments`.
+- Features attach ontology elements to make terms reachable for descendant features and specifying requirements.
+
+Use `#### Concept References` when requirement prose needs readable labels bound to ontology terms:
+
+```markdown
+#### Concept References
+  * Service Endpoint: api:ServiceEndpoint
+```
+
+Use `semantic-contract` elements only as requirement-owned SHACL profiles:
+
+- `semantic-contract` must refine a requirement.
+- `#### Shapes` is required.
+- `#### Ontology` is forbidden.
+
+Reqvire validates ontology and semantic contract content by parsing Turtle and running lightweight SHACL sanity checks:
+
+- malformed Turtle is rejected,
+- duplicate ontology term declarations are rejected,
+- conflicting declarations are rejected,
+- SHACL references must resolve through reachable ontology context,
+- references to terms in another feature subgraph require an explicit ontology attachment.
+
+Use ontology when content defines domain meaning, vocabulary, object structure, or semantic relationships. Use requirement-owned semantic contracts when one obligation needs a SHACL profile over reachable ontology. Use requirements for system obligations.
+
+## Example
+
+````markdown
 # Elements
 
-### User Login
+### API Authentication
 
-The system shall provide secure user authentication using username and password.
+API authentication capability and access-token domain context.
 
 #### Metadata
-  * type: user-requirement
+  * type: feature
+
+#### Attachments
+  * [Access Token Ontology](#access-token-ontology)
 
 #### Relations
-  * verifiedBy: [Login Test](../tests/auth.md#login-test)
-
-#### Details
-
-- Passwords must be hashed using bcrypt
-- Failed login attempts shall be logged
-- Account lockout after 5 failed attempts
+  * specifiedBy: [API Access Token Validation](#api-access-token-validation)
 
 ---
 
-### Password Validation
+### Access Token Ontology
 
-The system shall validate password complexity before accepting registration.
+Defines access token domain meaning.
+
+#### Metadata
+  * type: ontology
+
+#### Ontology
+
+```turtle
+@prefix auth: <urn:reqvire:auth:> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+auth:AccessToken a owl:Class .
+auth:subject a owl:ObjectProperty .
+```
+
+---
+
+### API Access Token Validation
+
+The system shall reject API requests whose access token does not conform to the access token semantic contract.
 
 #### Metadata
   * type: requirement
 
-#### Relations
-  * derivedFrom: [User Login](#user-login)
-  * verifiedBy: [Password Validation Test](../tests/auth.md#password-test)
-  * satisfiedBy: src/auth/password.rs
-
----
-```
-
-### Organizational Approaches
-
-Reqvire supports flexible organization:
-
-**Separate repositories:**
-```
-requirements/
-  └── Requirements.md
-src/
-  └── implementation.rs
-```
-
-**Co-located with code:**
-```
-src/
-  ├── authentication/
-  │   ├── Requirements.md
-  │   └── auth.rs
-```
-
-**Mixed approach:**
-```
-requirements/          # High-level requirements
-  └── UserRequirements.md
-src/
-  ├── module/
-  │   ├── Requirements.md  # Detailed requirements
-  │   └── implementation.rs
-```
-
-The co-location approach provides additional benefits for developers and AI coding assistants by placing requirements directly alongside the code they describe.
-
----
-
-## Requirements
-
-### Conceptual Overview
-
-Reqvire is a tool, framework, and methodology for requirements management. In Reqvire, a **requirement** represents a stakeholder's need, system capability, or constraint that the system must fulfill. Requirements define:
-
-- **What** the system must do
-- **How** the system does it (including functional implementation details and non-functional aspects such as performance, security, and quality attributes)
-
-These requirements serve as the foundation for system design, development, and verification.
-
-Reqvire enforces a **consistent structure** for organizing and presenting requirements across the project. However, it does **not impose a specific syntax** for how the content of requirements is written. This provides flexibility for teams to tailor requirement expressions based on project context.
-
-The use of structured syntaxes like **EARS (Easy Approach to Requirements Syntax)** is encouraged to enhance clarity and consistency but is **not mandatory**.
-
-For detailed specifications on document structure and formatting, refer to: [Specifications](https://github.com/reqvire-org/reqvire/blob/main/requirements/SpecificationsRequirements.md).
-
-### Requirement Types and Classification
-
-Reqvire organizes requirements into **two main categories**:
-
-- **User Requirements**
-  (includes Stakeholder Needs, Mission Requirements, User Stories, and other WHAT-focused requirements)
-
-- **System Requirements**
-  (detailed technical and functional specifications describing HOW the system will fulfill user needs)
-
-This structure supports a **progressive refinement** approach, ensuring traceability from high-level stakeholder expectations down to technical implementation.
-
-### User Requirements
-
-**User requirements** represent **stakeholder needs**, **mission objectives**, **user expectations**, and **WHAT-focused requirements**. These describe *what* the system must do from an external point of view, without specifying technical implementation details.
-
-User requirements include:
-
-- **Stakeholder needs**: High-level expressions of expectations from users, customers, operators, and regulatory bodies.
-- **Mission requirements**: Enterprise-level objectives the system must support.
-- **User stories**: Informal narratives that describe system interactions or functionalities from a user's perspective.
-- **WHAT-focused requirements**: Formalized requirements that define system capabilities, behaviors, or constraints without dictating the solution approach.
-
-User requirements serve as the **foundation for system design**, ensuring that all stakeholder concerns and operational goals are captured before technical development begins.
-
-### System Requirements
-
-**System requirements** specify **HOW** the system will fulfill the user and mission requirements. They define detailed **technical** and **functional** specifications, covering:
-
-- System behaviors
-- Performance criteria
-- Interfaces and data flows
-- Design and regulatory constraints
-
-System requirements are derived from user requirements and are structured to map directly to **subsystems** or **components** of the overall system, ensuring **modularity** and **traceability**.
-
-### Requirement Containment
-
-Reqvire manages **requirement containment** through its **file and folder structure** rather than explicit containment relationships. This approach provides a natural and intuitive way to organize and group related requirements.
-
-#### Files and Folders as Containers
-
-In Reqvire, requirements are organized hierarchically using:
-
-- **Folders**: Directory structure represents major system areas, subsystems, or requirement categories.
-- **Files**: Markdown files serve as containers for requirements, typically grouping related requirements within a folder.
-
-This file-and-folder based containment approach offers several advantages:
-
-- **Natural hierarchy**: The directory structure directly reflects the containment relationships.
-- **Simplified management**: No need to maintain explicit containment links between requirements.
-- **Clear organization**: The physical location of a requirement in the documentation hierarchy shows its containment.
-- **Flexible grouping**: Requirements can be easily reorganized by moving them between files or folders.
-
-#### Example Structure
-
-```
-project/
-├── Requirements.md              # Top-level user requirements
-│   ├── REQ_AUTH
-│   └── REQ_SECURITY
-└── Authentication/
-    ├── PasswordAuth.md          # Password authentication requirements
-    │   └── REQ_PASSWORD
-    └── OAuthAuth.md             # OAuth authentication requirements
-        └── REQ_OAUTH
-```
-
-In this example:
-- Top-level `Requirements.md` file contains high-level user requirements
-- `Authentication/` folder contains detailed system requirements for the authentication subsystem
-- Each file groups related requirements
-- The `derivedFrom` relationship traces technical requirements back to user requirements
-- Organization follows **architectural decomposition** by subsystem/component rather than by artifact type
-
-### Diagram Summary
-
-The diagram below demonstrates how requirements, their relationships, and hierarchical structures are organized within the **Reqvire methodology**.
-It showcases the connection between stakeholder needs, user requirements, mission requirements, system requirements, and their links to verifications, specification documents, and other system elements.
-
-```mermaid
-graph TD
-    subgraph Requirements Design
-
-
-      subgraph System Requirements
-        subgraph IDP
-
-            REQ_ENCRYPT["**REQ_ID**: 2.1<br>**Text**: The system shall encrypt authentication data."]
-            style REQ_ENCRYPT font-color:#000000,fill:#FFCCCC,stroke:#FF0000,stroke-width:2px;
-
-
-            REQ_SESSION["**REQ_ID**: 2.2<br>**Text**: The system shall manage user sessions securely."]
-            style REQ_SESSION font-color:#000000,fill:#FFCCCC,stroke:#FF0000,stroke-width:2px;
-
-
-
-            REQ_PASSWORD["**REQ_ID**: 1.1<br>**Text**: The system shall support password-based authentication."]
-            style REQ_PASSWORD font-color:#000000,fill:#FFCCCC,stroke:#FF0000,stroke-width:2px;
-
-            REQ_OAUTH["**REQ_ID**: 1.2<br>**Text**: The system shall support federated login using OAuth."]
-            style REQ_OAUTH font-color:#000000,fill:#FFCCCC,stroke:#FF0000,stroke-width:2px;
-
-
-            %% Verifications (verifies)
-            VerifyPasswordStrength["Verification: Password Strength Validation"]
-            style VerifyPasswordStrength fill:#CCFFCC,stroke:#008000,stroke-width:2px;
-
-        end
-
-      end
-
-      subgraph Stakeholder Needs
-
-        subgraph Mission Requirements
-
-                MOE_CPD["MOE_CPD: Decrease Costs and Increase Profitability"]
-
-                REQ_LIMITS["**REQ_ID**: 3<br>**Text**:Specification Design Document for Resource Rates and Limits"]
-                style REQ_LIMITS font-color:#000001,fill:#FFCCCC,stroke:#FF0000,stroke-width:2px;
-
-                SDD_LIMITS["SDD_LIMITS_AND_RATES: Specification Design Document: Limits and Rates"]
-                style SDD_LIMITS font-color:#000001,fill:#FFA500,stroke:#db9d00,stroke-width:2px;
-
-        end
-        subgraph User Requirements
-
-                MOE_CR["MOE_CR: Maintain High Customer Retention by Reducing Churn"]
-                USER_STORY_PASSWORD["User Story: User Sign-Up and Sign-In"]
-                style USER_STORY_PASSWORD fill:#FFFF99,stroke:#FFD700,stroke-width:2px;
-
-                REQ_AUTH["**REQ_ID**: 1<br>**Text**: The system shall provide user authentication."]
-                style REQ_AUTH font-color:#000000,fill:#FFCCCC,stroke:#FF0000,stroke-width:2px;
-
-                REQ_SECURITY["**REQ_ID**: 2<br>**Text**: The system shall ensure authentication security."]
-                style REQ_SECURITY font-color:#000001,fill:#FFCCCC,stroke:#FF0000,stroke-width:2px;
-
-        end
-    end
-
-    MOE_CPD -.->|trace| REQ_LIMITS
-    SDD_LIMITS -.->|satisfiedBy| REQ_LIMITS
-
-    MOE_CR -.->|trace| USER_STORY_PASSWORD
-    REQ_AUTH -.->|derivedFrom| USER_STORY_PASSWORD
-    REQ_SECURITY -.->|derivedFrom| USER_STORY_PASSWORD
-
-    %% Relationships
-    REQ_ENCRYPT -.->|derivedFrom| REQ_SECURITY
-    REQ_SESSION -.->|derivedFrom| REQ_SECURITY
-
-
-    REQ_PASSWORD -.->|derivedFrom| REQ_AUTH
-    REQ_OAUTH -.->|derivedFrom| REQ_AUTH
-
-
-    VerifyPasswordStrength -.->|verifiedBy| REQ_PASSWORD
-
-
-    %% Click Actions
-    click VerifyPasswordStrength href "https://example.com/docs/test-case-222" "Test Case Documentation"
-    click USER_STORY_PASSWORD href "https://example.com/docs/user-story-password-login" "User Story Documentation"
-    click USER_STORY_OAUTH href "https://example.com/docs/user-story-google-login" "User Story Documentation"
-    click AuthenticationSubsystem href "https://example.com/docs/authentication-subsystem" "Subsystem Documentation"
-    click LoginBehavior href "https://example.com/docs/login-behavior" "Behavior Documentation"
-
-
-
-
-end
-
-```
-
-### Visual Representation
-
-Reqvire automatically generates visual representations of requirements and their relationships using Mermaid diagrams. For more information on diagrams, see the [User Guide](./user_guide.md#diagrams) and [Specifications](https://github.com/reqvire-org/reqvire/blob/main/requirements/SpecificationsRequirements.md).
-
----
-
-## Verifications
-
-### Conceptual Overview
-
-In Reqvire, **verification** is the process of confirming that a system or its components meet specified **requirements**. Verification ensures that the system has been **built right**, checking whether it conforms to the defined functional and non-functional requirements at each level of system decomposition.
-
-Verification activities are integrated into the **requirements structure**, maintaining clear **traceability** between requirements and their associated **verification methods** and **test artifacts**.
-
-### Verification Element Types
-
-Reqvire supports several verification element types that align with standard systems engineering verification methods:
-
-#### Primary Verification Types
-- **verification** - Default verification through testing (equivalent to test-verification)
-- **test-verification** - Formal testing with documented test procedures and expected outcomes
-- **analysis-verification** - Verification through systematic analysis of documentation or code without physical testing
-- **inspection-verification** - Verification through formal examination of documentation, code, or physical components
-- **demonstration-verification** - Verification through showing functionality in an operational-like environment
-
-#### Relation Requirements by Verification Type
-- **test-verification**: MUST have `satisfiedBy` relations pointing to actual test implementations
-- **analysis-verification, inspection-verification, demonstration-verification**: Do NOT require `satisfiedBy` relations (considered satisfied by default)
-- **trace relations**: Always allowed for any verification type
-
-### Coverage Philosophy
-
-Reqvire uses a **Verification Roll-up approach**, where verification of detailed requirements provides coverage for their parent requirements through the requirements hierarchy.
-
-#### Leaf Requirements Focus
-
-Reqvire's verification coverage focuses on **leaf requirements** - requirements that do not have forward relations to other requirements. These represent the actual testable functionality.
-
-**Preferable Verification Approach:**
-
-The recommended strategy is to **verify leaf requirements** rather than intermediate or parent requirements. This approach provides several key advantages:
-
-- **Verification Roll-up**: When leaf requirements are verified, their verification status automatically rolls up through the traceability chain to cover all parent requirements up to the root
-- **Efficiency**: A single verification can verify multiple leaf requirements, providing coverage for entire requirement chains
-- **Coverage Completeness**: Verifying the most detailed, specific requirements ensures that all higher-level requirements they derive from are implicitly verified
-- **Clear Test Scope**: Leaf requirements represent concrete, testable functionality with well-defined acceptance criteria
-
-**Coverage Rules:**
-- **Leaf requirements** MUST be verified - these represent the actual testable functionality
-- **Parent/intermediate requirements** MAY be verified but it's not necessary as they are covered through verification of their leaf requirements
-- One verification may verify multiple leaf requirements (N:1 relationship), covering entire chains of parent requirements
-
-#### Coverage Metrics
-The verification coverage system tracks:
-- **Verified leaf requirements**: Leaf requirements with `verifiedBy` relations pointing to verification elements
-- **Satisfied evidence-backed verifications**: Test-verification and formal-proof-verification elements with `satisfiedBy` relations pointing to actual test implementations or proof evidence
-- **Unsatisfied evidence-backed verifications**: Test-verification and formal-proof-verification elements missing `satisfiedBy` relations (flagged as incomplete)
-- **Coverage percentages**: Calculated separately for leaf requirements verification and evidence-backed verification satisfaction
-
-### Two-Level Verification System
-
-Reqvire implements a two-level verification approach:
-
-1. **Requirements → Verifications**: Requirements link to verification elements via `verifiedBy` relations
-2. **Evidence-backed Verifications → Evidence Artifacts**: Test-verification and formal-proof-verification elements link to actual test scripts, proof artifacts, theorem files, generated fixtures, or proof reports via `satisfiedBy` relations
-
-```markdown
-### My Requirement
-The system shall process data within 500ms.
+#### Concept References
+  * Access Token: auth:AccessToken
 
 #### Relations
-  * verifiedBy: [Performance Test](tests/PerformanceTests.md#response-time-test)
+  * specify: [API Authentication](#api-authentication)
+  * refinedBy: [Access Token Validation Shape Contract](#access-token-validation-shape-contract)
+  * verifiedBy: [Access Token Contract Test](#access-token-contract-test)
+  * satisfiedBy: [auth_middleware.rs](../src/auth_middleware.rs)
 
 ---
 
-### Performance Test
-This test verifies response time requirements.
+### Access Token Validation Shape Contract
+
+Defines the SHACL profile for the access-token validation obligation.
+
+#### Metadata
+  * type: semantic-contract
+
+#### Relations
+  * refine: [API Access Token Validation](#api-access-token-validation)
+
+#### Shapes
+
+```turtle
+@prefix auth: <urn:reqvire:auth:> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+
+auth:AccessTokenValidationShape
+  a sh:NodeShape ;
+  sh:targetClass auth:AccessToken ;
+  sh:property [
+    sh:path auth:subject ;
+    sh:minCount 1 ;
+  ] .
+```
+
+---
+
+### Access Token Contract Test
+
+Test verifies access tokens conform to the semantic contract.
 
 #### Metadata
   * type: test-verification
 
 #### Relations
-  * verify: [My Requirement](Requirements.md#my-requirement)
-  * satisfiedBy: [test.sh](../../tests/test-performance/test.sh)
-```
+  * verify: [API Access Token Validation](#api-access-token-validation)
+  * satisfiedBy: [test_access_token.rs](../tests/test_access_token.rs)
+````
 
-#### Bidirectional Traceability
-Reqvire automatically maintains bidirectional relations:
-- When a requirement has `verifiedBy: [Test A]`, the Test A element shows `verify: [Requirement]`
-- This ensures complete traceability in both directions
+## Related Pages
 
-### Verification Coverage
-
-Generate coverage reports to track both verification status and implementation coverage of your requirements.
-
-#### Coverage Command
-
-```bash
-# Generate coverage report
-reqvire coverage
-
-# Generate JSON coverage report for programmatic analysis
-reqvire coverage --json
-```
-
-The coverage report includes a **verification coverage** section focused on leaf requirements:
-- Percentage of verified/unverified leaf requirements
-- Breakdown by file
-- Breakdown by verification type
-- Test-verification satisfaction status
-
-It also includes a **requirement implementation coverage** section.
-
-Implementation coverage rules, scope, and output details are documented in:
+- [Requirements](requirements.md)
+- [Verifications](verifications.md)
 - [Implementation Coverage](implementation_coverage.md)
-
-#### Coverage Strategy
-
-The coverage system implements the **verification roll-up approach**:
-
-- **Leaf requirements** MUST be verified - these represent the actual testable functionality
-- **Parent requirements** are automatically covered when their leaf requirements are verified
-- One verification can verify multiple leaf requirements, providing coverage for entire requirement chains
-- **Evidence-backed verifications** (`test-verification` and `formal-proof-verification`) require `satisfiedBy` relations to actual test implementations or proof evidence
-- **Analysis/inspection/demonstration verifications** are considered satisfied by default (no `satisfiedBy` required)
-
-#### Coverage Flags
-
-The coverage system will flag:
-- ✅ **Satisfied test-verifications**: Those with valid `satisfiedBy` relations to test implementations
-- ❌ **Unsatisfied test-verifications**: Those missing `satisfiedBy` relations
-- ✅ **Satisfied formal-proof-verifications**: Those with valid `satisfiedBy` relations to proof evidence
-- ❌ **Unsatisfied formal-proof-verifications**: Those missing `satisfiedBy` relations
-- ✅ **Analysis/inspection/demonstration verifications**: Considered satisfied by default (no `satisfiedBy` required)
+- [Submodels and Subgraphs](submodels.md)

@@ -149,6 +149,8 @@ When `--output` is used, a confirmation message is printed to stdout and the JSO
 
 The `--output` option is available on all commands that support `--json`: `format`, `validate`, `search`, `change-impact`, `traces`, `coverage`, `model`, `submodels`, `lint`, `add`, `rm`, `mv`, `rename`, `merge`, `mv-file`, `link`, `unlink`, `relink`, `mv-asset`, `rm-asset`, `containment`, `resources`, and `collect`.
 
+The `ontologies` command also supports `--output <FILE>` for Turtle or JSON-LD output.
+
 ---
 
 ## File Exclusion Patterns
@@ -262,11 +264,11 @@ The combination of containment structure and explicit relations creates the full
 
 Requirements are organized in hierarchical levels within the markdown structure:
 
-- **Level 1 requirements** are root-level requirements that don't have parent relations. These are typically found at the top level of your main requirements file.
-- **Level 2 requirements** (children of level 1) are usually **user requirements** - high-level stakeholder needs and system objectives.
-- **Deeper levels** typically contain **system requirements** - detailed technical specifications that derive from and implement the user requirements above them.
+- **Feature roots** are product, capability, stakeholder, regulatory, or external areas that define why a part of the model exists and own source context while attaching ontology vocabulary for that part of the model.
+- **Requirements** specify features through `specify`/`specifiedBy` and state what the system shall do.
+- **Child requirements** use `derivedFrom`/`derive` only within the requirement hierarchy when an obligation is decomposed into more specific obligations.
 
-This hierarchy naturally reflects the progressive refinement from high-level user needs down to detailed technical implementation.
+This structure keeps capability ownership in features while keeping implementation-facing obligations in requirements.
 
 ### Requirements and general Markdown files format
 
@@ -311,7 +313,7 @@ Requirement elements can declare governance metadata in `#### Metadata`:
   * owner: Platform Team
 ```
 
-Governance metadata applies only to requirement-family elements (`requirement` and `user-requirement`):
+Governance metadata applies only to feature and requirement elements:
 
 | Key | Values | Default |
 |-----|--------|---------|
@@ -320,9 +322,9 @@ Governance metadata applies only to requirement-family elements (`requirement` a
 | `risk` | `low`, `medium`, `high`, `critical` | `low` |
 | `owner` | free-form person, role, or team | unassigned |
 
-Child requirements inherit missing governance fields from their nearest owning parent requirement through the requirement hierarchy. If no parent defines a field, Reqvire uses the default effective value. Only explicitly authored metadata is written back to Markdown; inherited and default values appear in structured outputs as effective metadata.
+Child requirements inherit missing governance fields from their nearest owning parent requirement through the requirement hierarchy, or from the owning feature when a top-level requirement uses `specify`. If no parent defines a field, Reqvire uses the default effective value. Only explicitly authored metadata is written back to Markdown; inherited and default values appear in structured outputs as effective metadata.
 
-Refinement elements (`specification`, `constraint`, and `behavior`) must not declare `status`, `priority`, `risk`, or `owner`. They receive governance context from the requirement that owns them via `refinedBy` / `refine`.
+Refinement elements (`source`, `semantic-contract`, `specification`, `constraint`, `behavior`, `state`, and `input-output`) must not declare `status`, `priority`, `risk`, or `owner`. They receive governance context from the feature or requirement that owns them via `refinedBy` / `refine`.
 
 ## Element Manipulation
 
@@ -339,7 +341,7 @@ reqvire add "requirements/Requirements.md" --content '### New Security Requireme
 The system SHALL enforce authentication for all API endpoints.
 
 #### Metadata
-  * type: system-requirement
+  * type: requirement
 
 #### Relations
   * derivedFrom: Requirements.md#user-authentication
@@ -352,7 +354,7 @@ reqvire add "requirements/Requirements.md" <<'EOF'
 The system SHALL enforce authentication for all API endpoints.
 
 #### Metadata
-  * type: system-requirement
+  * type: requirement
 
 #### Relations
   * derivedFrom: Requirements.md#user-authentication
@@ -401,7 +403,7 @@ Updated content with new details.
 New consolidated details after merge cleanup.
 
 #### Metadata
-  * type: system-requirement
+  * type: requirement
 
 #### Relations
   * derivedFrom: Requirements.md#parent-requirement
@@ -632,8 +634,8 @@ Create a relation between elements or attach refinement element identifiers:
 reqvire link "<source>" "<relation-type>" "<target>"
 
 # Examples - linking elements
-reqvire link "Feature Requirement" "derivedFrom" "User Story"
-reqvire link "System Requirement" "derive" "Feature Requirement"
+reqvire link "Password Login Requirement" "derivedFrom" "Authentication Requirement"
+reqvire link "Authentication" "specifiedBy" "Authentication Requirement"
 reqvire link "Authentication Requirement" "verifiedBy" "Auth Test Case"
 
 # Link to implementation file or external URL
@@ -660,31 +662,36 @@ The link command:
 
 | Relation Type | Description |
 |---------------|-------------|
-| `derivedFrom` | Source derives from target (child to parent) |
-| `derive` | Source has derived target (parent to child) |
+| `derivedFrom` | Source derives from target inside the same hierarchy family |
+| `derive` | Source has derived target inside the same hierarchy family |
+| `specify` | Requirement specifies a feature |
+| `specifiedBy` | Feature is specified by a requirement |
 | `verifiedBy` | Source is verified by target |
 | `verify` | Source verifies target |
 | `satisfiedBy` | Source is satisfied by target (code implementations) |
 | `satisfy` | Source satisfies target (code implementations) |
-| `refinedBy` | Source owns target as refinement element |
-| `refine` | Source refines target requirement (auto-generated) |
+| `refinedBy` | Source owns target as a compatible refinement element |
+| `refine` | Source refines a compatible feature or requirement owner (auto-generated) |
 | `trace` | General traceability link |
 
 **Target types for relations:**
-- Element name (e.g., "User Story")
+- Element name (e.g., "Authentication Requirement")
 - Internal file path (e.g., "src/auth/login.rs")
 - External URL (e.g., "https://example.com/spec.html")
 
 `refinedBy` constraint:
-- `refinedBy` must target a refinement element identifier (constraint, behavior, or specification), including refinement elements defined in `# Documents` files.
+- `refinedBy` must target a compatible refinement element identifier: feature to `source`, or requirement to `semantic-contract`, `constraint`, `behavior`, `specification`, `state`, or `input-output`, including refinement elements defined in `# Documents` files.
 - Plain file-path targets for `refinedBy` are rejected.
 
 **Attaching (use `attaching` keyword instead of relation type):**
+- Ontology element identifier (for feature ontology context)
 - Same-file refinement identifier (e.g., `#rate-limiting-constraint`)
 - Cross-file refinement identifier (e.g., `constraints/RateLimits.md#rate-limiting-constraint`)
 
-**Attachment constraints for Refinement elements:**
-- Refinements must have a `refine` relation (established via requirement's `refinedBy`)
+**Attachment constraints for element attachments:**
+- Ontology elements may be attached by features.
+- Requirement attachments may target compatible requirement-owned refinement elements.
+- Requirement-owned refinements must have a `refine` relation (established via requirement's `refinedBy`)
 - Attachments only allowed from requirements **outside** the owner's derivation hierarchy
 - Requirements in the same hierarchy access refinements through the hierarchy, not attachments
 
@@ -693,7 +700,7 @@ The link command:
 Use `--dry-run` to preview the operation:
 
 ```bash
-reqvire link "Feature Requirement" "derivedFrom" "User Story" --dry-run
+reqvire link "Password Login Requirement" "derivedFrom" "Authentication Requirement" --dry-run
 reqvire link "Performance Requirement" attaching "#rate-limiting-constraint" --dry-run
 ```
 
@@ -702,8 +709,8 @@ reqvire link "Performance Requirement" attaching "#rate-limiting-constraint" --d
 Get structured output for programmatic processing or write it to a file:
 
 ```bash
-reqvire link "Feature Requirement" "derivedFrom" "User Story" --json
-reqvire link "Feature Requirement" "derivedFrom" "User Story" --dry-run --json --output link-result.json
+reqvire link "Password Login Requirement" "derivedFrom" "Authentication Requirement" --json
+reqvire link "Password Login Requirement" "derivedFrom" "Authentication Requirement" --dry-run --json --output link-result.json
 ```
 
 ### Unlink
@@ -715,7 +722,7 @@ Remove an existing relation or attachment (auto-detects type):
 reqvire unlink "<source>" "<target>"
 
 # Examples
-reqvire unlink "Feature Requirement" "User Story"
+reqvire unlink "Password Login Requirement" "Authentication Requirement"
 reqvire unlink "Requirement" "Test Case"
 reqvire unlink "Performance Requirement" "#rate-limiting-constraint"
 ```
@@ -737,7 +744,7 @@ The unlink command:
 Use `--dry-run` to preview the operation:
 
 ```bash
-reqvire unlink "Feature Requirement" "User Story" --dry-run
+reqvire unlink "Password Login Requirement" "Authentication Requirement" --dry-run
 ```
 
 #### JSON Output
@@ -745,8 +752,8 @@ reqvire unlink "Feature Requirement" "User Story" --dry-run
 Get structured output for programmatic processing or write it to a file:
 
 ```bash
-reqvire unlink "Feature Requirement" "User Story" --json
-reqvire unlink "Feature Requirement" "User Story" --dry-run --json --output unlink-result.json
+reqvire unlink "Password Login Requirement" "Authentication Requirement" --json
+reqvire unlink "Password Login Requirement" "Authentication Requirement" --dry-run --json --output unlink-result.json
 ```
 
 ### Relink
@@ -846,7 +853,7 @@ Errors must be fixed before command can execute.
 After mutating commands (`link`, `unlink`, `merge`, `mv`, `relink`, `mv-asset`, `rm-asset`, etc.), run `reqvire validate` to confirm post-change structural integrity, including single-root hierarchy ownership.
 
 Why single-root hierarchy ownership matters:
-- Every `requirement` must belong to exactly one top-level `user-requirement` tree.
+- Every `requirement` must belong to exactly one feature root through `specify` or inherited `derivedFrom` ancestry.
 - This keeps ownership unambiguous and prevents conflicting model boundaries.
 - It also keeps coverage roll-up, `collect`, and change-impact results deterministic and explainable.
 
@@ -966,7 +973,7 @@ Track relationships between requirements and verifications using traceability fe
 reqvire traces
 ```
 
-This generates upward trace trees from verifications to root requirements, showing how verifications link to requirements and their parent chains. It also identifies redundant verify relations - cases where the same verification verifies both a leaf requirement and its parent, which indicates the model is not clean. Output is in Markdown format with Mermaid diagrams by default.
+This generates upward trace trees from verifications to owning feature roots, showing how verifications link to requirements, requirement parent chains, and feature context. It also identifies redundant verify relations - cases where the same verification verifies both a leaf requirement and its parent, which indicates the model is not clean. Output is in Markdown format with Mermaid diagrams by default.
 
 #### Output Format Options
 
@@ -1067,6 +1074,33 @@ Shows file-based attachment references when present. In identifier-only models, 
 ### HTML Export Integration
 
 The resources report is also available in the HTML export as a dedicated "Resources" page accessible from the navigation bar. This provides a browsable view of all referenced files with clickable links to the referencing elements.
+
+## Ontologies Report
+
+The `ontologies` command collects ontology element `#### Ontology` Turtle blocks and requirement-owned semantic-contract `#### Shapes` Turtle blocks from the graph registry.
+
+```bash
+# Generate RDF/Turtle to stdout (default)
+reqvire ontologies
+
+# Write RDF/Turtle to a file
+reqvire ontologies --output ontologies.ttl
+
+# Generate JSON-LD
+reqvire ontologies --jsonld
+
+# Write JSON-LD to a file
+reqvire ontologies --jsonld --output ontologies.jsonld
+
+# Include Reqvire model context triples
+reqvire ontologies --full
+```
+
+Turtle is the default format. Use `--jsonld` only when a JSON-LD representation is needed. Default mode exports authored ontology and SHACL artifacts. Use `--full` when downstream semantic tooling also needs Reqvire model context triples for elements, relations, attachments, concept references, ontology declarations, and shape references.
+
+The command reuses the same semantic index used by validation, so Turtle blocks are parsed once and reused for diagnostics, ontology declarations, SHACL references, and export serialization. HTML export also writes `ontologies.ttl` and includes an "Ontologies" page in the navigation bar. That page renders a searchable ontology/SHACL graph from the parsed semantic-index quads, supports full-window graph expansion, collapses anonymous SHACL property-shape blank nodes and RDF list infrastructure into owning-shape inspector constraints, and keeps the collected Turtle blocks available below the graph for audit review.
+
+The MCP server exposes the same semantic collection through the read-only `reqvire.ontologies` tool. Use `format: "turtle"` for the default Turtle serialization, `format: "jsonld"` for JSON-LD output, and `full: true` to include generated Reqvire model context triples.
 
 ## Submodels Report
 
@@ -1200,7 +1234,7 @@ Each content block is followed by a source citation and separator:
 
 The command will error if:
 - Element name is not found
-- Element is not a requirement type (only `requirement` and `user-requirement` are supported)
+- Element is not a valid model element type.
 
 ## Search and Filtering
 
@@ -1225,12 +1259,12 @@ Filter elements by their metadata properties:
 
 ```bash
 # Filter by element type (supports comma-separated list)
-reqvire search --filter-type="user-requirement"
-reqvire search --filter-type="system-requirement"
+reqvire search --filter-type="feature"
+reqvire search --filter-type="requirement"
 reqvire search --filter-type="test-verification"
 
 # Filter by multiple types (OR logic)
-reqvire search --filter-type="requirement,user-requirement"
+reqvire search --filter-type="feature,requirement"
 reqvire search --filter-type="requirement,test-verification,behavior"
 
 # Filter by file path (glob pattern)
@@ -1298,19 +1332,19 @@ reqvire search --filter-type="test-verification" --not-have-relations="satisfied
 All filters use AND logic - elements must match ALL specified criteria:
 
 ```bash
-# Find unverified user requirements in specifications
-reqvire search --filter-type="user-requirement" \
+# Find feature roots in specifications
+reqvire search --filter-type="feature" \
                --filter-file="requirements/*.md" \
-               --not-have-relations="verifiedBy"
+               --have-relations="specifiedBy"
 
 # Find security requirements mentioning encryption
 reqvire search --filter-file="**/Security*.md" \
                --filter-content="encryption" \
-               --filter-type="system-requirement"
+               --filter-type="requirement"
 
 # Complex query with JSON output
 reqvire search --filter-file="requirements/*.md" \
-               --filter-type="user-requirement" \
+               --filter-type="requirement" \
                --have-relations="verifiedBy" \
                --filter-content="SHALL" \
                --json
@@ -1336,25 +1370,42 @@ reqvire search --json --short
 
 Reqvire provides two complementary model-structure commands:
 - `model` for relation-centric nested structure visualization
-- `submodels` for independent requirement subgraph and coupling analysis
+- `submodels` for independent feature-rooted subgraph and coupling analysis
 
-The `model` command generates a model-centric view showing requirements and verifications with their nested relations as a hierarchical tree structure. It supports both forward traversal (root to leaves) and reverse traversal (leaves to roots).
+The `model` command generates a model-centric view starting from ontology roots and feature roots by default, then follows requirements, refinements, verifications, and implementation/evidence links through nested relations. It supports both forward traversal (model roots to leaves) and reverse traversal (leaves to feature roots and other owning model context).
 
 ### Generate Model-Centric Structure
 
-Generate a complete model-centric structure starting from root requirements:
+Generate a complete model-centric structure starting from ontology roots and feature roots:
 
 ```bash
 reqvire model
 ```
 
 This generates a hierarchical structure showing:
-- Root requirements (level 1)
-- Their nested child requirements and relations
-- Complete forward relation chains (derive, satisfiedBy, refinedBy, verifiedBy, trace)
+- Ontology roots that define reusable model vocabulary
+- Feature roots (level 1)
+- Requirements that specify each feature through `specifiedBy`
+- Nested child requirements and relations
+- Complete forward relation chains (`derive`, `specifiedBy`, `satisfiedBy`, `refinedBy`, `verifiedBy`, `trace`)
 - Mermaid diagrams for each element showing its relations
 
 Each element in the output includes a Mermaid diagram visualizing its forward relations to other elements.
+
+For raw Mermaid text without a Markdown wrapper, use:
+
+```bash
+reqvire model --mmd
+```
+
+This emits pure Mermaid flowchart text suitable for tools that expect `.mmd` content. It does not include Markdown headings or fenced code blocks.
+
+When working from the Reqvire repository checkout, the helper script can render that stream to SVG or PNG:
+
+```bash
+cargo run -- model --mmd | scripts/render-mmd.sh -o /tmp/model.svg --scale 1
+cargo run -- model --mmd | scripts/render-mmd.sh -o /tmp/model.png --scale 2
+```
 
 ### Filter by Element Name
 
@@ -1368,14 +1419,14 @@ reqvire model --from "User Authentication"
 reqvire model --from "Data Storage System"
 ```
 
-This includes only the specified element and elements reachable by following forward relations (derive, satisfiedBy, refinedBy, verifiedBy, trace) from it.
+This includes only the specified element and elements reachable by following forward relations (`derive`, `specifiedBy`, `satisfiedBy`, `refinedBy`, `verifiedBy`, `trace`) from it.
 
 ### Reverse Traversal
 
-Use `--reverse` to traverse from leaf elements upward to root requirements:
+Use `--reverse` to traverse from leaf elements upward to owning feature roots:
 
 ```bash
-# Traverse from verifications up to requirements
+# Traverse from verifications up to requirements and feature roots
 reqvire model --reverse
 
 # Reverse traversal with JSON output
@@ -1384,17 +1435,17 @@ reqvire model --reverse --json
 
 In reverse mode:
 - Starting elements are "leaf" elements (elements with backward relations but no forward children)
-- Traversal follows backward relations: derivedFrom, satisfy, refine, verify
-- Useful for understanding how verifications trace back to requirements
-- Shows the upward path from implementation to high-level requirements
+- Traversal follows backward relations: `derivedFrom`, `specify`, `satisfy`, `refine`, `verify`
+- Useful for understanding how verifications trace back to requirements and owning features
+- Shows the upward path from implementation/evidence to feature-rooted capability context
 
 ### Filter by Element Type
 
 Filter starting elements by type using `--filter-type`:
 
 ```bash
-# Show model starting only from user requirements
-reqvire model --filter-type="user-requirement"
+# Show model starting only from features
+reqvire model --filter-type="feature"
 
 # Show model starting only from verifications
 reqvire model --filter-type="test-verification"
@@ -1403,14 +1454,16 @@ reqvire model --filter-type="test-verification"
 reqvire model --reverse --filter-type="test-verification"
 
 # Multiple types (comma-separated, OR logic)
-reqvire model --filter-type="user-requirement,requirement"
+reqvire model --filter-type="feature,requirement"
 reqvire model --filter-type="test-verification,analysis-verification"
 ```
 
 **Valid element types:**
-- `user-requirement`, `requirement` (requirements)
-- `test-verification`, `analysis-verification`, `inspection-verification`, `demonstration-verification` (verifications)
-- `constraint`, `behavior`, `specification` (refinements)
+- `feature` (product/capability roots)
+- `requirement` (system obligations)
+- `ontology` (shared semantic vocabulary)
+- `test-verification`, `formal-proof-verification`, `analysis-verification`, `inspection-verification`, `demonstration-verification` (verifications)
+- `source`, `semantic-contract`, `constraint`, `behavior`, `specification`, `state`, `input-output` (refinements)
 - `other-TYPENAME` for custom types (e.g., `other-use-case`)
 
 ### Output Format Options
@@ -1421,6 +1474,9 @@ reqvire model
 
 # Generate filtered text output from specific element
 reqvire model --from "Security Requirements"
+
+# Generate pure Mermaid flowchart text
+reqvire model --mmd
 
 # Generate complete model structure in JSON format (nested)
 reqvire model --json

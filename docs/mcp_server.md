@@ -128,6 +128,7 @@ Default mode advertises read/report tools:
 - `reqvire.containment`
 - `reqvire.collect`
 - `reqvire.submodels`
+- `reqvire.ontologies`
 - `reqvire.lint`
 - `reqvire.coverage`
 - `reqvire.traces`
@@ -150,6 +151,17 @@ Search supports governance metadata filters:
 ```
 
 Full structured search results include effective `governance_metadata` for requirement-family elements and global governance summary counters under `global_counters.total_governance_metadata`.
+
+## Semantic Model Evidence
+
+MCP tools expose the same feature/requirement/ontology model as Reqvire core:
+
+- `reqvire.search` accepts `filter_type: "ontology"` and returns parsed ontology ADT content in full results.
+- `reqvire.search` accepts `filter_type: "semantic-contract"` and returns requirement-owned SHACL shape contracts in full results.
+- `reqvire.read_element` returns `concept_references` for elements that author `#### Concept References`.
+- `reqvire.collect` includes reachable ontology context for feature and requirement elements.
+- `reqvire.ontologies` returns the same semantic collection as the CLI `ontologies` command. It accepts optional `format: "turtle"` or `format: "jsonld"` and optional `full: true`. Default mode returns serialized authored ontology/SHACL content with semantic index summary, block metadata, diagnostics, ontology declarations, and SHACL references. Full mode also includes generated Reqvire model context triples.
+- Mutation tools use the same Reqvire validation gates before persistence, including ontology attachment compatibility, semantic-contract SHACL reference reachability, concept-reference resolution, and single ontology-root validation.
 
 ## Resources
 
