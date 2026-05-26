@@ -1,10 +1,10 @@
 ---
 layout: page
-nav_order: 3
+nav_order: 5
 title: User Guide
 ---
 
-This user guide provides detailed instructions on how to install and use Reqvire effectively.
+This user guide explains how to install and use Reqvire as a semantic engineering graph for building verifiable and traceable systems.
 
 ## Table of Contents
 
@@ -14,7 +14,7 @@ This user guide provides detailed instructions on how to install and use Reqvire
 - [MCP Server](#mcp-server)
 - [JSON File Output](#json-file-output)
 - [File Exclusion Patterns](#file-exclusion-patterns)
-- [Working with Requirements](#working-with-requirements)
+- [Working with Model Elements](#working-with-model-elements)
 - [Element Manipulation](#element-manipulation)
 - [Link and Unlink Commands](#link-and-unlink-commands)
 - [Validation](#validation)
@@ -71,7 +71,7 @@ reqvire --version
 
 ## Basic Commands
 
-Reqvire offers several core commands for managing your requirements:
+Reqvire offers several core commands for managing your engineering knowledge graph:
 
 ### Help
 
@@ -204,13 +204,13 @@ tests/**
 src/**
 ```
 
-## Working with Requirements
+## Working with Model Elements
 
-Reqvire is designed to work with a structured requirements hierarchy in Markdown files. Requirements are organized using **folders and files for logical containment** - representing subsystems, features, or functional areas.
+Reqvire is designed to work with a structured semantic engineering graph in Markdown files. Capabilities, requirements, ontology, refinements, verifications, and evidence are organized using **folders and files for physical containment** while relations define the logical model.
 
 ### Folder Structure
 
-Reqvire supports flexible organization based on **architectural decomposition** - structuring by subsystem/component rather than by artifact type. Requirements can be organized separately from implementation or co-located with code.
+Reqvire supports flexible organization based on **architectural or capability decomposition** - structuring by subsystem, component, capability, or domain area rather than by artifact type alone. Model elements can be organized separately from implementation or co-located with code.
 
 **Example 1: Requirements separate from implementation**
 
@@ -258,17 +258,17 @@ Markdown files contain **requirements** and **verification elements** that toget
   - `verifies` - linking verifications to requirements they verify
   - `trace` - soft relations for traceability between elements
 
-The combination of containment structure and explicit relations creates the full requirements model.
+The combination of containment structure and explicit relations creates the full semantic engineering graph.
 
 ### Requirement Hierarchy Levels
 
 Requirements are organized in hierarchical levels within the markdown structure:
 
-- **Feature roots** are product, capability, stakeholder, regulatory, or external areas that define why a part of the model exists and own source context while attaching ontology vocabulary for that part of the model.
-- **Requirements** specify features through `specify`/`specifiedBy` and state what the system shall do.
+- **Capability roots** are product, capability, stakeholder, regulatory, or external areas that define why a part of the model exists and own source context while attaching ontology vocabulary for that part of the model.
+- **Requirements** specify capabilities through `specify`/`specifiedBy` and state what the system shall do.
 - **Child requirements** use `derivedFrom`/`derive` only within the requirement hierarchy when an obligation is decomposed into more specific obligations.
 
-This structure keeps capability ownership in features while keeping implementation-facing obligations in requirements.
+This structure keeps capability ownership in capabilities while keeping implementation-facing obligations in requirements.
 
 ### Requirements and general Markdown files format
 
@@ -313,7 +313,7 @@ Requirement elements can declare governance metadata in `#### Metadata`:
   * owner: Platform Team
 ```
 
-Governance metadata applies only to feature and requirement elements:
+Governance metadata applies only to capability and requirement elements:
 
 | Key | Values | Default |
 |-----|--------|---------|
@@ -322,9 +322,9 @@ Governance metadata applies only to feature and requirement elements:
 | `risk` | `low`, `medium`, `high`, `critical` | `low` |
 | `owner` | free-form person, role, or team | unassigned |
 
-Child requirements inherit missing governance fields from their nearest owning parent requirement through the requirement hierarchy, or from the owning feature when a top-level requirement uses `specify`. If no parent defines a field, Reqvire uses the default effective value. Only explicitly authored metadata is written back to Markdown; inherited and default values appear in structured outputs as effective metadata.
+Child requirements inherit missing governance fields from their nearest owning parent requirement through the requirement hierarchy, or from the owning capability when a top-level requirement uses `specify`. If no parent defines a field, Reqvire uses the default effective value. Only explicitly authored metadata is written back to Markdown; inherited and default values appear in structured outputs as effective metadata.
 
-Refinement elements (`source`, `semantic-contract`, `specification`, `constraint`, `behavior`, `state`, and `input-output`) must not declare `status`, `priority`, `risk`, or `owner`. They receive governance context from the feature or requirement that owns them via `refinedBy` / `refine`.
+Refinement elements (`source`, `semantic-contract`, `specification`, `constraint`, `behavior`, `state`, and `input-output`) must not declare `status`, `priority`, `risk`, or `owner`. They receive governance context from the capability or requirement that owns them via `refinedBy` / `refine`.
 
 ## Element Manipulation
 
@@ -664,14 +664,14 @@ The link command:
 |---------------|-------------|
 | `derivedFrom` | Source derives from target inside the same hierarchy family |
 | `derive` | Source has derived target inside the same hierarchy family |
-| `specify` | Requirement specifies a feature |
-| `specifiedBy` | Feature is specified by a requirement |
+| `specify` | Requirement specifies a capability |
+| `specifiedBy` | Capability is specified by a requirement |
 | `verifiedBy` | Source is verified by target |
 | `verify` | Source verifies target |
 | `satisfiedBy` | Source is satisfied by target (code implementations) |
 | `satisfy` | Source satisfies target (code implementations) |
 | `refinedBy` | Source owns target as a compatible refinement element |
-| `refine` | Source refines a compatible feature or requirement owner (auto-generated) |
+| `refine` | Source refines a compatible capability or requirement owner (auto-generated) |
 | `trace` | General traceability link |
 
 **Target types for relations:**
@@ -680,16 +680,16 @@ The link command:
 - External URL (e.g., "https://example.com/spec.html")
 
 `refinedBy` constraint:
-- `refinedBy` must target a compatible refinement element identifier: feature to `source`, or requirement to `semantic-contract`, `constraint`, `behavior`, `specification`, `state`, or `input-output`, including refinement elements defined in `# Documents` files.
+- `refinedBy` must target a compatible refinement element identifier: capability to `source`, or requirement to `semantic-contract`, `constraint`, `behavior`, `specification`, `state`, or `input-output`, including refinement elements defined in `# Documents` files.
 - Plain file-path targets for `refinedBy` are rejected.
 
 **Attaching (use `attaching` keyword instead of relation type):**
-- Ontology element identifier (for feature ontology context)
+- Ontology element identifier (for capability ontology context)
 - Same-file refinement identifier (e.g., `#rate-limiting-constraint`)
 - Cross-file refinement identifier (e.g., `constraints/RateLimits.md#rate-limiting-constraint`)
 
 **Attachment constraints for element attachments:**
-- Ontology elements may be attached by features.
+- Ontology elements may be attached by capabilities.
 - Requirement attachments may target compatible requirement-owned refinement elements.
 - Requirement-owned refinements must have a `refine` relation (established via requirement's `refinedBy`)
 - Attachments only allowed from requirements **outside** the owner's derivation hierarchy
@@ -853,7 +853,7 @@ Errors must be fixed before command can execute.
 After mutating commands (`link`, `unlink`, `merge`, `mv`, `relink`, `mv-asset`, `rm-asset`, etc.), run `reqvire validate` to confirm post-change structural integrity, including single-root hierarchy ownership.
 
 Why single-root hierarchy ownership matters:
-- Every `requirement` must belong to exactly one feature root through `specify` or inherited `derivedFrom` ancestry.
+- Every `requirement` must belong to exactly one capability root through `specify` or inherited `derivedFrom` ancestry.
 - This keeps ownership unambiguous and prevents conflicting model boundaries.
 - It also keeps coverage roll-up, `collect`, and change-impact results deterministic and explainable.
 
@@ -965,7 +965,7 @@ reqvire lint --json
 
 ## Traceability
 
-Track relationships between requirements and verifications using traceability features.
+Track relationships between requirements and verifications using traceability capabilities.
 
 ### Generate Verification Traces
 
@@ -973,7 +973,7 @@ Track relationships between requirements and verifications using traceability fe
 reqvire traces
 ```
 
-This generates upward trace trees from verifications to owning feature roots, showing how verifications link to requirements, requirement parent chains, and feature context. It also identifies redundant verify relations - cases where the same verification verifies both a leaf requirement and its parent, which indicates the model is not clean. Output is in Markdown format with Mermaid diagrams by default.
+This generates upward trace trees from verifications to owning capability roots, showing how verifications link to capabilities, requirements, requirement parent chains, and capability context. It also identifies redundant verify relations - cases where the same verification verifies both an element and an ancestor already covered through the trace path, which indicates the model is not clean. Output is in Markdown format with Mermaid diagrams by default.
 
 #### Output Format Options
 
@@ -1142,17 +1142,17 @@ The `collect` command aggregates content from a requirement element and its rela
 
 ```bash
 # Collect content upstream - ancestors via derivedFrom (default)
-reqvire collect "Feature Requirement"
+reqvire collect "Capability Requirement"
 
 # Collect content downstream - descendants via derive
-reqvire collect "Feature Requirement" --direction DOWNSTREAM
+reqvire collect "Capability Requirement" --direction DOWNSTREAM
 
 # Explicit upstream direction
-reqvire collect "Feature Requirement" --direction UPSTREAM
+reqvire collect "Capability Requirement" --direction UPSTREAM
 
 # Collect content in JSON format
-reqvire collect "Feature Requirement" --json
-reqvire collect "Feature Requirement" --direction DOWNSTREAM --json
+reqvire collect "Capability Requirement" --json
+reqvire collect "Capability Requirement" --direction DOWNSTREAM --json
 ```
 
 ### How It Works
@@ -1238,7 +1238,7 @@ The command will error if:
 
 ## Search and Filtering
 
-The `search` command provides powerful filtering and querying capabilities to explore your requirements model. It supports comprehensive filtering with over 10 filter types that can be combined using AND logic.
+The `search` command provides powerful filtering and querying capabilities to explore your semantic engineering graph. It supports comprehensive filtering with over 10 filter types that can be combined using AND logic.
 
 ### Basic Search
 
@@ -1259,12 +1259,12 @@ Filter elements by their metadata properties:
 
 ```bash
 # Filter by element type (supports comma-separated list)
-reqvire search --filter-type="feature"
+reqvire search --filter-type="capability"
 reqvire search --filter-type="requirement"
 reqvire search --filter-type="test-verification"
 
 # Filter by multiple types (OR logic)
-reqvire search --filter-type="feature,requirement"
+reqvire search --filter-type="capability,requirement"
 reqvire search --filter-type="requirement,test-verification,behavior"
 
 # Filter by file path (glob pattern)
@@ -1332,8 +1332,8 @@ reqvire search --filter-type="test-verification" --not-have-relations="satisfied
 All filters use AND logic - elements must match ALL specified criteria:
 
 ```bash
-# Find feature roots in specifications
-reqvire search --filter-type="feature" \
+# Find capability roots in specifications
+reqvire search --filter-type="capability" \
                --filter-file="requirements/*.md" \
                --have-relations="specifiedBy"
 
@@ -1370,13 +1370,13 @@ reqvire search --json --short
 
 Reqvire provides two complementary model-structure commands:
 - `model` for relation-centric nested structure visualization
-- `submodels` for independent feature-rooted subgraph and coupling analysis
+- `submodels` for independent capability-rooted subgraph and coupling analysis
 
-The `model` command generates a model-centric view starting from ontology roots and feature roots by default, then follows requirements, refinements, verifications, and implementation/evidence links through nested relations. It supports both forward traversal (model roots to leaves) and reverse traversal (leaves to feature roots and other owning model context).
+The `model` command generates a model-centric view starting from ontology roots and capability roots by default, then follows requirements, refinements, verifications, and implementation/evidence links through nested relations. It supports both forward traversal (model roots to leaves) and reverse traversal (leaves to capability roots and other owning model context).
 
 ### Generate Model-Centric Structure
 
-Generate a complete model-centric structure starting from ontology roots and feature roots:
+Generate a complete model-centric structure starting from ontology roots and capability roots:
 
 ```bash
 reqvire model
@@ -1384,8 +1384,8 @@ reqvire model
 
 This generates a hierarchical structure showing:
 - Ontology roots that define reusable model vocabulary
-- Feature roots (level 1)
-- Requirements that specify each feature through `specifiedBy`
+- Capability roots (level 1)
+- Requirements that specify each capability through `specifiedBy`
 - Nested child requirements and relations
 - Complete forward relation chains (`derive`, `specifiedBy`, `satisfiedBy`, `refinedBy`, `verifiedBy`, `trace`)
 - Mermaid diagrams for each element showing its relations
@@ -1415,7 +1415,7 @@ Generate a filtered model starting from a specific element by name:
 # Show model structure starting from named element
 reqvire model --from "User Authentication"
 
-# Show nested structure for specific feature
+# Show nested structure for specific capability
 reqvire model --from "Data Storage System"
 ```
 
@@ -1423,10 +1423,10 @@ This includes only the specified element and elements reachable by following for
 
 ### Reverse Traversal
 
-Use `--reverse` to traverse from leaf elements upward to owning feature roots:
+Use `--reverse` to traverse from leaf elements upward to owning capability roots:
 
 ```bash
-# Traverse from verifications up to requirements and feature roots
+# Traverse from verifications up to requirements and capability roots
 reqvire model --reverse
 
 # Reverse traversal with JSON output
@@ -1436,16 +1436,16 @@ reqvire model --reverse --json
 In reverse mode:
 - Starting elements are "leaf" elements (elements with backward relations but no forward children)
 - Traversal follows backward relations: `derivedFrom`, `specify`, `satisfy`, `refine`, `verify`
-- Useful for understanding how verifications trace back to requirements and owning features
-- Shows the upward path from implementation/evidence to feature-rooted capability context
+- Useful for understanding how verifications trace back to requirements and owning capabilities
+- Shows the upward path from implementation/evidence to capability-rooted capability context
 
 ### Filter by Element Type
 
 Filter starting elements by type using `--filter-type`:
 
 ```bash
-# Show model starting only from features
-reqvire model --filter-type="feature"
+# Show model starting only from capabilities
+reqvire model --filter-type="capability"
 
 # Show model starting only from verifications
 reqvire model --filter-type="test-verification"
@@ -1454,12 +1454,12 @@ reqvire model --filter-type="test-verification"
 reqvire model --reverse --filter-type="test-verification"
 
 # Multiple types (comma-separated, OR logic)
-reqvire model --filter-type="feature,requirement"
+reqvire model --filter-type="capability,requirement"
 reqvire model --filter-type="test-verification,analysis-verification"
 ```
 
 **Valid element types:**
-- `feature` (product/capability roots)
+- `capability` (coherent operational, product, business, regulatory, or system abilities)
 - `requirement` (system obligations)
 - `ontology` (shared semantic vocabulary)
 - `test-verification`, `formal-proof-verification`, `analysis-verification`, `inspection-verification`, `demonstration-verification` (verifications)
@@ -1649,10 +1649,10 @@ Reqvire includes several GitHub Actions workflows that can be used in your repos
 
 #### PR Validation
 
-The PR validation workflow runs automatically on every pull request to validate your requirements model:
+The PR validation workflow runs automatically on every pull request to validate your Reqvire model:
 
 ```yaml
-name: Validate Requirements on PR
+name: Validate Reqvire Model on PR
 
 on:
   pull_request:
@@ -1663,7 +1663,7 @@ on:
 
 jobs:
   validate:
-    name: Validate Requirements
+    name: Validate Reqvire Model
     runs-on: ubuntu-latest
 
     steps:
@@ -1807,4 +1807,4 @@ jobs:
             ${{ env.REQVIRE_OUTPUT }}            
 ```
 
-These commands provide valuable insights during the pull request review process, helping reviewers understand the impact of changes on the requirements model.
+These commands provide valuable insights during the pull request review process, helping reviewers understand the impact of changes on the semantic engineering graph.

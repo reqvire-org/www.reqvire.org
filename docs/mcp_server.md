@@ -1,12 +1,12 @@
 ---
 layout: page
-nav_order: 4
+nav_order: 9
 title: MCP Server
 ---
 
 # MCP Server
 
-Reqvire can run as a Model Context Protocol (MCP) server so MCP-capable coding assistants can inspect and operate on the Reqvire model through structured tools instead of shell commands.
+Reqvire can run as a Model Context Protocol (MCP) server so MCP-capable coding assistants can inspect and operate on the Reqvire engineering knowledge graph through structured tools instead of shell commands.
 
 The MCP server is a Reqvire CLI subcommand:
 
@@ -154,12 +154,12 @@ Full structured search results include effective `governance_metadata` for requi
 
 ## Semantic Model Evidence
 
-MCP tools expose the same feature/requirement/ontology model as Reqvire core:
+MCP tools expose the same ontology-driven capability/requirement/verification model as Reqvire core:
 
 - `reqvire.search` accepts `filter_type: "ontology"` and returns parsed ontology ADT content in full results.
-- `reqvire.search` accepts `filter_type: "semantic-contract"` and returns requirement-owned SHACL shape contracts in full results.
+- `reqvire.search` accepts `filter_type: "semantic-contract"` and returns SHACL shape contracts in full results.
 - `reqvire.read_element` returns `concept_references` for elements that author `#### Concept References`.
-- `reqvire.collect` includes reachable ontology context for feature and requirement elements.
+- `reqvire.collect` includes reachable ontology context for capability and requirement elements.
 - `reqvire.ontologies` returns the same semantic collection as the CLI `ontologies` command. It accepts optional `format: "turtle"` or `format: "jsonld"` and optional `full: true`. Default mode returns serialized authored ontology/SHACL content with semantic index summary, block metadata, diagnostics, ontology declarations, and SHACL references. Full mode also includes generated Reqvire model context triples.
 - Mutation tools use the same Reqvire validation gates before persistence, including ontology attachment compatibility, semantic-contract SHACL reference reachability, concept-reference resolution, and single ontology-root validation.
 

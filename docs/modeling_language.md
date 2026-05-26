@@ -1,42 +1,43 @@
 ---
 layout: page
-nav_order: 6
+nav_order: 4
 title: Modeling Language
 ---
 
 ## Reqvire Modeling Language
 
-Reqvire uses semi-structured Markdown as a lightweight MBSE modeling language. Models stay readable in Git while still being machine-validated, queryable, and useful as context for coding assistants.
+Reqvire uses semi-structured Markdown as a lightweight semantic engineering and MBSE modeling language. Models stay readable in Git while still forming a machine-validated, queryable, traceable engineering knowledge graph for humans and AI assistants.
 
 ## Core Elements
 
 Each Reqvire model consists of:
 
-- **Features** - product/capability, stakeholder, regulatory, or external-context anchors.
-- **Requirements** - implementable system obligations that specify features.
 - **Ontologies** - first-class OWL/Turtle vocabulary and reusable semantic model terms.
-- **Feature refinements** - `source` context owned by a feature.
-- **Requirement refinements** - `semantic-contract`, `specification`, `constraint`, `behavior`, `state`, and `input-output`.
-- **Verifications** - evidence that requirements are satisfied by tests, proofs, analysis, inspection, or demonstration.
+- **Capabilities** - coherent operational, product, business, regulatory, or system abilities.
+- **Requirements** - implementable obligations, constraints, guarantees, and behavioral expectations that specify capabilities.
+- **Refinements** - `source`, `semantic-contract`, `specification`, `constraint`, `behavior`, `state`, and `input-output` detail owned by capabilities or requirements.
+- **Verifications** - evidence that capabilities or requirements are verified by tests, proofs, analysis, inspection, or demonstration.
 - **Relations** - explicit links between model elements and implementation/evidence artifacts.
 - **Files and folders** - physical organization for model content.
 
 Elements are defined using `###` Markdown headers. Metadata, relations, details, and attachments are represented as reserved `####` subsections.
 
-## Feature and Requirement Ownership
+## Capability and Requirement Ownership
 
-Reqvire enforces feature-rooted ownership:
+Reqvire enforces capability-rooted ownership while keeping ontology, requirement, and verification semantics explicit:
 
-- A `feature` may be a root.
-- A feature may derive from another feature.
-- A requirement must resolve to exactly one owning feature.
-- A top-level requirement connects to its owning feature through `specify`.
+- A `capability` may be a root.
+- A capability may derive from another capability.
+- A requirement must resolve to exactly one owning capability.
+- A top-level requirement connects to the capability it specifies through `specify`.
 - A child requirement may inherit ownership through `derivedFrom` to another requirement.
-- Cross-feature semantic dependencies must be explicit attachments so change impact is preserved.
+- Cross-capability semantic dependencies must be explicit attachments so change impact is preserved.
 
-This keeps ownership, change impact, and coverage roll-up auditable.
+This keeps ownership, change impact, verification, and coverage roll-up auditable.
 
-Feature roots should remain real capability roots, not universal buckets. Use one top feature when its requirements truly specify the same capability. Use subfeatures only when the capability has meaningful product, interface, stakeholder, regulatory, or domain slices that need independent ownership or collection. Reuse shared ontology through explicit ontology attachments across feature roots instead of placing unrelated requirements under the same feature hierarchy.
+Capabilities should describe what the system is able to accomplish, not how the system is implemented. Use one top capability when its requirements truly specify the same ability. Use child capabilities when concerns differ in verification, ownership, lifecycle, architecture impact, operational semantics, or requirement clusters. Reuse shared ontology through explicit ontology attachments across capability roots instead of placing unrelated requirements under the same capability hierarchy.
+
+Capability prose may include optional semantic enrichment subsections such as `#### Stakeholder Need`, `#### Feature`, `#### Operational Context`, `#### Regulatory Driver`, `#### Mission Objective`, `#### Service Context`, `#### AI Context`, or `#### Notes`. These sections enrich human and AI understanding; they do not replace graph structure. If the concern needs independent traceability or verification, model it as a child capability.
 
 ## Document Structure
 
@@ -48,12 +49,12 @@ Model files must begin with one of these level-1 headings:
 ```markdown
 # Elements
 
-### My Feature
+### My Capability
 
-Feature scope.
+Capability scope.
 
 #### Metadata
-  * type: feature
+  * type: capability
 ```
 
 ```markdown
@@ -85,7 +86,7 @@ Metadata is defined in a `#### Metadata` subsection:
 Reserved metadata:
 
 - `type` - element type.
-- `status`, `priority`, `risk`, `owner` - governance metadata, valid only on `feature` and `requirement` elements.
+- `status`, `priority`, `risk`, `owner` - governance metadata, valid only on `capability` and `requirement` elements.
 
 Governance metadata defaults:
 
@@ -96,7 +97,7 @@ Governance metadata defaults:
 | `risk` | `low` | `low`, `medium`, `high`, `critical` |
 | `owner` | unassigned | free-form string |
 
-Requirements inherit missing governance fields from the nearest parent requirement or owning feature. Features inherit missing values from parent features.
+Requirements inherit missing governance fields from the nearest parent requirement or owning capability. Capabilities inherit missing values from parent capabilities.
 
 Refinements and verifications must not declare governance metadata.
 
@@ -104,16 +105,16 @@ Refinements and verifications must not declare governance metadata.
 
 | Category | Type | Purpose |
 |----------|------|---------|
-| Feature | `feature` | Product/capability, stakeholder, regulatory, or external-context anchor |
+| Capability | `capability` | Coherent operational, product, business, regulatory, or system ability |
 | Requirement | `requirement` | Implementable system obligation |
 | Ontology | `ontology` | OWL/Turtle vocabulary, concept, relation, and semantic model definitions |
-| Feature refinement | `source` | Stakeholder, regulatory, contractual, or external source material |
-| Requirement refinement | `semantic-contract` | Requirement-owned SHACL shape profile over reachable ontology |
-| Requirement refinement | `specification` | Detailed technical specification |
-| Requirement refinement | `constraint` | Limit or boundary |
-| Requirement refinement | `behavior` | Behavioral contract |
-| Requirement refinement | `state` | Lifecycle states, state machines, transitions, and state-dependent contracts |
-| Requirement refinement | `input-output` | Payloads, messages, schemas, fixtures, and data contracts |
+| Refinement | `source` | Stakeholder, regulatory, contractual, policy, or external source material |
+| Refinement | `semantic-contract` | SHACL shape profile over reachable ontology |
+| Refinement | `specification` | Detailed technical specification |
+| Refinement | `constraint` | Limit or boundary |
+| Refinement | `behavior` | Behavioral contract |
+| Refinement | `state` | Lifecycle states, state machines, transitions, and state-dependent contracts |
+| Refinement | `input-output` | Payloads, messages, schemas, fixtures, and data contracts |
 | Verification | `test-verification` | Test evidence; requires `satisfiedBy` |
 | Verification | `formal-proof-verification` | Proof/model-checking/theorem/fixture/report evidence; requires `satisfiedBy` |
 | Verification | `analysis-verification` | Analysis evidence |
@@ -128,7 +129,7 @@ Relations are defined in `#### Relations`:
 
 ```markdown
 #### Relations
-  * specify: [Parent Feature](Features.md#parent-feature)
+  * specify: [Parent Capability](Capabilities.md#parent-capability)
   * verifiedBy: [Contract Test](Verifications.md#contract-test)
   * satisfiedBy: [implementation.rs](../src/implementation.rs)
   * refinedBy: [Payload Contract](Contracts.md#payload-contract)
@@ -138,21 +139,27 @@ Supported core relations:
 
 | Relation | Direction | Description |
 |----------|-----------|-------------|
-| `derivedFrom` | child -> parent | Hierarchy inside the same family: feature-to-feature, requirement-to-requirement, or ontology-to-ontology |
+| `derivedFrom` | child -> parent | Hierarchy inside the same family: capability-to-capability, requirement-to-requirement, or ontology-to-ontology |
 | `derive` | parent -> child | Inverse hierarchy relation |
-| `specify` | requirement -> feature | Requirement specifies a feature |
-| `specifiedBy` | feature -> requirement | Feature is specified by a requirement |
-| `verifiedBy` | requirement -> verification | Requirement is verified by a verification element |
-| `verify` | verification -> requirement | Verification verifies a requirement |
+| `specify` | requirement -> capability | Requirement specifies a capability |
+| `specifiedBy` | capability -> requirement | Capability is specified by a requirement |
+| `verifiedBy` | capability or requirement -> verification | Capability or requirement is verified by a verification element |
+| `verify` | verification -> capability or requirement | Verification verifies a capability or requirement |
 | `satisfiedBy` | requirement or evidence-backed verification -> artifact | Links implementation or evidence artifacts |
 | `satisfy` | artifact -> requirement or evidence-backed verification | Inverse satisfaction relation |
-| `refinedBy` | owner -> refinement | Feature or requirement owns a subtype-compatible refinement |
+| `refinedBy` | owner -> refinement | Capability or requirement owns a subtype-compatible refinement |
 | `refine` | refinement -> owner | Refinement points to its owner |
 | `trace` | any -> any | Soft traceability |
 
-Feature-owned refinements:
+Capability-owned refinements:
 
-- `feature refinedBy source`
+- `capability refinedBy source`
+- `capability refinedBy semantic-contract`
+- `capability refinedBy specification`
+- `capability refinedBy constraint`
+- `capability refinedBy behavior`
+- `capability refinedBy state`
+- `capability refinedBy input-output`
 
 Requirement-owned refinements:
 
@@ -174,7 +181,7 @@ Attachments reference existing ontology elements or compatible requirement-owned
 
 Attachment rules:
 
-- Features may attach `ontology` elements.
+- Capabilities may attach `ontology` elements to define reachable semantic context.
 - Requirements may attach `semantic-contract`, `specification`, `constraint`, `behavior`, `state`, or `input-output` refinements owned by other requirement subgraphs.
 - Refinements must already have a `refine` owner relation before they can be attached. Ontology elements are not refinements and are attached directly.
 - Attachments are used for cross-boundary contracts; elements in the same hierarchy use ownership relations instead.
@@ -184,10 +191,10 @@ Attachment rules:
 Use `ontology` elements for reusable meaning:
 
 - `ontology` requires exactly one `#### Ontology` fenced Turtle block.
-- Authored ontology elements should live under `requirements/Ontologies`, not inside feature files.
+- Authored ontology elements should live under `requirements/Ontologies`, not inside capability files.
 - Ontology elements can use `derive` / `derivedFrom` only with other ontology elements.
 - Ontology elements do not author `#### Attachments`.
-- Features attach ontology elements to make terms reachable for descendant features and specifying requirements.
+- Capabilities attach ontology elements to make terms reachable for descendant capabilities and specifying requirements.
 
 Use `#### Concept References` when requirement prose needs readable labels bound to ontology terms:
 
@@ -196,9 +203,9 @@ Use `#### Concept References` when requirement prose needs readable labels bound
   * Service Endpoint: api:ServiceEndpoint
 ```
 
-Use `semantic-contract` elements only as requirement-owned SHACL profiles:
+Use `semantic-contract` elements as capability-owned or requirement-owned SHACL profiles:
 
-- `semantic-contract` must refine a requirement.
+- `semantic-contract` must refine exactly one compatible capability or requirement owner.
 - `#### Shapes` is required.
 - `#### Ontology` is forbidden.
 
@@ -208,9 +215,9 @@ Reqvire validates ontology and semantic contract content by parsing Turtle and r
 - duplicate ontology term declarations are rejected,
 - conflicting declarations are rejected,
 - SHACL references must resolve through reachable ontology context,
-- references to terms in another feature subgraph require an explicit ontology attachment.
+- references to terms in another capability subgraph require an explicit ontology attachment.
 
-Use ontology when content defines domain meaning, vocabulary, object structure, or semantic relationships. Use requirement-owned semantic contracts when one obligation needs a SHACL profile over reachable ontology. Use requirements for system obligations.
+Use ontology when content defines domain meaning, vocabulary, object structure, or semantic relationships. Use semantic contracts when one capability or obligation needs a SHACL profile over reachable ontology. Use requirements for implementable system obligations.
 
 ## Example
 
@@ -222,7 +229,7 @@ Use ontology when content defines domain meaning, vocabulary, object structure, 
 API authentication capability and access-token domain context.
 
 #### Metadata
-  * type: feature
+  * type: capability
 
 #### Attachments
   * [Access Token Ontology](#access-token-ontology)
@@ -310,7 +317,7 @@ Test verifies access tokens conform to the semantic contract.
 
 ## Related Pages
 
-- [Requirements](requirements.md)
+- [Engineering Graph](requirements.md)
 - [Verifications](verifications.md)
 - [Implementation Coverage](implementation_coverage.md)
 - [Submodels and Subgraphs](submodels.md)

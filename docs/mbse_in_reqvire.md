@@ -1,75 +1,86 @@
 ---
 layout: page
-nav_order: 7
-title: MBSE in Reqvire
+nav_order: 2
+title: Strategic Vision
 ---
 
-## Reqvire's MBSE Integration: Overview
+## Git-Native, AI-Native MBSE
 
----
+Reqvire brings Model-Based Systems Engineering into the Git workflow as a semantic engineering graph for building verifiable and traceable systems. Instead of keeping system models in a separate tool and requirements in separate documents, Reqvire stores the semantic engineering graph as structured Markdown that can be reviewed, validated, queried, and used by AI assistants.
 
-Reqvire brings true Git-native Model-Based Systems Engineering to modern engineering teams.
+The model is not just a requirements list. It is an engineering knowledge graph connecting:
 
-### What is MBSE?
+- ontologies
+- capabilities
+- requirements
+- refinements
+- verification evidence
+- implementation artifacts
 
-Model-Based Systems Engineering (MBSE) is a methodology that shifts from traditional document-based approaches to using formal, digital models as the primary means of representing, analyzing, and verifying complex systems. It emphasizes creating interconnected models of system requirements, architecture, behavior, and interfaces to improve traceability, reduce errors, and support collaborative development—especially in fields like aerospace, automotive, and software engineering.
+## Where Reqvire Fits
 
-### MBSE in Reqvire
+Reqvire is converging at the intersection of:
 
-Reqvire integrates MBSE by embedding model-driven principles directly into its Git-native "Requirements-as-Context" framework. Rather than treating models as siloed artifacts in specialized tools (e.g., SysML diagramming software), Reqvire unifies them with requirements management and AI-assisted development in a single, version-controlled Git repository. This creates a "living" system model that's queryable by coding assistants (for example Claude Code plugin workflows or Codex skills) and enforceable across the development lifecycle.
+- SysML and MBSE
+- knowledge graphs
+- ontology-driven engineering
+- semantic engineering
+- context engineering
+- AI-native development infrastructure
 
-The core idea: **Requirements act as the canonical source of truth**, while system models provide structured representations of how those requirements translate into system behavior and architecture. This unification enables automated workflows that keep everything aligned, traceable, and adaptable to changes.
+It keeps MBSE traceability and lifecycle discipline, but represents the model in a Git-native form that software teams and AI systems can both use.
 
-## How It Works: Key Mechanisms
+## What MBSE Means Here
 
----
+Model-Based Systems Engineering shifts engineering from static documents toward connected models of system meaning, behavior, obligations, interfaces, verification, and evidence.
 
-Reqvire's MBSE features are designed for seamless integration without disrupting Git workflows. Here's how it unifies requirements, system models, and AI:
+In Reqvire, that model remains lightweight and Git-native:
 
-1. **Version-Controlled System Modeling**  
-   - System models are stored as structured, executable artifacts in Git (e.g., using formats like YAML or JSON for requirements links, or integrated with tools for behavioral diagrams).  
-   - Models represent system architecture, interfaces, and dynamics, ensuring they're "living" documents that evolve with code branches, pull requests, and CI/CD pipelines.
+- Ontologies define reusable domain meaning.
+- Capabilities define stable operational or system abilities.
+- Requirements define implementable obligations.
+- Refinements capture behavioral, state, semantic, input/output, constraint, and specification detail.
+- Verifications prove that obligations and capability expectations are met.
+- Implementation artifacts show where requirements and evidence are realized.
 
-2. **Bidirectional Traceability**  
-   - Automatically links requirements to model elements, code, tests, and other artifacts.  
-   - For example, a change in a requirement instantly highlights impacted model components, preventing drift and enabling full lineage tracking from spec to implementation.
+This makes the model useful to systems engineers, software engineers, reviewers, compliance stakeholders, and AI systems.
 
-3. **Smart Change Propagation**  
-   - When requirements evolve, Reqvire identifies downstream effects on the system model (e.g., updating behaviors or interface definitions).  
-   - This propagates changes consistently across the repo, reducing manual rework and errors.
+## Why Capabilities Matter
 
-4. **Verification and Validation**  
-   - Tracks coverage of verifications (e.g., tests proving a model element meets requirements) and validations (e.g., ensuring the overall system behaves as specified).  
-   - Supports specification-driven development, where generated code or simulations remain tied to originating model/requirement nodes.
+Capabilities are the semantic bridge between domain meaning and implementable work. They describe what the system is able to accomplish without locking the model to a UI screen, deployment artifact, ticket, or code module.
 
-5. **AI-Enhanced Reasoning**  
-   - AI tools query the unified context (requirements + models) to suggest model refinements, generate compliant code, or simulate behaviors.  
-   - Integration with coding assistants allows natural-language interactions, e.g., "Refine the control system model based on updated safety requirements."
+Good capabilities are stable, decomposable, implementation-independent, and verifiable. They provide durable traceability anchors for requirement clusters, ontology context, verification evidence, and architecture impact.
 
-## Example Workflow in Reqvire
+## AI-Native Context
 
----
+Reqvire models are intentionally readable by both humans and AI systems. The graph gives assistants structured context for:
 
-A typical MBSE-driven workflow might look like this:
+- finding relevant requirements before editing code
+- understanding capability intent
+- resolving ontology vocabulary
+- checking verification and implementation evidence
+- generating implementation tasks
+- explaining change impact
+- maintaining traceability during refactors
 
-1. **Define Requirements**: Author structured specs in Git/.
-2. **Build System Model**: Create linked model elements or derived requirements (e.g., state machines or block definitions) using reqvire CLI or AI coding assistants.
-3. **Trace and Link**: Use Reqvire commands to analyse traces, coverages and understand model.
-4. **AI-Assisted Iteration**: Query your coding assistant: "Generate test cases for this subsystem model," pulling context from the unified repo.  
-5. **Propagate Changes**: Edit a requirement; Reqvire flags model updates needed and automates propagation.  
-6. **Validate in PR**: During code review, visualize traceability and change impact to confirm compliance or iterate over required updates.
-7. **Merge and Deploy**: Full audit trail ensures the deployed system matches the model.
+AI can work from the same versioned model that engineers review in pull requests.
 
-## Benefits for Engineering Teams
+## Typical Workflow
 
----
+1. Define or refine capability intent.
+2. Attach ontology context that gives the capability stable domain meaning.
+3. Derive requirements that specify the capability.
+4. Add refinements for behavior, state, constraints, I/O, semantic contracts, or detailed specifications.
+5. Link requirements and capabilities to verification elements.
+6. Link requirements and evidence-backed verifications to implementation artifacts.
+7. Run validation, coverage, traces, and change impact before review.
 
-- **Eliminates Outdated Docs**: Models and requirements stay synchronized in Git, avoiding the "doc rot" common in traditional MBSE.  
-- **Boosts Efficiency**: Automation cuts manual tracing by 50–70% (based on similar tools), accelerating delivery.  
-- **Enhances Quality**: Full traceability and validation reduce compliance risks in regulated industries.  
-- **Scales Collaboration**: Git-native design fits DevOps teams, with AI lowering the MBSE learning curve.  
-- **Reduces Misalignment**: Developers and modelers work from one shared context, minimizing handoffs.
+## Benefits
 
-In essence, Reqvire democratizes MBSE by making it lightweight and developer-friendly, turning complex systems engineering into an intelligent, traceable extension of everyday Git workflows.
+- **Less drift**: requirements, semantic meaning, verification, and implementation evidence stay linked.
+- **Better reviews**: pull requests can show impact and coverage in the same repository as the code.
+- **Better AI context**: assistants reason from a structured graph instead of scattered prose.
+- **Better lifecycle traceability**: changes propagate through capabilities, requirements, verifications, and artifacts.
+- **Lower process overhead**: the model stays in Markdown and Git rather than a separate heavyweight tool.
 
-For hands-on details, check the [installation guide](https://www.reqvire.org/user_guide#installation) or the [Coding Assistants guide](https://www.reqvire.org/coding_assistants.html).
+Reqvire makes MBSE a practical, reviewable, AI-ready extension of everyday engineering work.

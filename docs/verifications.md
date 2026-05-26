@@ -1,6 +1,6 @@
 ---
 layout: page
-nav_order: 5
+nav_order: 6
 title: Verifications
 ---
 
@@ -8,9 +8,9 @@ title: Verifications
 
 ---
 
-In Reqvire, **verification** is the process of confirming that a system or its components meet specified **requirements**. Verification ensures that the system has been **built right**, checking whether it conforms to the defined functional and non-functional requirements at each level of system decomposition.
+In Reqvire, **verification** is the process of confirming that system behavior, implementation evidence, or operational evidence satisfies specified **capabilities** and **requirements**. Verification keeps the engineering knowledge graph tied to real evidence.
 
-Verification activities are integrated into the **requirements structure**, maintaining clear **traceability** between requirements and their associated **verification methods** and **test artifacts**.
+Verification activities are integrated into the semantic engineering graph, maintaining clear traceability between capabilities, requirements, verification methods, tests, proofs, analysis artifacts, and implementation evidence.
 
 ## Verification Element Types
 
@@ -36,7 +36,7 @@ Reqvire supports several verification element types that align with standard sys
 
 ---
 
-Reqvire uses a **Verification Roll-up approach**, where verification of detailed requirements provides coverage for their parent requirements through the requirements hierarchy.
+Reqvire uses a verification roll-up approach for requirements, where verification of detailed requirements provides coverage for their parent requirements through the requirements hierarchy. Capabilities may also be directly verified, while capability coverage can roll up from the requirements that specify them.
 
 ### Leaf Requirements Focus
 
@@ -67,10 +67,10 @@ The verification coverage system tracks:
 
 ---
 
-Reqvire implements a two-level verification approach:
+Reqvire implements a graph-based verification approach:
 
-1. **Requirements → Verifications**: Requirements link to verification elements via `verifiedBy` relations
-2. **Test-Verifications → Test Implementations**: Test-verification elements link to actual test scripts/artifacts via `satisfiedBy` relations
+1. **Capabilities or requirements → verifications**: Capabilities and requirements link to verification elements via `verifiedBy` relations
+2. **Evidence-backed verifications → evidence artifacts**: Test-verification and formal-proof-verification elements link to actual test scripts, proof artifacts, generated fixtures, or reports via `satisfiedBy` relations
 
 ```markdown
 ### My Requirement
@@ -95,6 +95,7 @@ This test verifies response time requirements.
 ### Bidirectional Traceability
 Reqvire automatically maintains bidirectional relations:
 - When a requirement has `verifiedBy: [Test A]`, the Test A element shows `verify: [Requirement]`
+- When a capability has `verifiedBy: [Test A]`, the Test A element shows `verify: [Capability]`
 - This ensures complete traceability in both directions
 
 ## Verification Coverage

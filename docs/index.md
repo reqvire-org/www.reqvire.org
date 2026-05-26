@@ -8,98 +8,126 @@ permalink: /
 # What is Reqvire?
 {: .fs-9 }
 
-**Reqvire** is a lightweight, Git-native **Requirements-as-Context** framework that redefines how modern engineering teams design, build, and maintain software.
+**Reqvire** is a semantic engineering graph for building verifiable and traceable systems.
 {: .fs-6 .fw-300 }
 
-It unifies system modeling, requirements management, context engineering and AI-assisted development into a single workflow—providing complete traceability, intelligent automation, and faster delivery while staying fully aligned with your codebase.
+It connects ontologies, capabilities, requirements, refinements, verifications, and implementation evidence directly inside your Git workflow.
 
 [View it on GitHub](https://github.com/reqvire-org/reqvire){: .btn .fs-5 .mb-4 .mb-md-0 }
 
+## Engineering Knowledge Graph
 
+Reqvire is an engineering knowledge graph for systems development. It connects the engineering knowledge that usually lives in disconnected documents, tickets, spreadsheets, diagrams, tests, and code:
 
-## Key Features
+- **Ontologies** define domain concepts, relationships, vocabulary, and semantic meaning.
+- **Capabilities** describe coherent operational, product, business, regulatory, or system abilities.
+- **Requirements** define implementable obligations, constraints, guarantees, and behavioral expectations.
+- **Refinements** turn requirements and capabilities into precise engineering contracts.
+- **Verifications** provide evidence that requirements and capabilities are satisfied.
+- **Implementation artifacts** connect the model to code, tests, proofs, and generated evidence.
 
----
+```text
+Ontology
+    ↓
+Capabilities
+    ↓
+Requirements
+    ↓
+Refinements
+    ↓
+Verification
+    ↓
+Implementation evidence
+```
 
-### **Requirements-as-Context**
-Create a structured, canonical source of truth for your project.  
-Reqvire provides a consistent context layer that AI tools can reliably query—so they always understand what needs to be built, where changes belong, and how system components fit together.
+Unlike traditional requirements tools, Reqvire treats engineering knowledge as a living semantic engineering graph rather than disconnected documents. The graph stays versioned, reviewable, queryable, and aligned with the codebase.
 
-### **Requirements-as-Code**
-Evolve requirements from static documents into version-controlled, executable artifacts.  
-Reqvire keeps your system model alive in Git—no more lost specs, outdated docs, or knowledge locked in transient tickets.
+Reqvire naturally sits between:
 
-### **Intelligent Engineering**
-Bring Model-Based Systems Engineering (MBSE) directly into your Git workflow:
+- SysML and MBSE
+- knowledge graphs
+- semantic engineering
+- context engineering
+- AI-native development infrastructure
 
-- **Specification-Driven Development**  
-  Develop from requirements. Enforce clear specifications and generate code that stays tied to its originating requirements.
+## Why Reqvire?
 
-- **Automated Traceability**  
-  Maintain instant, bidirectional links between requirements, code, tests, and artifacts.
+Traditional engineering knowledge is fragmented across:
 
-- **Verification & Validation**  
-  Track verifications, ensure coverage, and validate that implementations meet intended behavior.
+- documents
+- tickets
+- architecture diagrams
+- code
+- spreadsheets
+- wikis
+- test systems
 
-- **Smart Change Propagation**  
-  Identify impacted parts of the system and help propagate requirement changes consistently across the model and codebase.
+That fragmentation creates stale specifications, broken traceability, inconsistent semantics, disconnected verification, weak AI context, and difficult change propagation.
 
-- **Seamless Integration**  
-  Works naturally with branches, pull requests, reviews, and CI/CD. No workflow disruption—just added intelligence.
+Reqvire keeps the model in Git so normal engineering workflows still work: branches, pull requests, reviews, CI, diffs, and audit history.
 
+## AI-Native Engineering
 
-## Reqvire Modeling Language
+Reqvire models are designed for both humans and AI systems. The semi-structured modeling language gives AI assistants a stable context layer they can reason over:
 
----
+- semantic search
+- traceability analysis
+- impact analysis
+- architecture-aware code generation
+- AI-assisted verification
+- context-aware task planning
+- intelligent change propagation
 
-Reqvire uses a lightweight, human- and AI-friendly modeling language built on **semi-structured Markdown**.
+Reqvire does not replace engineering judgment. It gives engineers and assistants a shared, traceable model of intent, obligations, evidence, and implementation context.
 
-### Why Semi-Structured Markdown?
-Choosing Markdown as the foundation gives Reqvire several superpowers:
+## Key Capabilities
 
-- **Zero friction for AI** – LLMs (Claude, ChatGPT, Cursor, local models, etc.) can read, write, and reason about requirements and models without custom parsers  
-- **Git-native from day one** – models live as regular `.md` files, fully diffable and reviewable in pull requests  
-- **Instant validation & automation** – simple rules make it trivial to lint, auto-format, and generate artifacts  
-- **No learning curve** – engineers already know Markdown; no new DSL or proprietary syntax to learn  
+### Semantic Engineering in Git
 
-The result: requirements and system models that are simultaneously precise enough for traceability and loose enough for everyday editing and AI assistance.
+Keep engineering knowledge versioned, traceable, reviewable, AI-readable, and semantically connected alongside implementation artifacts.
 
+### Capability-Driven Engineering
 
-## Human in Control — Always
+Develop systems around coherent operational capabilities instead of disconnected feature lists or isolated requirement statements. Capabilities decompose hierarchically, connect to ontology concepts, generate requirements, support verification, and remain stable across implementation changes.
 
----
+### Ontology-Driven Engineering
 
-While Reqvire empowers AI tools to act as smart collaborators, the **human engineer remains the system’s captain** — setting direction, making decisions, and approving outcomes.
+Bring semantic vocabulary and domain meaning directly into the engineering workflow. Ontologies make terminology explicit, reusable, and visible to humans and AI systems.
 
-Reqvire ensures that:
-- Every AI-suggested change is traceable and reviewable
-- System evolution remains understandable and documented
-- AI tooling acts in service of the engineer’s intent, not in place of it
+### Specification-Driven Development
 
-## Diagram & Traceability Automation
+Develop from capabilities and requirements while keeping implementation, architecture, tests, and verification artifacts aligned with engineering intent.
 
----
+### Automated Traceability
 
-Reqvire automatically parses structured Markdown to generate:
-- **Architecture diagrams** (component hierarchies, interfaces, dependencies)
-- **Traceability reports** linking requirements to architecture, verifications, and tests
-- **Impact reports** showing what was changed, and what it affects
-- **Requirement flow diagrams** visualizing hierarchical relationships and derivations
-- **Verification coverage maps** showing which leaf requirements are verified and how
-- **Change propagation analysis** identifying all downstream effects of modifications
-- **Model summary reports** providing overview statistics and health metrics
-- **Submodels/subgraphs analysis** exposing independent hierarchies and cross-boundary couplings
-- **Interactive HTML documentation** with clickable diagrams and searchable content
-- **MCP server integration** exposing structured model tools to MCP-capable coding assistants
+Maintain links between ontologies, capabilities, requirements, refinements, code, tests, proofs, and verification artifacts.
 
-## CI/CD Integration
+### Verification and Validation
 
----
+Track verification coverage, behavioral correctness, implementation alignment, and validation evidence throughout the lifecycle.
 
-Reqvire is designed for automation. In typical Git-based workflows, you can:
+### Smart Change Propagation
 
-- **Validate Markdown structure** using static checks
-- **Generate traceability and change impact reports** for stakeholder review
-- **Block PRs** if requirements are incomplete or broken
-- **Package models** into versioned documentation releases
-- **Integrate with GitHub Actions/GitLab CI** for automated validation
+Identify impacted requirements, capabilities, verifications, implementation artifacts, and semantic dependencies before changes drift out of alignment.
+
+## Automation
+
+Reqvire can generate:
+
+- model diagrams and structural views
+- traceability reports
+- verification and implementation coverage reports
+- change impact reports
+- submodel and coupling analysis
+- semantic ontology exports
+- interactive HTML documentation
+- MCP tools for AI assistants
+
+## Next Steps
+
+- [User Guide](user_guide.md)
+- [Strategic Vision](mbse_in_reqvire.md)
+- [Engineering Graph](requirements.md)
+- [Modeling Language](modeling_language.md)
+- [Verifications](verifications.md)
+- [Coding Assistants](coding_assistants.md)

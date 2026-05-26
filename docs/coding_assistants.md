@@ -1,6 +1,6 @@
 ---
 layout: page
-nav_order: 2
+nav_order: 10
 title: Coding Assistants
 ---
 
@@ -8,13 +8,13 @@ title: Coding Assistants
 
 ---
 
-Reqvire integrates with coding assistants through three main approaches:
+Reqvire integrates with coding assistants by exposing the engineering knowledge graph as structured, AI-ready context:
 
 1. **Claude Code plugin** (marketplace plugin with slash commands and skills)
 2. **Codex skill package** (installable to `$CODEX_HOME/skills`)
 3. **MCP server** (standard tool interface for MCP-capable clients)
 
-All approaches support MBSE-first, requirements-as-code workflows.
+All approaches support ontology-driven engineering, capability-driven planning, requirements-as-code, semantic traceability, and AI-native MBSE workflows.
 
 ## Prerequisites
 
@@ -65,7 +65,7 @@ For detailed options, see the [Installation Guide](https://www.reqvire.org/user_
 - `/reqvire:analyze-model`
 - `/reqvire:add-requirement`
 - `/reqvire:add-verification`
-- `/reqvire:add-feature`
+- `/reqvire:add-capability`
 - `/reqvire:analyze-coverage`
 - `/reqvire:analyze-impact`
 - `/reqvire:collect`
@@ -123,17 +123,20 @@ For Streamable HTTP request details and the active tool contract, see the [MCP S
 
 ---
 
-1. **Requirements first**: define or update requirements.
-2. **Refinements**: add specs/constraints/behaviors.
-3. **Verifications**: ensure leaf requirements are verified.
-4. **Implementation links**: connect code/tests with `satisfiedBy`.
-5. **Validate**: run `reqvire validate`, `reqvire lint`, `reqvire coverage`.
+1. **Capability first**: understand or define the operational ability being changed.
+2. **Ontology context**: attach or inspect semantic vocabulary that gives the capability meaning.
+3. **Requirements**: define implementable obligations that specify the capability.
+4. **Refinements**: add specs, constraints, behaviors, states, I/O contracts, or semantic contracts.
+5. **Verifications**: ensure capabilities or leaf requirements are verified.
+6. **Implementation links**: connect code, tests, proofs, and evidence with `satisfiedBy`.
+7. **Validate**: run `reqvire validate`, `reqvire lint`, `reqvire coverage`.
 
 ## Example Assistant Prompts
 
 ---
 
 - "Show unverified leaf requirements and propose verifications."
+- "Explain the capability, ontology context, requirements, and verification evidence for this change."
 - "Analyze change impact against `main` and summarize invalidated verifications."
 - "Create implementation tasks for the impacted requirements with traceability."
 - "Refactor this requirement to extract technical details into specification elements."
@@ -142,8 +145,9 @@ For Streamable HTTP request details and the active tool contract, see the [MCP S
 
 ---
 
-- Requirements model exploration and navigation
+- Engineering knowledge graph exploration and navigation
 - Coverage and traceability analysis
 - Change impact assessment
-- MBSE-guided feature planning and implementation task generation
+- MBSE-guided capability planning and implementation task generation
+- Ontology-driven context collection for AI assistants
 - Refactoring and consolidation of requirement structures
