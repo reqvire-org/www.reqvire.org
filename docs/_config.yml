@@ -2,7 +2,7 @@
 remote_theme: just-the-docs/just-the-docs
 
 title: Reqvire
-description: Requirements-as-context framework for modern engineering teams.
+description: Semantic engineering graph for building verifiable and traceable systems.
 
 logo: "/assets/images/logo.png"
 favicon_ico: "/assets/images/favicon.ico"
@@ -92,4 +92,3 @@ callouts:
   warning:
     title: Warning
     color: red
-

@@ -11,7 +11,7 @@ permalink: /
 **Reqvire** is a semantic engineering graph for building verifiable and traceable systems.
 {: .fs-6 .fw-300 }
 
-It connects ontologies, capabilities, requirements, refinements, verifications, and implementation evidence directly inside your Git workflow.
+Model ontologies, capabilities, requirements, refinements, and verification directly inside Git — with AI-native traceability and engineering context built in.
 
 [View it on GitHub](https://github.com/reqvire-org/reqvire){: .btn .fs-5 .mb-4 .mb-md-0 }
 
