@@ -210,53 +210,74 @@ Reqvire is designed to work with a structured semantic engineering graph in Mark
 
 ### Folder Structure
 
-Reqvire supports flexible organization based on **architectural or capability decomposition** - structuring by subsystem, component, capability, or domain area rather than by artifact type alone. Model elements can be organized separately from implementation or co-located with code.
+Reqvire supports flexible organization based on **capability and semantic decomposition**. The recommended structure separates capability-rooted subgraphs, shared ontology vocabulary, and verification evidence while keeping graph relations authoritative.
 
-**Example 1: Requirements separate from implementation**
+**Recommended model layout**
 
 ```
 project/
-├── Requirements.md
-├── Authentication/
-│   └── Requirements.md           # Authentication subsystem requirements
-├── Storage/
-│   └── Requirements.md           # Storage subsystem requirements
-├── API/
-│   └── Requirements.md           # API subsystem requirements
+├── requirements/
+│   ├── Capabilities/
+│   │   ├── Product/
+│   │   │   └── Collaboration/
+│   │   │       ├── Collaboration.md
+│   │   │       ├── CollaborationRequirements.md
+│   │   │       ├── CollaborationBehaviors.md
+│   │   │       └── Architecture/
+│   │   │           └── CollaborationServiceSpecifications.md
+│   │   └── Platform/
+│   │       └── Identity/
+│   │           ├── Identity.md
+│   │           └── IdentityRequirements.md
+│   ├── Ontologies/
+│   │   ├── Collaboration.md
+│   │   └── Identity.md
+│   └── Verifications/
+│       ├── Collaboration/
+│       │   └── CollaborationVerifications.md
+│       └── Identity/
+│           └── IdentityVerifications.md
 └── src/
     ├── auth.rs
-    ├── storage.rs
-    └── api.rs
+    └── collaboration.rs
 ```
 
-**Example 2: Requirements co-located with implementation**
+This layout uses:
+
+- `Capabilities/` for capability-rooted subgraphs, including the requirements and refinements owned by the capability.
+- `Ontologies/` for reusable semantic vocabulary and domain meaning.
+- `Verifications/` for verification elements and evidence references.
+- Capability-local `Architecture/` folders for design specifications that refine that capability or its requirements.
+
+**Co-located variant**
 
 ```
 project/
-├── Requirements.md
 └── src/
     ├── authentication/
-    │   ├── Requirements.md       # Authentication subsystem requirements
+    │   ├── Capabilities.md       # capability and local requirements
+    │   ├── IdentityOntology.md   # local ontology only if intentionally scoped here
     │   └── auth.rs
-    ├── storage/
-    │   ├── Requirements.md       # Storage subsystem requirements
-    │   └── storage.rs
-    └── api/
-        ├── Requirements.md       # API subsystem requirements
-        └── api.rs
+    └── collaboration/
+        ├── Capabilities.md
+        ├── CollaborationRequirements.md
+        └── collaboration.rs
 ```
 
-Both approaches organize by architectural decomposition. The co-location approach provides additional benefits for developers and AI coding assistants by placing requirements directly alongside the code they describe.
+Co-location can be useful for developers and AI coding assistants, but shared ontology should still be easy to discover and attach explicitly. Do not rely on paths to imply ownership; model ownership through `specify`, `refine`, `verify`, and attachments.
 
 ### Model Structure
 
-Markdown files contain **requirements** and **verification elements** that together form the complete model structure. These elements are connected through:
+Markdown files contain **capabilities**, **ontology elements**, **requirements**, **refinements**, and **verification elements** that together form the complete semantic engineering graph. These elements are connected through:
 
 - **Containment**: The folder and file hierarchy provides the containment structure
 - **Relations**: Elements are wired together using relations such as:
-  - `derivedFrom` - hierarchical relation showing how detailed requirements derive from higher-level ones
-  - `verifies` - linking verifications to requirements they verify
-  - `trace` - soft relations for traceability between elements
+  - `derivedFrom` / `derive` - hierarchy inside the same family: capability-to-capability, requirement-to-requirement, or ontology-to-ontology
+  - `specify` / `specifiedBy` - bridge from requirements to capabilities
+  - `refine` / `refinedBy` - ownership of refinements by capabilities or requirements
+  - `verify` / `verifiedBy` - verification of capabilities or requirements
+  - `satisfiedBy` - implementation or evidence links for requirements and evidence-backed verifications
+  - attachments - explicit cross-subgraph reuse of ontology or compatible requirement-owned contracts
 
 The combination of containment structure and explicit relations creates the full semantic engineering graph.
 
@@ -1620,6 +1641,8 @@ reqvire containment --json
 - Planning file reorganization
 - Identifying folder structure issues
 - Before large-scale refactoring with mv-file
+
+Use containment together with `submodels` and `search` when planning structure changes. A common target is a capability-centered model with `Capabilities/`, `Ontologies/`, and `Verifications/` planes, but this is guidance rather than a hard schema. Preserve valid project-specific naming when the graph remains clear.
 
 **Example: Find files that need consolidation**
 

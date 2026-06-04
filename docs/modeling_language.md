@@ -22,6 +22,27 @@ Each Reqvire model consists of:
 
 Elements are defined using `###` Markdown headers. Metadata, relations, details, and attachments are represented as reserved `####` subsections.
 
+## Physical Containment
+
+Reqvire's logical graph is defined by element metadata and relations. Folders and files provide physical containment, review boundaries, and navigation.
+
+Recommended top-level model planes:
+
+```text
+<model-root>/
+  Capabilities/
+  Ontologies/
+  Verifications/
+```
+
+`Capabilities/` contains capability-rooted subgraphs: the capability element, child capabilities, requirements that specify the capability, owned refinements, local semantic contracts, and capability-local architecture specifications.
+
+`Ontologies/` contains reusable `ontology` elements. Capabilities attach ontology from this plane instead of nesting shared vocabulary inside capability files.
+
+`Verifications/` contains verification elements grouped by verification domain. Verifications prove capabilities or requirements through `verify` / `verifiedBy`; evidence-backed verification types may use `satisfiedBy`.
+
+The folder structure is guidance, not schema. File paths should help humans review the model, while `type`, `specify`, `refine`, `verify`, and attachments define the authoritative graph.
+
 ## Capability and Requirement Ownership
 
 Reqvire enforces capability-rooted ownership while keeping ontology, requirement, and verification semantics explicit:

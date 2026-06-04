@@ -338,31 +338,44 @@ requirement
 
 `specify` / `specifiedBy` is the bridge between requirements and capabilities.
 
-## Requirement Containment
+## Model Containment
 
-Reqvire uses files and folders for physical organization, while capability and requirement relations define the logical model.
+Reqvire uses files and folders for physical organization, while element metadata and relations define the logical model. A good layout makes capability ownership, ontology context, requirements, refinements, and verification evidence easy to find without replacing graph relations.
 
-Example:
+Recommended top-level model planes:
 
 ```text
 requirements/
-├── Capabilities.md
-├── Identity/
-│   ├── Requirements.md
-│   ├── SemanticContracts.md
-│   └── Verifications.md
-└── Security/
-    ├── Requirements.md
-    ├── Sources.md
-    └── Verifications.md
+├── Capabilities/
+│   ├── Product/
+│   │   └── Collaboration/
+│   │       ├── Collaboration.md
+│   │       ├── CollaborationRequirements.md
+│   │       ├── CollaborationBehaviors.md
+│   │       └── Architecture/
+│   │           └── CollaborationServiceSpecifications.md
+│   └── Platform/
+│       └── Identity/
+│           ├── Identity.md
+│           └── IdentityRequirements.md
+├── Ontologies/
+│   ├── Collaboration.md
+│   └── Identity.md
+└── Verifications/
+    ├── Collaboration/
+    │   └── CollaborationVerifications.md
+    └── Identity/
+        └── IdentityVerifications.md
 ```
 
 In this example:
 
-- `Capabilities.md` contains capability elements.
-- `Ontologies/Identity.md` contains shared ontology elements.
-- `Identity/Requirements.md` contains system obligations specified by identity capabilities.
-- `Identity/Verifications.md` contains evidence that verifies requirements.
+- `Capabilities/` contains capability-rooted subgraphs and the requirements/refinements owned by each capability.
+- `Ontologies/` contains shared `ontology` elements that capabilities attach for semantic context.
+- `Verifications/` contains verification elements grouped by verification domain.
+- `Architecture/` folders live inside the capability subgraph they refine, unless reusable meaning should be extracted into ontology.
+
+The folder names are guidance, not schema. The authoritative semantics remain the element `type` metadata and relations such as `specify`, `refine`, `verify`, and attachments.
 
 ## Verification and Coverage
 
