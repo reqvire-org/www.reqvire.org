@@ -206,9 +206,9 @@ Use ontology for:
 
 Use `semantic-contract` for:
 
-- SHACL validation constraints for one capability or obligation,
+- SHACL validation constraints for one requirement obligation,
 - payload or state profiles over reachable ontology,
-- examples or validation targets for capability-level or requirement-specific contracts.
+- requirement-owned validation profiles that depend on ontology terms reachable through the owning requirement's capability context.
 
 Use a requirement instead when the statement is a system obligation.
 
@@ -219,7 +219,14 @@ Rule of thumb:
 - `This domain term means...` may belong in ontology.
 - `The system shall...` belongs in a requirement.
 
-This split prevents requirements from becoming overloaded with vocabulary and data-model definitions. Ontology defines what domain objects mean; the capability defines the stable ability; the requirement states what the system must do; a semantic contract can define the exact shape/profile that makes the capability or obligation precise.
+This split prevents requirements from becoming overloaded with vocabulary and data-model definitions. Ontology defines what domain objects mean; the capability defines the stable ability and attaches ontology context; the requirement states what the system must do; a requirement-owned semantic contract can define the exact shape/profile that makes the obligation precise.
+
+Keep OWL and SHACL responsibilities separate:
+
+- OWL ontology blocks define the vocabulary: classes, object properties, datatype properties, subclass relations, domain/range, labels, comments, restrictions, equivalence, inverse properties, and other reusable semantic meaning.
+- SHACL shape blocks define validation constraints over that vocabulary: target classes, required properties, cardinality, datatype checks, allowed values, patterns, and operational data-quality rules.
+- Use XSD datatypes through `owl:DatatypeProperty` and `rdfs:range` in OWL, then repeat the operational datatype/cardinality constraint in SHACL when the data must be validated.
+- Use `rdfs:label` and `rdfs:comment` for display labels and descriptions. Create project-specific `...Name` or `...Meaning` properties only when the name or meaning is itself a domain concept that must be queried or constrained.
 
 ````markdown
 ### Access Token Ontology
@@ -234,9 +241,17 @@ Defines access token domain meaning.
 ```turtle
 @prefix auth: <urn:reqvire:auth:> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-auth:AccessToken a owl:Class .
-auth:subject a owl:ObjectProperty .
+auth:AccessToken a owl:Class ;
+  rdfs:label "Access token" ;
+  rdfs:comment "Credential presented by a client to authenticate API access." .
+
+auth:subject a owl:DatatypeProperty ;
+  rdfs:domain auth:AccessToken ;
+  rdfs:range xsd:string ;
+  rdfs:comment "Subject identifier carried by an access token." .
 ```
 
 ````
@@ -259,6 +274,7 @@ Defines the SHACL profile for one access-token validation requirement.
 ```turtle
 @prefix auth: <urn:reqvire:auth:> .
 @prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
 auth:AccessTokenValidationShape
   a sh:NodeShape ;
@@ -266,6 +282,8 @@ auth:AccessTokenValidationShape
   sh:property [
     sh:path auth:subject ;
     sh:minCount 1 ;
+    sh:maxCount 1 ;
+    sh:datatype xsd:string ;
   ] .
 ```
 ````

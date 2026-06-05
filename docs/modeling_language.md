@@ -15,7 +15,7 @@ Each Reqvire model consists of:
 - **Ontologies** - first-class OWL/Turtle vocabulary and reusable semantic model terms.
 - **Capabilities** - coherent operational, product, business, regulatory, or system abilities.
 - **Requirements** - implementable obligations, constraints, guarantees, and behavioral expectations that specify capabilities.
-- **Refinements** - `source`, `semantic-contract`, `specification`, `constraint`, `behavior`, `state`, and `input-output` detail owned by capabilities or requirements.
+- **Refinements** - `source`, `semantic-contract`, `semantic-query-contract`, `specification`, `constraint`, `behavior`, `state`, and `input-output` detail owned by capabilities or requirements.
 - **Verifications** - evidence that capabilities or requirements are verified by tests, proofs, analysis, inspection, or demonstration.
 - **Relations** - explicit links between model elements and implementation/evidence artifacts.
 - **Files and folders** - physical organization for model content.
@@ -35,7 +35,7 @@ Recommended top-level model planes:
   Verifications/
 ```
 
-`Capabilities/` contains capability-rooted subgraphs: the capability element, child capabilities, requirements that specify the capability, owned refinements, local semantic contracts, and capability-local architecture specifications.
+`Capabilities/` contains capability-rooted subgraphs: the capability element, child capabilities, requirements that specify the capability, owned refinements, requirement-owned semantic contracts, and capability-local architecture specifications.
 
 `Ontologies/` contains reusable `ontology` elements. Capabilities attach ontology from this plane instead of nesting shared vocabulary inside capability files.
 
@@ -131,6 +131,7 @@ Refinements and verifications must not declare governance metadata.
 | Ontology | `ontology` | OWL/Turtle vocabulary, concept, relation, and semantic model definitions |
 | Refinement | `source` | Stakeholder, regulatory, contractual, policy, or external source material |
 | Refinement | `semantic-contract` | SHACL shape profile over reachable ontology |
+| Refinement | `semantic-query-contract` | Requirement-owned declarative SPARQL query contract over reachable ontology context |
 | Refinement | `specification` | Detailed technical specification |
 | Refinement | `constraint` | Limit or boundary |
 | Refinement | `behavior` | Behavioral contract |
@@ -175,7 +176,6 @@ Supported core relations:
 Capability-owned refinements:
 
 - `capability refinedBy source`
-- `capability refinedBy semantic-contract`
 - `capability refinedBy specification`
 - `capability refinedBy constraint`
 - `capability refinedBy behavior`
@@ -185,6 +185,7 @@ Capability-owned refinements:
 Requirement-owned refinements:
 
 - `requirement refinedBy semantic-contract`
+- `requirement refinedBy semantic-query-contract`
 - `requirement refinedBy specification`
 - `requirement refinedBy constraint`
 - `requirement refinedBy behavior`
@@ -203,11 +204,11 @@ Attachments reference existing ontology elements or compatible requirement-owned
 Attachment rules:
 
 - Capabilities may attach `ontology` elements to define reachable semantic context.
-- Requirements may attach `semantic-contract`, `specification`, `constraint`, `behavior`, `state`, or `input-output` refinements owned by other requirement subgraphs.
+- Requirements may attach `semantic-contract`, `semantic-query-contract`, `specification`, `constraint`, `behavior`, `state`, or `input-output` refinements owned by other requirement subgraphs.
 - Refinements must already have a `refine` owner relation before they can be attached. Ontology elements are not refinements and are attached directly.
 - Attachments are used for cross-boundary contracts; elements in the same hierarchy use ownership relations instead.
 
-## Ontologies, Concept References, and Semantic Contracts
+## Ontologies, Concept References, Semantic Contracts, and Semantic Query Contracts
 
 Use `ontology` elements for reusable meaning:
 
@@ -216,6 +217,8 @@ Use `ontology` elements for reusable meaning:
 - Ontology elements can use `derive` / `derivedFrom` only with other ontology elements.
 - Ontology elements do not author `#### Attachments`.
 - Capabilities attach ontology elements to make terms reachable for descendant capabilities and specifying requirements.
+- OWL ontology content should define classes, object properties, datatype properties, subclass relations, domain/range, labels, comments, restrictions, equivalence, inverse properties, property chains, and other reusable semantic meaning.
+- Use XSD datatypes through `owl:DatatypeProperty` and `rdfs:range`. Use `rdfs:label` and `rdfs:comment` for ordinary display labels and descriptions instead of project-specific name/meaning properties unless those properties are true domain concepts.
 
 Use `#### Concept References` when requirement prose needs readable labels bound to ontology terms:
 
@@ -224,21 +227,33 @@ Use `#### Concept References` when requirement prose needs readable labels bound
   * Service Endpoint: api:ServiceEndpoint
 ```
 
-Use `semantic-contract` elements as capability-owned or requirement-owned SHACL profiles:
+Use `semantic-contract` elements as requirement-owned SHACL profiles:
 
-- `semantic-contract` must refine exactly one compatible capability or requirement owner.
+- `semantic-contract` must refine exactly one requirement.
 - `#### Shapes` is required.
 - `#### Ontology` is forbidden.
+- SHACL shapes should target OWL classes and validate operational constraints such as required properties, cardinality, datatypes, allowed values, patterns, and closed-world data-quality rules.
+- SHACL shape profiles are validation contracts. They are not exported as SHACL-AF materialization rules unless explicit `sh:rule` support is authored and implemented.
 
-Reqvire validates ontology and semantic contract content by parsing Turtle and running lightweight SHACL sanity checks:
+Use `semantic-query-contract` elements as requirement-owned declarative query contracts:
+
+- `semantic-query-contract` must refine exactly one requirement.
+- `#### Query` is required and must contain exactly one fenced `sparql` code block.
+- `#### Ontology` and `#### Shapes` are forbidden.
+- Query kind or purpose classification is not part of the initial model.
+- Search JSON exposes semantic query contract identity and parsed Query block details.
+- Ontology collection and full semantic export do not emit query contracts until a dedicated query-export command exists.
+
+Reqvire validates ontology, semantic contract, and semantic query contract content by parsing Turtle, checking query-contract structure, and running lightweight SHACL sanity checks:
 
 - malformed Turtle is rejected,
 - duplicate ontology term declarations are rejected,
 - conflicting declarations are rejected,
 - SHACL references must resolve through reachable ontology context,
-- references to terms in another capability subgraph require an explicit ontology attachment.
+- references to terms in another capability subgraph require an explicit ontology attachment,
+- semantic query contracts must use a single `#### Query` fenced `sparql` block and may not include ontology or shape blocks.
 
-Use ontology when content defines domain meaning, vocabulary, object structure, or semantic relationships. Use semantic contracts when one capability or obligation needs a SHACL profile over reachable ontology. Use requirements for implementable system obligations.
+Use ontology when content defines domain meaning, vocabulary, object structure, or semantic relationships. Use semantic contracts when one requirement obligation needs a SHACL profile over reachable ontology. Use semantic query contracts when one requirement needs a declarative graph query contract over reachable context. Use requirements for implementable system obligations.
 
 ## Example
 

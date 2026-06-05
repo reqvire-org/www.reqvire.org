@@ -56,9 +56,14 @@ For detailed options, see the [Installation Guide](https://www.reqvire.org/user_
 
 ### What You Get
 
-- Specialized skills (`syseng`, `task-master`)
+- Specialized skills (`syseng`, `ontology-authoring`)
 - Slash commands (`/reqvire:*`) for model operations
 - Native chat-driven MBSE workflows in Claude Code
+
+The marketplace plugin exposes skills from:
+
+- `claude-plugins/skills/syseng`
+- `claude-plugins/skills/ontology-authoring`
 
 ### Main Slash Commands
 
@@ -82,22 +87,24 @@ For detailed options, see the [Installation Guide](https://www.reqvire.org/user_
 
 ---
 
-Reqvire includes a Codex skill package in this repository at:
+Reqvire includes Codex skill packages in this repository at:
 
 - `codex-skills/reqvire-syseng`
+- `codex-skills/reqvire-ontology-authoring`
 
-Install it globally on your machine:
+Install them globally on your machine:
 
 ```bash
 ./scripts/install-codex-skill.sh
 ```
 
-This installs the skill to:
+This installs the skills to:
 
 - `$CODEX_HOME/skills/reqvire-syseng`
+- `$CODEX_HOME/skills/reqvire-ontology-authoring`
 - default `CODEX_HOME` is `~/.codex`
 
-The installer removes any existing `reqvire-syseng` before copying the latest repo version.
+The installer removes any existing Reqvire Codex skills before copying the latest repo versions.
 
 For complete instructions, see [Codex Skills Guide](https://github.com/reqvire-org/reqvire/blob/main/doc/CODEX_SKILLS.md).
 
@@ -115,7 +122,7 @@ The MCP server uses RMCP Streamable HTTP and advertises read/report tools by def
 
 For assistants that need context-sizing metadata, start the server with `--with-size-estimates`. This adds `size_estimate` records to MCP model evidence returned by tools such as `reqvire.read_element` and `reqvire.model`.
 
-For semantic model workflows, call `reqvire.ontologies` through MCP to collect ontology `#### Ontology` blocks and semantic-contract `#### Shapes` blocks as Turtle or JSON-LD. Pass `full: true` when the assistant also needs generated Reqvire model context triples for elements, relations, attachments, concept references, ontology declarations, and shape references.
+For semantic model workflows, call `reqvire.ontologies` through MCP to collect ontology `#### Ontology` blocks and semantic-contract `#### Shapes` blocks as Turtle or JSON-LD. Pass `full: true` when the assistant also needs generated Reqvire model context triples for elements, relations, attachments, concept references, ontology declarations, shape references, and ontology projection facts used by the HTML ontology explorer. Semantic query contracts are searchable requirement-owned contracts today; they are not emitted by ontology export until a dedicated query export exists.
 
 For Streamable HTTP request details and the active tool contract, see the [MCP Server](/mcp_server/) guide.
 
@@ -126,7 +133,7 @@ For Streamable HTTP request details and the active tool contract, see the [MCP S
 1. **Capability first**: understand or define the operational ability being changed.
 2. **Ontology context**: attach or inspect semantic vocabulary that gives the capability meaning.
 3. **Requirements**: define implementable obligations that specify the capability.
-4. **Refinements**: add specs, constraints, behaviors, states, I/O contracts, or semantic contracts.
+4. **Refinements**: add specs, constraints, behaviors, states, I/O contracts, semantic contracts, or semantic query contracts.
 5. **Verifications**: ensure capabilities or leaf requirements are verified.
 6. **Implementation links**: connect code, tests, proofs, and evidence with `satisfiedBy`.
 7. **Validate**: run `reqvire validate`, `reqvire lint`, `reqvire coverage`.

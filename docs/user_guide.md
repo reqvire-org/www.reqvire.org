@@ -345,7 +345,7 @@ Governance metadata applies only to capability and requirement elements:
 
 Child requirements inherit missing governance fields from their nearest owning parent requirement through the requirement hierarchy, or from the owning capability when a top-level requirement uses `specify`. If no parent defines a field, Reqvire uses the default effective value. Only explicitly authored metadata is written back to Markdown; inherited and default values appear in structured outputs as effective metadata.
 
-Refinement elements (`source`, `semantic-contract`, `specification`, `constraint`, `behavior`, `state`, and `input-output`) must not declare `status`, `priority`, `risk`, or `owner`. They receive governance context from the capability or requirement that owns them via `refinedBy` / `refine`.
+Refinement elements must not declare `status`, `priority`, `risk`, or `owner`. `source` refinements receive governance context from their owning capability. Requirement-owned refinements (`semantic-contract`, `specification`, `constraint`, `behavior`, `state`, and `input-output`) receive governance context from their owning requirement via `refinedBy` / `refine`.
 
 ## Element Manipulation
 
@@ -692,7 +692,7 @@ The link command:
 | `satisfiedBy` | Source is satisfied by target (code implementations) |
 | `satisfy` | Source satisfies target (code implementations) |
 | `refinedBy` | Source owns target as a compatible refinement element |
-| `refine` | Source refines a compatible capability or requirement owner (auto-generated) |
+| `refine` | Source refines its compatible owner (auto-generated) |
 | `trace` | General traceability link |
 
 **Target types for relations:**
@@ -1117,9 +1117,11 @@ reqvire ontologies --jsonld --output ontologies.jsonld
 reqvire ontologies --full
 ```
 
-Turtle is the default format. Use `--jsonld` only when a JSON-LD representation is needed. Default mode exports authored ontology and SHACL artifacts. Use `--full` when downstream semantic tooling also needs Reqvire model context triples for elements, relations, attachments, concept references, ontology declarations, and shape references.
+Turtle is the default format. Use `--jsonld` only when a JSON-LD representation is needed. Default mode exports authored ontology and SHACL artifacts. Use `--full` when downstream semantic tooling also needs Reqvire model context triples for elements, relations, attachments, concept references, ontology declarations, shape references, and generated ontology projection facts used by the HTML ontology explorer.
 
-The command reuses the same semantic index used by validation, so Turtle blocks are parsed once and reused for diagnostics, ontology declarations, SHACL references, and export serialization. HTML export also writes `ontologies.ttl` and includes an "Ontologies" page in the navigation bar. That page renders a searchable ontology/SHACL graph from the parsed semantic-index quads, supports full-window graph expansion, collapses anonymous SHACL property-shape blank nodes and RDF list infrastructure into owning-shape inspector constraints, and keeps the collected Turtle blocks available below the graph for audit review.
+The command reuses the same semantic index used by validation, so Turtle blocks are parsed once and reused for diagnostics, ontology declarations, SHACL references, export serialization, and ontology-view projection constructs. HTML export also writes `ontologies.ttl` and includes an "Ontologies" page in the navigation bar. That page is an ontology explorer rather than a raw Turtle reader: it renders a searchable ontology/SHACL graph from parsed semantic-index quads, shows compact symbol badges for projected OWL/RDFS/SHACL constructs, provides legend filters for visible node, relation, construct, and origin categories, collapses anonymous SHACL property-shape blank nodes and RDF list infrastructure into owning-shape inspector slots/facets, and uses the side inspector for sources, domain/range, slots/facets, projection constructs, and raw SHACL association evidence.
+
+The HTML explorer intentionally does not show the collected Turtle text inline. Use the footer download link or the `ontologies --output` command when raw Turtle is needed.
 
 The MCP server exposes the same semantic collection through the read-only `reqvire.ontologies` tool. Use `format: "turtle"` for the default Turtle serialization, `format: "jsonld"` for JSON-LD output, and `full: true` to include generated Reqvire model context triples.
 
