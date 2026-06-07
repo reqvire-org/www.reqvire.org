@@ -15,7 +15,7 @@ Each Reqvire model consists of:
 - **Ontologies** - first-class OWL/Turtle vocabulary and reusable semantic model terms.
 - **Capabilities** - coherent operational, product, business, regulatory, or system abilities.
 - **Requirements** - implementable obligations, constraints, guarantees, and behavioral expectations that specify capabilities.
-- **Refinements** - `source`, `semantic-contract`, `semantic-query-contract`, `specification`, `constraint`, `behavior`, `state`, and `input-output` detail owned by capabilities or requirements.
+- **Refinements** - requirement-owned `source`, `semantic-contract`, `semantic-query-contract`, `specification`, `constraint`, `behavior`, `state`, and `input-output` detail.
 - **Verifications** - evidence that capabilities or requirements are verified by tests, proofs, analysis, inspection, or demonstration.
 - **Relations** - explicit links between model elements and implementation/evidence artifacts.
 - **Files and folders** - physical organization for model content.
@@ -35,7 +35,7 @@ Recommended top-level model planes:
   Verifications/
 ```
 
-`Capabilities/` contains capability-rooted subgraphs: the capability element, child capabilities, requirements that specify the capability, owned refinements, requirement-owned semantic contracts, and capability-local architecture specifications.
+`Capabilities/` contains capability-rooted subgraphs: the capability element, child capabilities, requirements that specify the capability, and requirement-owned refinements or contracts used by those requirements.
 
 `Ontologies/` contains reusable `ontology` elements. Capabilities attach ontology from this plane instead of nesting shared vocabulary inside capability files.
 
@@ -169,21 +169,13 @@ Supported core relations:
 | `verify` | verification -> capability or requirement | Verification verifies a capability or requirement |
 | `satisfiedBy` | requirement or evidence-backed verification -> artifact | Links implementation or evidence artifacts |
 | `satisfy` | artifact -> requirement or evidence-backed verification | Inverse satisfaction relation |
-| `refinedBy` | owner -> refinement | Capability or requirement owns a subtype-compatible refinement |
+| `refinedBy` | requirement -> refinement | Requirement owns a subtype-compatible refinement |
 | `refine` | refinement -> owner | Refinement points to its owner |
 | `trace` | any -> any | Soft traceability |
 
-Capability-owned refinements:
-
-- `capability refinedBy source`
-- `capability refinedBy specification`
-- `capability refinedBy constraint`
-- `capability refinedBy behavior`
-- `capability refinedBy state`
-- `capability refinedBy input-output`
-
 Requirement-owned refinements:
 
+- `requirement refinedBy source`
 - `requirement refinedBy semantic-contract`
 - `requirement refinedBy semantic-query-contract`
 - `requirement refinedBy specification`

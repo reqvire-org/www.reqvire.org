@@ -6,12 +6,12 @@ title: Engineering Graph
 
 ## Conceptual Overview
 
-Reqvire models requirements as part of a semantic engineering graph, not as isolated statements. The model separates domain meaning, capability intent, implementable obligations, refinements, verification evidence, and implementation artifacts:
+Reqvire models requirements as part of a semantic engineering graph, not as isolated statements. The model separates domain meaning, capability intent, implementable obligations, requirement-owned refinements, verification evidence, and implementation artifacts:
 
 - **Ontologies** define reusable domain/model meaning.
 - **Capabilities** define coherent operational, product, business, regulatory, or system abilities.
 - **Requirements** define what the system shall do for those capabilities.
-- **Refinements** add detailed engineering contracts to capabilities or requirements.
+- **Refinements** add detailed engineering contracts to requirements.
 - **Verifications** prove capabilities or requirements.
 - **Implementation artifacts** satisfy requirements or evidence-backed verifications.
 
@@ -24,7 +24,7 @@ A `capability` answers:
 - What coherent operational, product, business, regulatory, or system ability is this?
 - Why does this area exist in the product model?
 - Who owns the scope and routing for this slice?
-- What source material or ontology defines the domain context?
+- What ontology defines the domain context?
 - Which requirements belong under this capability?
 
 Capability:
@@ -37,13 +37,13 @@ Answers:
 
 - What capability/domain is this?
 - Why does this area exist in the product model?
-- What stakeholder, regulatory, source, or policy context owns it?
+- What stakeholder, regulatory, operational, or policy context explains it?
 - What ontology defines its domain language?
 - Which requirements belong under this capability?
 
 A capability is not a weaker requirement. It is a coherent operational, product, business, regulatory, or system ability. It defines the scope and language of the model area before individual system obligations are written.
 
-Because a capability owns the capability context, it can own compatible refinements and attach `ontology` elements from `requirements/Ontologies`. Those define vocabulary, source authority, external context, domain structure, contracts, behavior, and reusable meaning for the capability. They are not implementation obligations by themselves.
+Because a capability owns the capability context, it can attach `ontology` elements from `requirements/Ontologies`. Those define vocabulary, domain structure, and reusable meaning for the capability. Source authority, contracts, behavior, state, input/output, and other implementation-facing details belong in requirement-owned refinements.
 
 Capabilities can form capability hierarchies using `derive` / `derivedFrom` with other capabilities, and they connect to requirements through `specifiedBy` / `specify`.
 
@@ -290,20 +290,20 @@ auth:AccessTokenValidationShape
 
 ## Sources
 
-A `source` is a capability-owned refinement for stakeholder, regulatory, contractual, or external source material.
+A `source` is a requirement-owned refinement for stakeholder, regulatory, contractual, policy, or external source material.
 
-Use sources to capture why a capability exists without turning the source text into implementation requirements.
+Use sources to capture why a specific requirement exists without turning the source text into additional implementation requirements.
 
 ```markdown
 ### OAuth Provider Token Source
 
-OAuth provider documentation defining access token claims, issuer, subject, and expiration semantics.
+OAuth provider documentation defining access token claims, issuer, subject, and expiration semantics for API access token validation.
 
 #### Metadata
   * type: source
 
 #### Relations
-  * refine: [API Authentication](Capabilities.md#api-authentication)
+  * refine: [API Access Token Validation](AuthRequirements.md#api-access-token-validation)
 ```
 
 ## Governance Metadata

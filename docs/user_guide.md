@@ -244,10 +244,10 @@ project/
 
 This layout uses:
 
-- `Capabilities/` for capability-rooted subgraphs, including the requirements and refinements owned by the capability.
+- `Capabilities/` for capability-rooted subgraphs, including the capability, child capabilities, and requirements that specify the capability.
 - `Ontologies/` for reusable semantic vocabulary and domain meaning.
 - `Verifications/` for verification elements and evidence references.
-- Capability-local `Architecture/` folders for design specifications that refine that capability or its requirements.
+- Capability-local `Architecture/` folders for design specifications that refine requirements in that capability context.
 
 **Co-located variant**
 
@@ -285,7 +285,7 @@ The combination of containment structure and explicit relations creates the full
 
 Requirements are organized in hierarchical levels within the markdown structure:
 
-- **Capability roots** are product, capability, stakeholder, regulatory, or external areas that define why a part of the model exists and own source context while attaching ontology vocabulary for that part of the model.
+- **Capability roots** are product, capability, stakeholder, regulatory, or external areas that define why a part of the model exists while attaching ontology vocabulary for that part of the model.
 - **Requirements** specify capabilities through `specify`/`specifiedBy` and state what the system shall do.
 - **Child requirements** use `derivedFrom`/`derive` only within the requirement hierarchy when an obligation is decomposed into more specific obligations.
 
@@ -345,7 +345,7 @@ Governance metadata applies only to capability and requirement elements:
 
 Child requirements inherit missing governance fields from their nearest owning parent requirement through the requirement hierarchy, or from the owning capability when a top-level requirement uses `specify`. If no parent defines a field, Reqvire uses the default effective value. Only explicitly authored metadata is written back to Markdown; inherited and default values appear in structured outputs as effective metadata.
 
-Refinement elements must not declare `status`, `priority`, `risk`, or `owner`. `source` refinements receive governance context from their owning capability. Requirement-owned refinements (`semantic-contract`, `specification`, `constraint`, `behavior`, `state`, and `input-output`) receive governance context from their owning requirement via `refinedBy` / `refine`.
+Refinement elements must not declare `status`, `priority`, `risk`, or `owner`. Requirement-owned refinements (`source`, `semantic-contract`, `semantic-query-contract`, `specification`, `constraint`, `behavior`, `state`, and `input-output`) receive governance context from their owning requirement via `refinedBy` / `refine`.
 
 ## Element Manipulation
 
@@ -701,7 +701,7 @@ The link command:
 - External URL (e.g., "https://example.com/spec.html")
 
 `refinedBy` constraint:
-- `refinedBy` must target a compatible refinement element identifier: capability to `source`, or requirement to `semantic-contract`, `constraint`, `behavior`, `specification`, `state`, or `input-output`, including refinement elements defined in `# Documents` files.
+- `refinedBy` must target a compatible requirement-owned refinement element identifier: `source`, `semantic-contract`, `semantic-query-contract`, `constraint`, `behavior`, `specification`, `state`, or `input-output`, including refinement elements defined in `# Documents` files.
 - Plain file-path targets for `refinedBy` are rejected.
 
 **Attaching (use `attaching` keyword instead of relation type):**
