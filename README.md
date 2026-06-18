@@ -11,15 +11,21 @@ reqvire-org/reqvire:/website
 ```
 
 Deployment is handled by GitHub Actions in this repository. The workflow checks
-out `reqvire-org/reqvire`, builds `website/`, adds the custom-domain `CNAME`,
-and publishes the generated static artifact to GitHub Pages.
+out `reqvire-org/reqvire`, builds `website/`, and publishes the generated static
+artifact to GitHub Pages.
 
 GitHub Pages for this repository should be configured as:
 
 ```text
 Source: GitHub Actions
-Domain: www.reqvire.org
+Custom domain: reqvire.org
 ```
+
+GitHub ignores `CNAME` files for Actions-based Pages deployments. The custom
+domain must be set in **Settings -> Pages -> Custom domain**. DNS should point
+the apex domain to GitHub Pages and `www.reqvire.org` to
+`reqvire-org.github.io`; GitHub then handles the www/apex redirect for the
+configured custom domain.
 
 Manual deployment:
 

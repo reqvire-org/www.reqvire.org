@@ -34,7 +34,7 @@ jobs:
 
     steps:
       - name: Checkout Reqvire source
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: reqvire-org/reqvire
           ref: ${{ github.event.client_payload.ref || inputs.ref || 'main' }}
@@ -58,7 +58,6 @@ jobs:
       - name: Add Pages metadata
         run: |
           touch reqvire/website/dist/.nojekyll
-          printf '%s\n' 'www.reqvire.org' > reqvire/website/dist/CNAME
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
