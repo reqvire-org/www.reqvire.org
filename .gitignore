@@ -1,17 +1,10 @@
-# Jekyll
+# Local editor and OS files
+.DS_Store
+*.swp
+
+# Local GitHub Pages/action experiments
 _site/
-.sass-cache/
-.jekyll-cache/
-.jekyll-metadata
+.pages-artifact/
 
-# Bundler
-vendor/
-.bundle/
-Gemfile.lock
-
-# Ruby
-*.gem
-*.rbc
-
-# Playwrightmcp
+# Playwright MCP local state
 .playwright-mcp/

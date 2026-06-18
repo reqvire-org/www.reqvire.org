@@ -1,0 +1,73 @@
+name: Deploy Website
+
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: "Reqvire git ref, branch, or tag to deploy"
+        required: false
+        default: "main"
+  repository_dispatch:
+    types: ["deploy-website"]
+  push:
+    branches: ["main"]
+    paths:
+      - ".github/workflows/deploy.yml"
+      - "README.md"
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Build Reqvire website and deploy Pages
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Checkout Reqvire source
+        uses: actions/checkout@v4
+        with:
+          repository: reqvire-org/reqvire
+          ref: ${{ github.event.client_payload.ref || inputs.ref || 'main' }}
+          path: reqvire
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: reqvire/website/package-lock.json
+
+      - name: Install website dependencies
+        working-directory: reqvire/website
+        run: npm ci
+
+      - name: Build website
+        working-directory: reqvire/website
+        run: npm run build
+
+      - name: Add Pages metadata
+        run: |
+          touch reqvire/website/dist/.nojekyll
+          printf '%s\n' 'www.reqvire.org' > reqvire/website/dist/CNAME
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: reqvire/website/dist
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5
